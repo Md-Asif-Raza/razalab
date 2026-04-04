@@ -13,7 +13,9 @@ const EnvSchema = z.object({
   SESSION_SECRET: true,
 });
 
-// We validate immediately on import
+const isServer = typeof window === 'undefined';
+
+// We validate immediately on import, but only for the environment we are in
 const processEnv = {
   NEXT_PUBLIC_SUPABASE_URL:      process.env.NEXT_PUBLIC_SUPABASE_URL,
   NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
@@ -24,20 +26,26 @@ const processEnv = {
   NODE_ENV:                      process.env.NODE_ENV,
 };
 
-const parsed = EnvSchema.safeParse(processEnv);
+// If on client, we only care about NEXT_PUBLIC_ variables
+const schemaToUse = isServer ? EnvSchema : EnvSchema.partial({
+  SUPABASE_SERVICE_ROLE_KEY: true,
+  SUPABASE_JWT_SECRET: true,
+  SESSION_SECRET: true,
+});
+
+const parsed = schemaToUse.safeParse(processEnv);
 
 if (!parsed.success) {
   const isDev = process.env.NODE_ENV !== 'production';
-  console.error('❌ Invalid environment variables:', parsed.error.flatten().fieldErrors);
-  
-  if (!isDev) {
-    throw new Error('Invalid environment variables. Check your .env file or environment settings.');
+  // Only log full errors on server or if public vars are missing on client
+  if (isServer || !parsed.error.issues.every(i => !i.path.includes('NEXT_PUBLIC'))) {
+    console.error('❌ Invalid environment variables:', parsed.error.flatten().fieldErrors);
+    if (!isDev) throw new Error('Invalid environment variables.');
   }
 }
 
-// Fallbacks for development to prevent crashes
 export const env = {
   ...parsed.data,
-  SESSION_SECRET: parsed.data?.SESSION_SECRET || 'a-very-secret-fallback-string-32-chars-long',
-  SUPABASE_JWT_SECRET: parsed.data?.SUPABASE_JWT_SECRET || 'fallback-jwt-secret',
+  SESSION_SECRET: parsed.data?.SESSION_SECRET || 'fallback-secret-for-client-bundle',
+  SUPABASE_JWT_SECRET: parsed.data?.SUPABASE_JWT_SECRET || 'fallback-jwt-for-client-bundle',
 } as z.infer<typeof EnvSchema> & { SESSION_SECRET: string; SUPABASE_JWT_SECRET: string };

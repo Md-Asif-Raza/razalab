@@ -162,11 +162,10 @@ section { position: relative; z-index: 2; }
 
 /* ADMIN PANEL */
 #admin {
-  display: none;
   min-height: 100vh;
   background: var(--c6);
+  display: flex; /* Force visibility */
 }
-#admin.active { display: flex; }
 
 /* ANIMATIONS & REVEALS */
 .reveal, .reveal-up {

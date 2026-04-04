@@ -5,15 +5,15 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('arif@gmail.com');
+  const [password, setPassword] = useState('Arif@12145');
   const [error, setError] = useState('');
   const router = useRouter();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (email === 'arif@gmail.com' && password === 'Arif@12145') {
-      router.push('/admin');
+    if (email.trim().toLowerCase() === 'arif@gmail.com' && password.trim() === 'Arif@12145') {
+      window.location.href = '/admin?refresh=1';
     } else {
       setError('Invalid master credentials.');
     }
@@ -45,6 +45,7 @@ export default function LoginPage() {
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
+          pointer-events: none; /* Prevent click capture */
         }
         .login-card {
           width: 100%;
@@ -109,6 +110,9 @@ export default function LoginPage() {
           cursor: pointer;
           margin-top: 16px;
           transition: transform 0.2s ease;
+          position: relative;
+          z-index: 999;
+          pointer-events: auto;
         }
         .login-btn:hover {
           transform: scale(0.98);
@@ -137,7 +141,20 @@ export default function LoginPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       >
-        <div className="brand">Raza<span>Labs</span></div>
+        <div className="brand" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '40px' }}>
+          <div className="logo-circle" style={{ 
+            width: 64, height: 64, borderRadius: '50%', background: '#000', 
+            display: 'flex', alignItems: 'center', justifyContent: 'center', 
+            overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)',
+            transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+            boxShadow: '0 0 30px rgba(0,0,0,0.6)'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+          onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+          >
+            <img src="/logo.png" alt="Logo" style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+          </div>
+        </div>
         
         <form onSubmit={handleLogin}>
           {error && <div className="error">{error}</div>}
@@ -150,7 +167,6 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              autoFocus
               style={{ cursor: 'text', position: 'relative', zIndex: 999, pointerEvents: 'auto' }}
             />
           </div>
@@ -167,7 +183,19 @@ export default function LoginPage() {
             />
           </div>
 
-          <button type="submit" className="login-btn">Initialise Dashboard</button>
+          <button 
+            type="submit" 
+            className="login-btn"
+            style={{ 
+              position: 'relative', 
+              zIndex: 9999, 
+              pointerEvents: 'auto', 
+              cursor: 'pointer',
+              opacity: 1
+            }}
+          >
+            Initialise Dashboard
+          </button>
         </form>
 
         <a href="/" onClick={handleReturn} className="back-link">← Return to Organic Network</a>

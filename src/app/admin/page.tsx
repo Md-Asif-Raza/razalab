@@ -16,12 +16,17 @@ export default function AdminPage() {
     category: '', result: '', price: '', description: '', graphData: '', img: ''
   });
 
+  const [mounted, setMounted] = useState(false);
+  
   useEffect(() => {
+    setMounted(true);
     const checkAuth = async () => {
       setTimeout(() => { setIsAuth(true); setAuthChecking(false); }, 500);
     };
     checkAuth();
   }, []);
+
+  if (!mounted) return null;
 
   const handleSave = async (type: 'campaign' | 'testimonial' | 'review' | 'settings') => {
     setIsSaving(true);
@@ -43,7 +48,20 @@ export default function AdminPage() {
   return (
     <div id="admin" className="active" style={{ display: 'flex', minHeight: '100vh', background: '#050304' }}>
       <div className="admin-sidebar" style={{ width: 260, background: '#0c1015', borderRight: '1px solid rgba(255,255,255,0.05)', color: '#fff' }}>
-        <div className="admin-brand" style={{ padding: '32px', fontSize: '1.2rem', fontWeight: 800 }}>Raza Labs <span style={{ color: 'var(--c1)' }}>v1.0</span></div>
+        <div className="admin-brand" style={{ padding: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div className="logo-circle" style={{ 
+            width: 44, height: 44, borderRadius: '50%', background: '#000', 
+            display: 'flex', alignItems: 'center', justifyContent: 'center', 
+            overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)',
+            transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+            boxShadow: '0 0 15px rgba(0,0,0,0.3)'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+          onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+          >
+            <img src="/logo.png" alt="Logo" style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+          </div>
+        </div>
         <div style={{ padding: '0 20px' }}>
           <div className={`admin-nav-item ${tab === 'dashboard' ? 'active' : ''}`} onClick={() => setTab('dashboard')}>📊 Analytics</div>
           <div className={`admin-nav-item ${tab === 'campaigns' ? 'active' : ''}`} onClick={() => setTab('campaigns')}>💼 Portfolio</div>

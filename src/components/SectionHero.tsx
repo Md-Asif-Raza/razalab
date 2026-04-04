@@ -13,7 +13,7 @@ export default function SectionHero() {
         </h1>
 
         <p className="hero-sub reveal-up stagger-1">
-          We&apos;ll build you a mass content distribution system that scales your brand to new heights with an army of clippers. We have generated over <strong>2 Billion+ views</strong> for our clients with our systems. From creators to brands, we make your content explode across all platforms.
+          We&apos;ll build you a mass content distribution system that scales your brand to new heights with an army of clippers. We have generated over <strong>527 M+views</strong> for our clients with our systems. From creators to brands, we make your content explode across all platforms.
         </p>
 
         <div className="hero-actions reveal-up stagger-2">
@@ -21,7 +21,7 @@ export default function SectionHero() {
         </div>
 
         <div className="hero-views-line reveal-up stagger-3">
-          <CountUp endString="2,000,000,000+" /> views tracked for your favorite
+          <CountUp endString="527,00,000+" /> views tracked for your favorite
         </div>
       </div>
     </section>

@@ -32,7 +32,21 @@ export default function Navbar() {
     <>
       {/* Full navbar — visible at top */}
       <nav className={`nav-full ${!visible ? 'nav-hidden' : ''} ${scrolled ? 'nav-scrolled' : ''}`}>
-        <Link href="/" className="nav-logo">Raza<span>Labs</span></Link>
+        <Link href="/" className="nav-logo" style={{ display: 'flex', alignItems: 'center', gap: '12px', transition: 'transform 0.3s ease', textDecoration: 'none' }}>
+          <div className="logo-circle" style={{ 
+            width: 44, height: 44, borderRadius: '50%', background: '#000', 
+            display: 'flex', alignItems: 'center', justifyContent: 'center', 
+            overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)',
+            transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+            cursor: 'pointer'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+          onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+          >
+            <img src="/logo.png" alt="Logo" style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+          </div>
+          Raza<span>Labs</span>
+        </Link>
         <ul className="nav-links">
           <li><Link href="#hero">Home</Link></li>
           <li><Link href="#campaigns">Clients</Link></li>
@@ -55,14 +69,24 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* Circle logo — animated reveal on scroll */}
-      <div className={`nav-circle-logo-container ${scrolled && !visible ? 'visible' : ''}`}>
-        <Link href="/" className="nav-circle-wrapper">
-          <img 
-            src="/ChatGPT Image Apr 2, 2026, 11_54_01 PM.png" 
-            alt="Raza Labs" 
-            style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} 
-          />
+      {/* Circle logo — animated reveal ONLY when main navbar is HIDDEN */}
+      <div 
+        className={`nav-circle-logo-container ${scrolled && !visible ? 'visible' : ''}`} 
+        style={{ 
+          display: scrolled && !visible ? 'flex' : 'none',
+          pointerEvents: scrolled && !visible ? 'auto' : 'none' 
+        }}
+      >
+        <Link href="/" className="nav-circle-wrapper" style={{ 
+          width: 48, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', 
+          borderRadius: '50%', background: '#000', border: '1px solid rgba(255,255,255,0.15)',
+          transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+          overflow: 'hidden'
+        }}
+        onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+        onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+        >
+          <img src="/logo.png" alt="Raza Labs" style={{ width: '75%', height: '75%', objectFit: 'contain' }} />
         </Link>
       </div>
     </>

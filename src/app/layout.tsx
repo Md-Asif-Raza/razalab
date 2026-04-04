@@ -11,8 +11,13 @@ import SmoothScroll from "@/components/SmoothScroll";
 const inter = Inter({ subsets: ["latin"] });
 const outfit = Outfit({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"] });
 
+import ClientLayout from "@/components/ClientLayout";
+
 export const metadata: Metadata = {
   title: "Raza Labs — #1 Organic Marketing Network",
+  icons: {
+    icon: '/icon.png',
+  },
 };
 
 export default function RootLayout({
@@ -21,15 +26,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+      </head>
       <body className={`${outfit.className} bg-surface text-foreground antialiased`}>
-        <SmoothScroll />
-        <ScrollObserver />
-        <CursorWrapper />
-        <BgCanvas />
-        <div className="site-content" id="site-content">
+        <ClientLayout>
           {children}
-        </div>
+        </ClientLayout>
       </body>
     </html>
   );

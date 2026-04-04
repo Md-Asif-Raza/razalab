@@ -16,7 +16,7 @@ import ClientLayout from "@/components/ClientLayout";
 export const metadata: Metadata = {
   title: "Raza Labs — #1 Organic Marketing Network",
   icons: {
-    icon: '/icon.png',
+    icon: '/logo.png',
   },
 };
 

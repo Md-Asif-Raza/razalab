@@ -1,4 +1,32 @@
+'use client';
+import { useState, useEffect } from 'react';
+import { getBrands } from '@/lib/actions';
+
+const FALLBACK_BRANDS = [
+  { name: 'Cantina', is_bold: false },
+  { name: 'LOOKSMAX AI', is_bold: true },
+  { name: 'RIZZ', is_bold: false },
+  { name: 'Loveable', is_bold: false },
+  { name: 'Stella Clipping Campaign', is_bold: false },
+  { name: 'Atlas Ai', is_bold: false },
+  { name: 'Dropship.io', is_bold: false },
+  { name: 'Find GPT', is_bold: false },
+  { name: 'Joe Rogan + ReplitClip', is_bold: false },
+  { name: 'Sameer clipping', is_bold: false },
+  { name: 'canffen ai', is_bold: false },
+  { name: 'Rebet', is_bold: false },
+  { name: 'taller app', is_bold: false },
+];
+
 export default function SectionBrands() {
+  const [brands, setBrands] = useState(FALLBACK_BRANDS);
+
+  useEffect(() => {
+    getBrands().then(data => {
+      if (data && data.length > 0) setBrands(data);
+    }).catch(() => {});
+  }, []);
+
   return (
     <section id="brands">
       <div className="brands-heading reveal-up">
@@ -7,34 +35,13 @@ export default function SectionBrands() {
 
       <div className="brands-marquee reveal-up stagger-1">
         <div className="brands-track">
-          <div className="brand-item">Cantina</div>
-          <div className="brand-item brand-bold">LOOKSMAX AI</div>
-          <div className="brand-item">RIZZ</div>
-          <div className="brand-item">Loveable</div>
-          <div className="brand-item">Stella Clipping Campaign</div>
-          <div className="brand-item">Atlas Ai</div>
-          <div className="brand-item">Dropship.io</div>
-          <div className="brand-item">Find GPT</div>
-          <div className="brand-item">Joe Rogan + ReplitClip</div>
-          <div className="brand-item">Sameer clipping</div>
-          <div className="brand-item">canffen ai</div>
-          <div className="brand-item">Rebet</div>
-          <div className="brand-item">taller app</div>
-          
+          {brands.map((b, i) => (
+            <div key={i} className={`brand-item ${b.is_bold ? 'brand-bold' : ''}`}>{b.name}</div>
+          ))}
           {/* Duplicate for infinite loop */}
-          <div className="brand-item">Cantina</div>
-          <div className="brand-item brand-bold">LOOKSMAX AI</div>
-          <div className="brand-item">RIZZ</div>
-          <div className="brand-item">Loveable</div>
-          <div className="brand-item">Stella Clipping Campaign</div>
-          <div className="brand-item">Atlas Ai</div>
-          <div className="brand-item">Dropship.io</div>
-          <div className="brand-item">Find GPT</div>
-          <div className="brand-item">Joe Rogan + ReplitClip</div>
-          <div className="brand-item">Sameer clipping</div>
-          <div className="brand-item">canffen ai</div>
-          <div className="brand-item">Rebet</div>
-          <div className="brand-item">taller app</div>
+          {brands.map((b, i) => (
+            <div key={`dup-${i}`} className={`brand-item ${b.is_bold ? 'brand-bold' : ''}`}>{b.name}</div>
+          ))}
         </div>
       </div>
     </section>

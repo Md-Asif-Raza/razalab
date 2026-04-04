@@ -1,19 +1,36 @@
 'use client';
-import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { getSiteSettings } from '@/lib/actions';
 
 export default function SectionCalculator() {
   const [clippers, setClippers] = useState(1);
   const [posts, setPosts] = useState(1);
   const [views, setViews] = useState(5000);
-
-  const platforms = 3; 
-  const days = 7;
   
-  const weeklyPosts = clippers * posts * platforms * days;
+  const [calcConfig, setCalcConfig] = useState({
+    target_cpm: 25.00,
+    organic_cpm: 1.00,
+    platform_multiplier: 3,
+    days_multiplier: 7
+  });
+
+  useEffect(() => {
+    getSiteSettings().then(res => {
+      if (res) {
+        setCalcConfig({
+          target_cpm: Number(res.target_cpm) || 25.00,
+          organic_cpm: Number(res.organic_cpm) || 1.00,
+          platform_multiplier: Number(res.platform_multiplier) || 3,
+          days_multiplier: Number(res.days_multiplier) || 7
+        });
+      }
+    }).catch(() => {});
+  }, []);
+
+  const weeklyPosts = clippers * posts * calcConfig.platform_multiplier * calcConfig.days_multiplier;
   const annualViews = weeklyPosts * views * 52;
-  const paidCost = (annualViews / 1000) * 25; 
-  const organicCost = (annualViews / 1000) * 1; 
+  const paidCost = (annualViews / 1000) * calcConfig.target_cpm; 
+  const organicCost = (annualViews / 1000) * calcConfig.organic_cpm; 
   const savings = Math.round(paidCost - organicCost);
 
   return (
@@ -37,7 +54,7 @@ export default function SectionCalculator() {
                   <span>Clippers Team Size</span>
                   <span className="field-val" style={{ color: '#4d96ff' }}>{clippers}</span>
                 </div>
-                <input type="range" min="1" max="10" step="1" value={clippers} onChange={(e) => setClippers(parseInt(e.target.value))} />
+                <input type="range" min="1" max="100" step="1" value={clippers} onChange={(e) => setClippers(parseInt(e.target.value))} />
               </div>
 
               <div className="input-field">
@@ -45,7 +62,7 @@ export default function SectionCalculator() {
                   <span>Daily Posts per Clipper</span>
                   <span className="field-val" style={{ color: '#4d96ff' }}>{posts}</span>
                 </div>
-                <input type="range" min="1" max="5" step="1" value={posts} onChange={(e) => setPosts(parseInt(e.target.value))} />
+                <input type="range" min="1" max="10" step="1" value={posts} onChange={(e) => setPosts(parseInt(e.target.value))} />
               </div>
 
               <div className="input-field">
@@ -53,7 +70,7 @@ export default function SectionCalculator() {
                   <span>Platform Target Views</span>
                   <span className="field-val" style={{ color: '#4d96ff' }}>{views.toLocaleString()}</span>
                 </div>
-                <input type="range" min="5000" max="100000" step="5000" value={views} onChange={(e) => setViews(parseInt(e.target.value))} />
+                <input type="range" min="5000" max="1000000" step="5000" value={views} onChange={(e) => setViews(parseInt(e.target.value))} />
               </div>
             </div>
           </div>
@@ -70,14 +87,14 @@ export default function SectionCalculator() {
                 </div>
                 <div>
                   <div style={{ fontSize: '0.7rem', opacity: 0.4, textTransform: 'uppercase', marginBottom: '4px' }}>Efficiency</div>
-                  <div style={{ fontSize: '1.2rem', fontWeight: 700, color: '#00e676' }}>25.0x</div>
+                  <div style={{ fontSize: '1.2rem', fontWeight: 700, color: '#00e676' }}>{(calcConfig.target_cpm / calcConfig.organic_cpm).toFixed(1)}x</div>
                 </div>
               </div>
             </div>
 
             <div style={{ marginTop: '40px', textAlign: 'center' }}>
               <p style={{ fontSize: '0.88rem', opacity: 0.5, lineHeight: '1.6' }}>
-                This reflects the difference between paid media costs and our organic ecosystem efficiency.
+                This reflects the difference between paid media costs (${calcConfig.target_cpm}/CPM) and our organic ecosystem efficiency (${calcConfig.organic_cpm}/CPM).
               </p>
             </div>
           </div>

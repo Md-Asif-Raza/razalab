@@ -2,83 +2,325 @@
 import { revalidatePath } from 'next/cache';
 import { createServerClient } from './supabase/server';
 
-/**
- * MASTER DATA SYNC ACTIONS
- * Powering the Raza Labs 'All See' Experience
- */
+// =============================================
+// CAMPAIGNS
+// =============================================
+export async function getCampaigns() {
+  const supabase = createServerClient();
+  const { data, error } = await supabase
+    .from('campaigns')
+    .select('*')
+    .order('sort_order', { ascending: true });
+  if (error) return [];
+  return data || [];
+}
 
 export async function syncCampaign(data: any) {
   const supabase = createServerClient();
-  const { error } = await supabase
-    .from('campaigns')
-    .upsert({
-      id: data.id || undefined,
-      name: data.name,
-      category: data.category,
-      result: data.result,
-      price: data.price,
-      description: data.description,
-      graph_data: data.graphData,
-      img_url: data.img,
-      updated_at: new Date().toISOString(),
-    });
+  const payload: any = {
+    name: data.name,
+    category: data.category,
+    result: data.result,
+    price: data.price,
+    description: data.description,
+    graph_data: data.graphData || data.graph_data,
+    img_url: data.img || data.img_url,
+    sort_order: data.sort_order || 0,
+    is_active: data.is_active !== false,
+    updated_at: new Date().toISOString(),
+  };
+  if (data.id) payload.id = data.id;
 
+  const { error } = await supabase.from('campaigns').upsert(payload);
   if (error) throw new Error(`Sync Failed: ${error.message}`);
   revalidatePath('/');
   return { success: true };
+}
+
+export async function deleteCampaign(id: string) {
+  const supabase = createServerClient();
+  const { error } = await supabase.from('campaigns').delete().eq('id', id);
+  if (error) throw new Error(`Delete Failed: ${error.message}`);
+  revalidatePath('/');
+  return { success: true };
+}
+
+// =============================================
+// TESTIMONIALS
+// =============================================
+export async function getTestimonials() {
+  const supabase = createServerClient();
+  const { data, error } = await supabase
+    .from('testimonials')
+    .select('*')
+    .order('sort_order', { ascending: true });
+  if (error) return [];
+  return data || [];
 }
 
 export async function syncTestimonial(data: any) {
   const supabase = createServerClient();
-  const { error } = await supabase
-    .from('testimonials')
-    .upsert({
-      id: data.id || undefined,
-      name: data.name,
-      role: data.role,
-      quote: data.quote,
-      avatar_url: data.avatar,
-      updated_at: new Date().toISOString(),
-    });
+  const payload: any = {
+    name: data.name,
+    role: data.role,
+    quote: data.quote,
+    avatar_url: data.avatar_url || data.avatar,
+    sort_order: data.sort_order || 0,
+    is_active: data.is_active !== false,
+    updated_at: new Date().toISOString(),
+  };
+  if (data.id) payload.id = data.id;
 
+  const { error } = await supabase.from('testimonials').upsert(payload);
   if (error) throw new Error(`Sync Failed: ${error.message}`);
   revalidatePath('/');
   return { success: true };
+}
+
+export async function deleteTestimonial(id: string) {
+  const supabase = createServerClient();
+  const { error } = await supabase.from('testimonials').delete().eq('id', id);
+  if (error) throw new Error(`Delete Failed: ${error.message}`);
+  revalidatePath('/');
+  return { success: true };
+}
+
+// =============================================
+// REVIEWS
+// =============================================
+export async function getReviews() {
+  const supabase = createServerClient();
+  const { data, error } = await supabase
+    .from('reviews')
+    .select('*')
+    .order('sort_order', { ascending: true });
+  if (error) return [];
+  return data || [];
 }
 
 export async function syncReview(data: any) {
   const supabase = createServerClient();
-  const { error } = await supabase
-    .from('reviews')
-    .upsert({
-      id: data.id || undefined,
-      name: data.name,
-      handle: data.handle,
-      content: data.content,
-      stars: data.stars,
-      avatar_url: data.avatar,
-      updated_at: new Date().toISOString(),
-    });
+  const payload: any = {
+    name: data.name,
+    handle: data.handle,
+    content: data.content,
+    stars: data.stars || 5,
+    avatar_url: data.avatar_url || data.avatar,
+    sort_order: data.sort_order || 0,
+    is_active: data.is_active !== false,
+    updated_at: new Date().toISOString(),
+  };
+  if (data.id) payload.id = data.id;
 
+  const { error } = await supabase.from('reviews').upsert(payload);
   if (error) throw new Error(`Sync Failed: ${error.message}`);
   revalidatePath('/');
   return { success: true };
 }
 
-export async function syncSettings(data: any) {
+export async function deleteReview(id: string) {
   const supabase = createServerClient();
-  const { error } = await supabase
-    .from('settings')
-    .upsert({
-      id: 'global_config',
-      instagram_url: data.instagram,
-      youtube_url: data.youtube,
-      twitter_url: data.twitter,
-      cta_url: data.ctaUrl,
-      updated_at: new Date().toISOString(),
-    });
+  const { error } = await supabase.from('reviews').delete().eq('id', id);
+  if (error) throw new Error(`Delete Failed: ${error.message}`);
+  revalidatePath('/');
+  return { success: true };
+}
 
+// =============================================
+// FAQS
+// =============================================
+export async function getFaqs() {
+  const supabase = createServerClient();
+  const { data, error } = await supabase
+    .from('faqs')
+    .select('*')
+    .order('sort_order', { ascending: true });
+  if (error) return [];
+  return data || [];
+}
+
+export async function syncFaq(data: any) {
+  const supabase = createServerClient();
+  const payload: any = {
+    question: data.question,
+    answer: data.answer,
+    sort_order: data.sort_order || 0,
+    is_active: data.is_active !== false,
+    updated_at: new Date().toISOString(),
+  };
+  if (data.id) payload.id = data.id;
+
+  const { error } = await supabase.from('faqs').upsert(payload);
   if (error) throw new Error(`Sync Failed: ${error.message}`);
   revalidatePath('/');
   return { success: true };
+}
+
+export async function deleteFaq(id: string) {
+  const supabase = createServerClient();
+  const { error } = await supabase.from('faqs').delete().eq('id', id);
+  if (error) throw new Error(`Delete Failed: ${error.message}`);
+  revalidatePath('/');
+  return { success: true };
+}
+
+// =============================================
+// HERO CONTENT
+// =============================================
+export async function getHeroContent() {
+  const supabase = createServerClient();
+  const { data, error } = await supabase
+    .from('hero_content')
+    .select('*')
+    .eq('id', 'main')
+    .single();
+  if (error) return null;
+  return data;
+}
+
+export async function syncHeroContent(data: any) {
+  const supabase = createServerClient();
+  const { error } = await supabase.from('hero_content').upsert({
+    id: 'main',
+    title: data.title,
+    title_accent: data.title_accent,
+    subtitle: data.subtitle,
+    cta_text: data.cta_text,
+    cta_link: data.cta_link,
+    stats_text: data.stats_text,
+    updated_at: new Date().toISOString(),
+  });
+  if (error) throw new Error(`Sync Failed: ${error.message}`);
+  revalidatePath('/');
+  return { success: true };
+}
+
+// =============================================
+// SITE SETTINGS
+// =============================================
+export async function getSiteSettings() {
+  const supabase = createServerClient();
+  const { data, error } = await supabase
+    .from('site_settings')
+    .select('*')
+    .eq('id', 'global')
+    .single();
+  if (error) return null;
+  return data;
+}
+
+export async function syncSiteSettings(data: any) {
+  const supabase = createServerClient();
+  const { error } = await supabase.from('site_settings').upsert({
+    id: 'global',
+    instagram_url: data.instagram_url,
+    youtube_url: data.youtube_url,
+    twitter_url: data.twitter_url,
+    video_url: data.video_url,
+    video_poster: data.video_poster,
+    video_caption: data.video_caption,
+    cta_title: data.cta_title,
+    cta_title_accent: data.cta_title_accent,
+    cta_subtitle: data.cta_subtitle,
+    cta_button_text: data.cta_button_text,
+    cta_button_link: data.cta_button_link,
+    updated_at: new Date().toISOString(),
+  });
+  if (error) throw new Error(`Sync Failed: ${error.message}`);
+  revalidatePath('/');
+  return { success: true };
+}
+
+// =============================================
+// BRANDS
+// =============================================
+export async function getBrands() {
+  const supabase = createServerClient();
+  const { data, error } = await supabase
+    .from('brands')
+    .select('*')
+    .order('sort_order', { ascending: true });
+  if (error) return [];
+  return data || [];
+}
+
+export async function syncBrand(data: any) {
+  const supabase = createServerClient();
+  const payload: any = {
+    name: data.name,
+    is_bold: data.is_bold || false,
+    sort_order: data.sort_order || 0,
+  };
+  if (data.id) payload.id = data.id;
+
+  const { error } = await supabase.from('brands').upsert(payload);
+  if (error) throw new Error(`Sync Failed: ${error.message}`);
+  revalidatePath('/');
+  return { success: true };
+}
+
+export async function deleteBrand(id: string) {
+  const supabase = createServerClient();
+  const { error } = await supabase.from('brands').delete().eq('id', id);
+  if (error) throw new Error(`Delete Failed: ${error.message}`);
+  revalidatePath('/');
+  return { success: true };
+}
+
+// =============================================
+// TECH STACK (WHAT WE DO)
+// =============================================
+export async function getTechStack() {
+  const supabase = createServerClient();
+  const { data, error } = await supabase
+    .from('tech_stack')
+    .select('*')
+    .order('sort_order', { ascending: true });
+  if (error) return [];
+  return data || [];
+}
+
+export async function syncTechStack(data: any) {
+  const supabase = createServerClient();
+  const payload: any = {
+    name: data.name,
+    icon: data.icon,
+    description: data.description,
+    sort_order: data.sort_order || 0,
+  };
+  if (data.id) payload.id = data.id;
+
+  const { error } = await supabase.from('tech_stack').upsert(payload);
+  if (error) throw new Error(`Sync Failed: ${error.message}`);
+  revalidatePath('/');
+  return { success: true };
+}
+
+export async function deleteTechStack(id: string) {
+  const supabase = createServerClient();
+  const { error } = await supabase.from('tech_stack').delete().eq('id', id);
+  if (error) throw new Error(`Delete Failed: ${error.message}`);
+  revalidatePath('/');
+  return { success: true };
+}
+
+// =============================================
+// IMAGE UPLOAD to Supabase Storage
+// =============================================
+export async function uploadImage(formData: FormData) {
+  const supabase = createServerClient();
+  const file = formData.get('file') as File;
+  if (!file) throw new Error('No file provided');
+
+  const ext = file.name.split('.').pop();
+  const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+
+  const { data, error } = await supabase.storage
+    .from('media')
+    .upload(filename, file, { cacheControl: '3600', upsert: false });
+
+  if (error) throw new Error(`Upload Failed: ${error.message}`);
+
+  const { data: urlData } = supabase.storage.from('media').getPublicUrl(filename);
+  return { url: urlData.publicUrl };
 }

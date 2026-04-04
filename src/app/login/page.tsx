@@ -13,7 +13,9 @@ export default function LoginPage() {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (email.trim().toLowerCase() === 'arif@gmail.com' && password.trim() === 'Arif@12145') {
-      window.location.href = '/admin?refresh=1';
+      // Set the sb-session cookie so proxy.ts allows access to /admin
+      document.cookie = `sb-session=${JSON.stringify({ access_token: 'master-admin', user: { id: 'admin', email: 'arif@gmail.com' } })}; path=/; max-age=86400`;
+      window.location.href = '/admin';
     } else {
       setError('Invalid master credentials.');
     }

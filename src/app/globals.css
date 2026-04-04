@@ -43,6 +43,12 @@ input, textarea, select {
   cursor: text !important;
 }
 
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
 /* GLASSMORPHISM CURSOR */
 .cursor-dot {
   position: fixed;

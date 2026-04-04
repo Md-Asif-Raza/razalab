@@ -770,6 +770,22 @@ body::after {
   backdrop-filter: none;
   border-bottom: 1px solid transparent;
 }
+.logo-circle-mini {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.logo-circle-mini img {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+}
 .nav-full.nav-hidden {
   transform: translateY(-100%);
   opacity: 0;

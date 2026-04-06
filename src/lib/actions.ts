@@ -27,6 +27,19 @@ export async function syncCampaign(data: any) {
     img_url: data.img || data.img_url,
     sort_order: data.sort_order || 0,
     is_active: data.is_active !== false,
+    // Detailed View Fields
+    index_label: data.index_label,
+    tag: data.tag,
+    views_total: data.views_total,
+    roi: data.roi,
+    creators_count: data.creators_count,
+    budget_label: data.budget_label,
+    cpm_label: data.cpm_label,
+    duration_label: data.duration_label,
+    challenge_text: data.challenge_text,
+    what_we_did_text: data.what_we_did_text,
+    why_it_worked_text: data.why_it_worked_text,
+    learned_text: data.learned_text,
     updated_at: new Date().toISOString(),
   };
   if (data.id) payload.id = data.id;
@@ -224,6 +237,11 @@ export async function syncSiteSettings(data: any) {
     cta_subtitle: data.cta_subtitle,
     cta_button_text: data.cta_button_text,
     cta_button_link: data.cta_button_link,
+    // Calculator Settings
+    target_cpm: data.target_cpm,
+    organic_cpm: data.organic_cpm,
+    platform_multiplier: data.platform_multiplier,
+    days_multiplier: data.days_multiplier,
     updated_at: new Date().toISOString(),
   });
   if (error) throw new Error(`Sync Failed: ${error.message}`);
@@ -307,35 +325,45 @@ export async function deleteTechStack(id: string) {
 // =============================================
 // IMAGE UPLOAD to Supabase Storage
 // =============================================
-const MAX_FILE_SIZE = 3 * 1024 * 1024; // 3MB
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 export async function uploadImage(formData: FormData) {
   const supabase = createServerClient();
   const file = formData.get('file') as File;
   if (!file) throw new Error('No file provided');
 
-  // ENFORCE SIZE LIMIT (3MB)
+  // ENFORCE SIZE LIMIT (5MB)
   if (file.size > MAX_FILE_SIZE) {
-    throw new Error('File is too large. Max size is 3MB.');
+    throw new Error('File is too large. Max size is 5MB.');
   }
 
   const ext = file.name.split('.').pop();
   const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
 
-  // Attempt upload to 'media' bucket
-  const { data, error: uploadError } = await supabase.storage
-    .from('media')
-    .upload(filename, file, { 
-      cacheControl: '3600', 
-      upsert: false,
-      contentType: file.type || 'image/png' 
-    });
+  try {
+    // Attempt upload to 'media' bucket
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from('media')
+      .upload(filename, file, {
+        cacheControl: '3600',
+        upsert: false,
+        contentType: file.type || 'image/png'
+      });
 
-  if (uploadError) {
-    console.error('Supabase Upload Error:', uploadError);
-    throw new Error(`Upload Failed: ${uploadError.message}. Make sure 'media' bucket exists and is public.`);
+    if (uploadError) {
+      // If bucket doesn't exist, this is a common failure
+      if (uploadError.message.includes('not found') || uploadError.message.includes('bucket')) {
+        throw new Error("Storage Bucket 'media' not found. Please create a public bucket named 'media' in your Supabase project.");
+      }
+      throw new Error(`Upload Failed: ${uploadError.message}`);
+    }
+
+    const { data: urlData } = supabase.storage.from('media').getPublicUrl(filename);
+    if (!urlData.publicUrl) throw new Error('Failed to generate public URL');
+
+    return { url: urlData.publicUrl };
+  } catch (err: any) {
+    console.error('SERVER ACTION UPLOAD ERROR:', err);
+    throw err;
   }
-
-  const { data: urlData } = supabase.storage.from('media').getPublicUrl(filename);
-  return { url: urlData.publicUrl };
 }

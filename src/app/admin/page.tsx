@@ -37,12 +37,12 @@ function Toast({ message, type, onClose }: { message: string; type: 'success' | 
 // IMAGE UPLOAD COMPONENT
 // =============================================
 function ImageField({ value, onChange, label }: { value: string; onChange: (v: string) => void; label: string }) {
-  const [uploading, setUploading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
 
-  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    setUploading(true);
+    setIsUploading(true);
     try {
       const fd = new FormData();
       fd.append('file', file);
@@ -51,27 +51,56 @@ function ImageField({ value, onChange, label }: { value: string; onChange: (v: s
     } catch (err: any) {
       alert('Upload failed: ' + err.message);
     } finally {
-      setUploading(false);
+      setIsUploading(false);
     }
   };
 
   return (
     <div className="form-group">
       <label className="form-label">{label}</label>
-      <input
-        className="form-input"
-        placeholder="Paste image URL..."
-        value={value || ''}
-        onChange={(e) => onChange(e.target.value)}
-      />
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '8px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        {value && <img src={value} className="cms-image-preview-mini" alt="Preview" />}
+        <input
+          type="text"
+          className="form-input"
+          value={value || ''}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder="https://..."
+        />
         <label className="cms-upload-label">
-          {uploading ? 'Uploading...' : '📁 Upload File'}
-          <input type="file" accept="image/*" onChange={handleFile} style={{ display: 'none' }} />
+          {isUploading ? '...' : 'Upload'}
+          <input type="file" hidden onChange={handleFileChange} accept="image/*" />
         </label>
-        {value && (
-          <img src={value} alt="Preview" className="cms-image-preview-mini" />
-        )}
+      </div>
+    </div>
+  );
+}
+
+function GraphDataInputs({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const parts = value.split(',').map(p => p.trim());
+  const days = Array.from({ length: 7 }, (_, i) => parts[i] || '0');
+
+  const updateDay = (idx: number, newVal: string) => {
+    const next = [...days];
+    next[idx] = newVal || '0';
+    onChange(next.join(','));
+  };
+
+  return (
+    <div className="form-group mb-16">
+      <label className="form-label">Weekly Growth Data (7 Days)</label>
+      <div className="graph-grid-inputs" style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '8px' }}>
+        {days.map((d, i) => (
+          <div key={i}>
+            <div className="graph-day-label" style={{ fontSize: '0.7rem', marginBottom: '4px' }}>D{i + 1}</div>
+            <input
+              type="number"
+              className="form-input graph-day-input"
+              value={d}
+              onChange={(e) => updateDay(i, e.target.value)}
+            />
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -203,7 +232,7 @@ export default function AdminPage() {
       else if (editType === 'faq') await syncFaq(editItem);
       else if (editType === 'brand') await syncBrand(editItem);
       else if (editType === 'tech') await syncTechStack(editItem);
-      
+
       showToast(`${editType.charAt(0).toUpperCase() + editType.slice(1)} saved!`);
       setEditItem(null);
       setEditType('');
@@ -224,7 +253,7 @@ export default function AdminPage() {
       else if (deleteTarget.type === 'faq') await deleteFaq(deleteTarget.id);
       else if (deleteTarget.type === 'brand') await deleteBrand(deleteTarget.id);
       else if (deleteTarget.type === 'tech') await deleteTechStack(deleteTarget.id);
-      
+
       showToast(`Deleted "${deleteTarget.name}"`);
       setDeleteTarget(null);
       await loadData();
@@ -346,11 +375,42 @@ export default function AdminPage() {
               <div className="cms-edit-overlay" onClick={() => { setEditItem(null); setEditType(''); }}>
                 <div className="cms-edit-modal" onClick={(e) => e.stopPropagation()}>
                   <h2>{editItem.id ? 'Edit' : 'Add'} Campaign</h2>
-                  <div className="form-row"><div className="form-group"><label className="form-label">Name</label><input className="form-input" value={editItem.name} onChange={e => setEditItem({...editItem, name: e.target.value})} /></div><div className="form-group"><label className="form-label">Category</label><input className="form-input" value={editItem.category} onChange={e => setEditItem({...editItem, category: e.target.value})} /></div></div>
-                  <div className="form-row"><div className="form-group"><label className="form-label">Result</label><input className="form-input" value={editItem.result} onChange={e => setEditItem({...editItem, result: e.target.value})} /></div><div className="form-group"><label className="form-label">Price</label><input className="form-input" value={editItem.price} onChange={e => setEditItem({...editItem, price: e.target.value})} /></div></div>
-                  <div className="form-group mb-16"><label className="form-label">Description</label><textarea className="form-input form-textarea" value={editItem.description} onChange={e => setEditItem({...editItem, description: e.target.value})} /></div>
-                  <div className="form-group mb-16"><label className="form-label">Graph Data (csv)</label><input className="form-input" value={editItem.graph_data} onChange={e => setEditItem({...editItem, graph_data: e.target.value})} /></div>
-                  <ImageField value={editItem.img_url} onChange={v => setEditItem({...editItem, img_url: v})} label="Image" />
+                  <div className="form-row">
+                    <div className="form-group"><label className="form-label">Name</label><input className="form-input" value={editItem.name || ''} onChange={e => setEditItem({ ...editItem, name: e.target.value })} /></div>
+                    <div className="form-group"><label className="form-label">Category</label><input className="form-input" value={editItem.category || ''} onChange={e => setEditItem({ ...editItem, category: e.target.value })} /></div>
+                  </div>
+                  <div className="form-row">
+                    <div className="form-group"><label className="form-label">Result (Small)</label><input className="form-input" value={editItem.result || ''} onChange={e => setEditItem({ ...editItem, result: e.target.value })} /></div>
+                    <div className="form-group"><label className="form-label">Price/Budget (Small)</label><input className="form-input" value={editItem.price || ''} onChange={e => setEditItem({ ...editItem, price: e.target.value })} /></div>
+                  </div>
+
+                  <h3 className="cms-settings-heading mt-16" style={{ fontSize: '0.9rem', marginBottom: '12px', opacity: 0.8 }}>Metrics Overlays (Image Ref)</h3>
+                  <div className="form-row">
+                    <div className="form-group"><label className="form-label">Index Label (03)</label><input className="form-input" value={editItem.index_label || ''} onChange={e => setEditItem({ ...editItem, index_label: e.target.value })} /></div>
+                    <div className="form-group"><label className="form-label">Tag (Film)</label><input className="form-input" value={editItem.tag || ''} onChange={e => setEditItem({ ...editItem, tag: e.target.value })} /></div>
+                  </div>
+                  <div className="form-row">
+                    <div className="form-group"><label className="form-label">Views Total (20.5M)</label><input className="form-input" value={editItem.views_total || ''} onChange={e => setEditItem({ ...editItem, views_total: e.target.value })} /></div>
+                    <div className="form-group"><label className="form-label">ROI (8-12x)</label><input className="form-input" value={editItem.roi || ''} onChange={e => setEditItem({ ...editItem, roi: e.target.value })} /></div>
+                  </div>
+                  <div className="form-row">
+                    <div className="form-group"><label className="form-label">Creators Count (2,400)</label><input className="form-input" value={editItem.creators_count || ''} onChange={e => setEditItem({ ...editItem, creators_count: e.target.value })} /></div>
+                    <div className="form-group"><label className="form-label">Budget label ($10K)</label><input className="form-input" value={editItem.budget_label || ''} onChange={e => setEditItem({ ...editItem, budget_label: e.target.value })} /></div>
+                  </div>
+                  <div className="form-row">
+                    <div className="form-group"><label className="form-label">CPM label ($0.50)</label><input className="form-input" value={editItem.cpm_label || ''} onChange={e => setEditItem({ ...editItem, cpm_label: e.target.value })} /></div>
+                    <div className="form-group"><label className="form-label">Duration label (21 days)</label><input className="form-input" value={editItem.duration_label || ''} onChange={e => setEditItem({ ...editItem, duration_label: e.target.value })} /></div>
+                  </div>
+
+                  <h3 className="cms-settings-heading mt-16" style={{ fontSize: '0.9rem', marginBottom: '12px', opacity: 0.8 }}>Case Study Content</h3>
+                  <div className="form-group mb-12"><label className="form-label">The Challenge</label><textarea className="form-input" style={{ minHeight: '60px' }} value={editItem.challenge_text || ''} onChange={e => setEditItem({ ...editItem, challenge_text: e.target.value })} /></div>
+                  <div className="form-group mb-12"><label className="form-label">What We Did</label><textarea className="form-input" style={{ minHeight: '60px' }} value={editItem.what_we_did_text || ''} onChange={e => setEditItem({ ...editItem, what_we_did_text: e.target.value })} /></div>
+                  <div className="form-group mb-12"><label className="form-label">Why It Worked</label><textarea className="form-input" style={{ minHeight: '60px' }} value={editItem.why_it_worked_text || ''} onChange={e => setEditItem({ ...editItem, why_it_worked_text: e.target.value })} /></div>
+                  <div className="form-group mb-12"><label className="form-label">What the Studio Learned</label><textarea className="form-input" style={{ minHeight: '60px' }} value={editItem.learned_text || ''} onChange={e => setEditItem({ ...editItem, learned_text: e.target.value })} /></div>
+
+                  <div className="form-group mb-16"><label className="form-label">General Description (Short)</label><textarea className="form-input" style={{ minHeight: '60px' }} value={editItem.description || ''} onChange={e => setEditItem({ ...editItem, description: e.target.value })} /></div>
+                  <GraphDataInputs value={editItem.graph_data || ''} onChange={v => setEditItem({ ...editItem, graph_data: v })} />
+                  <ImageField value={editItem.img_url || ''} onChange={v => setEditItem({ ...editItem, img_url: v })} label="Cover Image" />
                   <div className="cms-modal-footer">
                     <button className="cms-btn cms-btn-ghost" onClick={() => { setEditItem(null); setEditType(''); }}>Cancel</button>
                     <button className="cms-btn cms-btn-primary" onClick={handleSave} disabled={loading}>Save</button>
@@ -384,9 +444,9 @@ export default function AdminPage() {
               <div className="cms-edit-overlay" onClick={() => { setEditItem(null); setEditType(''); }}>
                 <div className="cms-edit-modal" onClick={(e) => e.stopPropagation()}>
                   <h2>FAQ</h2>
-                  <div className="form-group mb-16"><label className="form-label">Question</label><input className="form-input" value={editItem.question} onChange={e => setEditItem({...editItem, question: e.target.value})} /></div>
-                  <div className="form-group mb-16"><label className="form-label">Answer</label><textarea className="form-input form-textarea" style={{minHeight:'120px'}} value={editItem.answer} onChange={e => setEditItem({...editItem, answer: e.target.value})} /></div>
-                  <div className="form-group"><label className="form-label">Sort Order</label><input className="form-input" type="number" value={editItem.sort_order} onChange={e => setEditItem({...editItem, sort_order: parseInt(e.target.value)})} /></div>
+                  <div className="form-group mb-16"><label className="form-label">Question</label><input className="form-input" value={editItem.question} onChange={e => setEditItem({ ...editItem, question: e.target.value })} /></div>
+                  <div className="form-group mb-16"><label className="form-label">Answer</label><textarea className="form-input form-textarea" style={{ minHeight: '120px' }} value={editItem.answer} onChange={e => setEditItem({ ...editItem, answer: e.target.value })} /></div>
+                  <div className="form-group"><label className="form-label">Sort Order</label><input className="form-input" type="number" value={editItem.sort_order} onChange={e => setEditItem({ ...editItem, sort_order: parseInt(e.target.value) })} /></div>
                   <div className="cms-modal-footer">
                     <button className="cms-btn cms-btn-ghost" onClick={() => { setEditItem(null); setEditType(''); }}>Cancel</button>
                     <button className="cms-btn cms-btn-primary" onClick={handleSave} disabled={loading}>Save</button>
@@ -419,9 +479,9 @@ export default function AdminPage() {
               <div className="cms-edit-overlay" onClick={() => { setEditItem(null); setEditType(''); }}>
                 <div className="cms-edit-modal" onClick={(e) => e.stopPropagation()}>
                   <h2>Brand</h2>
-                  <div className="form-group mb-16"><label className="form-label">Brand Name</label><input className="form-input" value={editItem.name} onChange={e => setEditItem({...editItem, name: e.target.value})} /></div>
-                  <div className="form-group mb-16 checkbox-group"><input type="checkbox" checked={editItem.is_bold} onChange={e => setEditItem({...editItem, is_bold: e.target.checked})} /><label className="form-label">Bold Formatting</label></div>
-                  <div className="form-group"><label className="form-label">Sort Order</label><input className="form-input" type="number" value={editItem.sort_order} onChange={e => setEditItem({...editItem, sort_order: parseInt(e.target.value)})} /></div>
+                  <div className="form-group mb-16"><label className="form-label">Brand Name</label><input className="form-input" value={editItem.name} onChange={e => setEditItem({ ...editItem, name: e.target.value })} /></div>
+                  <div className="form-group mb-16 checkbox-group"><input type="checkbox" checked={editItem.is_bold} onChange={e => setEditItem({ ...editItem, is_bold: e.target.checked })} /><label className="form-label">Bold Formatting</label></div>
+                  <div className="form-group"><label className="form-label">Sort Order</label><input className="form-input" type="number" value={editItem.sort_order} onChange={e => setEditItem({ ...editItem, sort_order: parseInt(e.target.value) })} /></div>
                   <div className="cms-modal-footer">
                     <button className="cms-btn cms-btn-ghost" onClick={() => { setEditItem(null); setEditType(''); }}>Cancel</button>
                     <button className="cms-btn cms-btn-primary" onClick={handleSave} disabled={loading}>Save</button>
@@ -462,9 +522,9 @@ export default function AdminPage() {
               <div className="cms-edit-overlay" onClick={() => { setEditItem(null); setEditType(''); }}>
                 <div className="cms-edit-modal" onClick={(e) => e.stopPropagation()}>
                   <h2>Testimonial</h2>
-                  <div className="form-row"><div className="form-group"><label className="form-label">Name</label><input className="form-input" value={editItem.name} onChange={e => setEditItem({...editItem, name: e.target.value})} /></div><div className="form-group"><label className="form-label">Role</label><input className="form-input" value={editItem.role} onChange={e => setEditItem({...editItem, role: e.target.value})} /></div></div>
-                  <div className="form-group mb-16"><label className="form-label">Quote</label><textarea className="form-input form-textarea" value={editItem.quote} onChange={e => setEditItem({...editItem, quote: e.target.value})} /></div>
-                  <ImageField value={editItem.avatar_url} onChange={v => setEditItem({...editItem, avatar_url: v})} label="Avatar" />
+                  <div className="form-row"><div className="form-group"><label className="form-label">Name</label><input className="form-input" value={editItem.name} onChange={e => setEditItem({ ...editItem, name: e.target.value })} /></div><div className="form-group"><label className="form-label">Role</label><input className="form-input" value={editItem.role} onChange={e => setEditItem({ ...editItem, role: e.target.value })} /></div></div>
+                  <div className="form-group mb-16"><label className="form-label">Quote</label><textarea className="form-input form-textarea" value={editItem.quote} onChange={e => setEditItem({ ...editItem, quote: e.target.value })} /></div>
+                  <ImageField value={editItem.avatar_url} onChange={v => setEditItem({ ...editItem, avatar_url: v })} label="Avatar" />
                   <div className="cms-modal-footer">
                     <button className="cms-btn cms-btn-ghost" onClick={() => { setEditItem(null); setEditType(''); }}>Cancel</button>
                     <button className="cms-btn cms-btn-primary" onClick={handleSave} disabled={loading}>Save</button>
@@ -486,7 +546,7 @@ export default function AdminPage() {
               {techStack.length === 0 && <div className="cms-empty">No services yet. Click "+ Add Service" to get started.</div>}
               {techStack.map(ts => (
                 <div key={ts.id} className="cms-item-card">
-                  <div style={{fontSize:'1.5rem', marginBottom:'8px'}}>{ts.icon}</div>
+                  <div style={{ fontSize: '1.5rem', marginBottom: '8px' }}>{ts.icon}</div>
                   <h3 className="cms-item-name">{ts.name}</h3>
                   {ts.description && <p className="cms-item-desc">{ts.description}</p>}
                   <div className="cms-item-actions">
@@ -500,8 +560,8 @@ export default function AdminPage() {
               <div className="cms-edit-overlay" onClick={() => { setEditItem(null); setEditType(''); }}>
                 <div className="cms-edit-modal" onClick={(e) => e.stopPropagation()}>
                   <h2>Service Item</h2>
-                  <div className="form-row"><div className="form-group"><label className="form-label">Name</label><input className="form-input" value={editItem.name} onChange={e => setEditItem({...editItem, name: e.target.value})} /></div><div className="form-group"><label className="form-label">Icon (Emoji)</label><input className="form-input" value={editItem.icon} onChange={e => setEditItem({...editItem, icon: e.target.value})} /></div></div>
-                  <div className="form-group mb-16"><label className="form-label">Description</label><input className="form-input" value={editItem.description} onChange={e => setEditItem({...editItem, description: e.target.value})} /></div>
+                  <div className="form-row"><div className="form-group"><label className="form-label">Name</label><input className="form-input" value={editItem.name} onChange={e => setEditItem({ ...editItem, name: e.target.value })} /></div><div className="form-group"><label className="form-label">Icon (Emoji)</label><input className="form-input" value={editItem.icon} onChange={e => setEditItem({ ...editItem, icon: e.target.value })} /></div></div>
+                  <div className="form-group mb-16"><label className="form-label">Description</label><input className="form-input" value={editItem.description} onChange={e => setEditItem({ ...editItem, description: e.target.value })} /></div>
                   <div className="cms-modal-footer">
                     <button className="cms-btn cms-btn-ghost" onClick={() => { setEditItem(null); setEditType(''); }}>Cancel</button>
                     <button className="cms-btn cms-btn-primary" onClick={handleSave} disabled={loading}>Save</button>
@@ -518,16 +578,22 @@ export default function AdminPage() {
             <h1 className="cms-page-title">Hero & CTA Content</h1>
             <div className="cms-settings-card">
               <h3 className="cms-settings-heading">🏠 Hero Section</h3>
-              <div className="form-row"><div className="form-group"><label className="form-label">Main Title</label><input className="form-input" value={heroData.title} onChange={e => setHeroData({...heroData, title: e.target.value})} /></div><div className="form-group"><label className="form-label">Accent Title</label><input className="form-input" value={heroData.title_accent} onChange={e => setHeroData({...heroData, title_accent: e.target.value})} /></div></div>
-              <div className="form-group mb-16"><label className="form-label">Hero Subtitle</label><textarea className="form-input form-textarea" value={heroData.subtitle} onChange={e => setHeroData({...heroData, subtitle: e.target.value})} /></div>
-              <div className="form-row"><div className="form-group"><label className="form-label">CTA Text</label><input className="form-input" value={heroData.cta_text} onChange={e => setHeroData({...heroData, cta_text: e.target.value})} /></div><div className="form-group"><label className="form-label">CTA Link</label><input className="form-input" value={heroData.cta_link} onChange={e => setHeroData({...heroData, cta_link: e.target.value})} /></div></div>
-              <div className="form-group mb-24"><label className="form-label">Stats Subtext</label><input className="form-input" value={heroData.stats_text} onChange={e => setHeroData({...heroData, stats_text: e.target.value})} /></div>
+              <div className="form-row"><div className="form-group"><label className="form-label">Main Title</label><input className="form-input" value={heroData.title} onChange={e => setHeroData({ ...heroData, title: e.target.value })} /></div><div className="form-group"><label className="form-label">Accent Title</label><input className="form-input" value={heroData.title_accent} onChange={e => setHeroData({ ...heroData, title_accent: e.target.value })} /></div></div>
+              <div className="form-group mb-16"><label className="form-label">Hero Subtitle</label><textarea className="form-input form-textarea" value={heroData.subtitle} onChange={e => setHeroData({ ...heroData, subtitle: e.target.value })} /></div>
+              <div className="form-row"><div className="form-group"><label className="form-label">CTA Text</label><input className="form-input" value={heroData.cta_text} onChange={e => setHeroData({ ...heroData, cta_text: e.target.value })} /></div><div className="form-group"><label className="form-label">CTA Link</label><input className="form-input" value={heroData.cta_link} onChange={e => setHeroData({ ...heroData, cta_link: e.target.value })} /></div></div>
+              <div className="form-group mb-24"><label className="form-label">Stats Subtext</label><input className="form-input" value={heroData.stats_text} onChange={e => setHeroData({ ...heroData, stats_text: e.target.value })} /></div>
+
+              <h3 className="cms-settings-heading mt-32">🧮 ROI Calculator Constants</h3>
+              <div className="form-row mb-24">
+                <div className="form-group"><label className="form-label">Paid Ads CPM (e.g. 25.00)</label><input className="form-input" type="number" step="0.5" value={settingsData.target_cpm || 25.00} onChange={e => setSettingsData({ ...settingsData, target_cpm: parseFloat(e.target.value) })} /></div>
+                <div className="form-group"><label className="form-label">Organic CPM (e.g. 1.00)</label><input className="form-input" type="number" step="0.1" value={settingsData.organic_cpm || 1.00} onChange={e => setSettingsData({ ...settingsData, organic_cpm: parseFloat(e.target.value) })} /></div>
+              </div>
 
               <h3 className="cms-settings-heading mt-32">📢 Bottom CTA Section</h3>
-              <div className="form-row"><div className="form-group"><label className="form-label">CTA Title</label><input className="form-input" value={settingsData.cta_title} onChange={e => setSettingsData({...settingsData, cta_title: e.target.value})} /></div><div className="form-group"><label className="form-label">CTA Accent</label><input className="form-input" value={settingsData.cta_title_accent} onChange={e => setSettingsData({...settingsData, cta_title_accent: e.target.value})} /></div></div>
-              <div className="form-group mb-16"><label className="form-label">CTA Subtitle</label><textarea className="form-input form-textarea" value={settingsData.cta_subtitle} onChange={e => setSettingsData({...settingsData, cta_subtitle: e.target.value})} /></div>
-              <div className="form-row mb-24"><div className="form-group"><label className="form-label">Btn Text</label><input className="form-input" value={settingsData.cta_button_text} onChange={e => setSettingsData({...settingsData, cta_button_text: e.target.value})} /></div><div className="form-group"><label className="form-label">Btn Link</label><input className="form-input" value={settingsData.cta_button_link} onChange={e => setSettingsData({...settingsData, cta_button_link: e.target.value})} /></div></div>
-              
+              <div className="form-row"><div className="form-group"><label className="form-label">CTA Title</label><input className="form-input" value={settingsData.cta_title} onChange={e => setSettingsData({ ...settingsData, cta_title: e.target.value })} /></div><div className="form-group"><label className="form-label">CTA Accent</label><input className="form-input" value={settingsData.cta_title_accent} onChange={e => setSettingsData({ ...settingsData, cta_title_accent: e.target.value })} /></div></div>
+              <div className="form-group mb-16"><label className="form-label">CTA Subtitle</label><textarea className="form-input form-textarea" value={settingsData.cta_subtitle} onChange={e => setSettingsData({ ...settingsData, cta_subtitle: e.target.value })} /></div>
+              <div className="form-row mb-24"><div className="form-group"><label className="form-label">Btn Text</label><input className="form-input" value={settingsData.cta_button_text} onChange={e => setSettingsData({ ...settingsData, cta_button_text: e.target.value })} /></div><div className="form-group"><label className="form-label">Btn Link</label><input className="form-input" value={settingsData.cta_button_link} onChange={e => setSettingsData({ ...settingsData, cta_button_link: e.target.value })} /></div></div>
+
               <button className="cms-btn cms-btn-primary" onClick={handleSaveHeroAndCTA} disabled={loading}>Save Hero & CTA</button>
             </div>
           </>
@@ -539,9 +605,9 @@ export default function AdminPage() {
             <h1 className="cms-page-title">Media & Explainer</h1>
             <div className="cms-settings-card">
               <h3 className="cms-settings-heading">🎬 Video Settings</h3>
-              <div className="form-group mb-16"><label className="form-label">Video URL (MP4 or YouTube)</label><input className="form-input" value={settingsData.video_url} onChange={e => setSettingsData({...settingsData, video_url: e.target.value})} /></div>
-              <ImageField value={settingsData.video_poster} onChange={v => setSettingsData({...settingsData, video_poster: v})} label="Poster Image" />
-              <div className="form-group mb-24 mt-16"><label className="form-label">Video Caption</label><input className="form-input" value={settingsData.video_caption} onChange={e => setSettingsData({...settingsData, video_caption: e.target.value})} /></div>
+              <div className="form-group mb-16"><label className="form-label">Video URL (MP4 or YouTube)</label><input className="form-input" value={settingsData.video_url} onChange={e => setSettingsData({ ...settingsData, video_url: e.target.value })} /></div>
+              <ImageField value={settingsData.video_poster} onChange={v => setSettingsData({ ...settingsData, video_poster: v })} label="Poster Image" />
+              <div className="form-group mb-24 mt-16"><label className="form-label">Video Caption</label><input className="form-input" value={settingsData.video_caption} onChange={e => setSettingsData({ ...settingsData, video_caption: e.target.value })} /></div>
               <button className="cms-btn cms-btn-primary" onClick={handleSaveMedia} disabled={loading}>Save Media</button>
             </div>
           </>
@@ -553,13 +619,13 @@ export default function AdminPage() {
             <h1 className="cms-page-title">Global Settings & Calculator</h1>
             <div className="cms-settings-card">
               <h3 className="cms-settings-heading">🔗 Social Connections</h3>
-              <div className="form-row"><div className="form-group"><label className="form-label">Instagram</label><input className="form-input" value={settingsData.instagram_url} onChange={e => setSettingsData({...settingsData, instagram_url: e.target.value})} /></div><div className="form-group"><label className="form-label">YouTube</label><input className="form-input" value={settingsData.youtube_url} onChange={e => setSettingsData({...settingsData, youtube_url: e.target.value})} /></div></div>
-              <div className="form-group mb-24"><label className="form-label">X/Twitter</label><input className="form-input" value={settingsData.twitter_url} onChange={e => setSettingsData({...settingsData, twitter_url: e.target.value})} /></div>
+              <div className="form-row"><div className="form-group"><label className="form-label">Instagram</label><input className="form-input" value={settingsData.instagram_url} onChange={e => setSettingsData({ ...settingsData, instagram_url: e.target.value })} /></div><div className="form-group"><label className="form-label">YouTube</label><input className="form-input" value={settingsData.youtube_url} onChange={e => setSettingsData({ ...settingsData, youtube_url: e.target.value })} /></div></div>
+              <div className="form-group mb-24"><label className="form-label">X/Twitter</label><input className="form-input" value={settingsData.twitter_url} onChange={e => setSettingsData({ ...settingsData, twitter_url: e.target.value })} /></div>
 
               <h3 className="cms-settings-heading mt-32">🧮 Calculator Variables</h3>
-              <div className="form-row"><div className="form-group"><label className="form-label">Target CPM ($)</label><input className="form-input" type="number" step="0.5" value={settingsData.target_cpm} onChange={e => setSettingsData({...settingsData, target_cpm: parseFloat(e.target.value)})} /></div><div className="form-group"><label className="form-label">Organic CPM ($)</label><input className="form-input" type="number" step="0.5" value={settingsData.organic_cpm} onChange={e => setSettingsData({...settingsData, organic_cpm: parseFloat(e.target.value)})} /></div></div>
-              <div className="form-row mb-24"><div className="form-group"><label className="form-label">Platform Multiplier</label><input className="form-input" type="number" value={settingsData.platform_multiplier} onChange={e => setSettingsData({...settingsData, platform_multiplier: parseInt(e.target.value)})} /></div><div className="form-group"><label className="form-label">Days per Week</label><input className="form-input" type="number" value={settingsData.days_multiplier} onChange={e => setSettingsData({...settingsData, days_multiplier: parseInt(e.target.value)})} /></div></div>
-              
+              <div className="form-row"><div className="form-group"><label className="form-label">Target CPM ($)</label><input className="form-input" type="number" step="0.5" value={settingsData.target_cpm} onChange={e => setSettingsData({ ...settingsData, target_cpm: parseFloat(e.target.value) })} /></div><div className="form-group"><label className="form-label">Organic CPM ($)</label><input className="form-input" type="number" step="0.5" value={settingsData.organic_cpm} onChange={e => setSettingsData({ ...settingsData, organic_cpm: parseFloat(e.target.value) })} /></div></div>
+              <div className="form-row mb-24"><div className="form-group"><label className="form-label">Platform Multiplier</label><input className="form-input" type="number" value={settingsData.platform_multiplier} onChange={e => setSettingsData({ ...settingsData, platform_multiplier: parseInt(e.target.value) })} /></div><div className="form-group"><label className="form-label">Days per Week</label><input className="form-input" type="number" value={settingsData.days_multiplier} onChange={e => setSettingsData({ ...settingsData, days_multiplier: parseInt(e.target.value) })} /></div></div>
+
               <button className="cms-btn cms-btn-primary" onClick={handleSaveGlobal} disabled={loading}>Save Global Settings</button>
             </div>
           </>

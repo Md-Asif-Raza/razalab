@@ -63,7 +63,7 @@ export default function Navbar() {
         <ul className="nav-links desktop-only">
           <li><Link href="#hero">Home</Link></li>
           <li><Link href="#campaigns">Clients</Link></li>
-          <li><Link href="#video-showcase">Explainer</Link></li>
+          <li><Link href="#testimonials">Testimonials</Link></li>
           <li><Link href="#faq">FAQ</Link></li>
         </ul>
          <div className="nav-socials desktop-only">
@@ -110,7 +110,7 @@ export default function Navbar() {
         <ul className="mobile-nav-links">
           <li><Link href="#hero" onClick={() => setIsMobileMenuOpen(false)}>Home</Link></li>
           <li><Link href="#campaigns" onClick={() => setIsMobileMenuOpen(false)}>Clients</Link></li>
-          <li><Link href="#video-showcase" onClick={() => setIsMobileMenuOpen(false)}>Explainer</Link></li>
+          <li><Link href="#testimonials" onClick={() => setIsMobileMenuOpen(false)}>Testimonials</Link></li>
           <li><Link href="#faq" onClick={() => setIsMobileMenuOpen(false)}>FAQ</Link></li>
         </ul>
         

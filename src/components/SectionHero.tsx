@@ -32,31 +32,41 @@ export default function SectionHero() {
   return (
     <section id="hero" style={{ padding: '160px 0 80px 0' }}>
       <div className="standard-container">
-        <div style={{ maxWidth: '900px' }}>
+        <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
           <h1 className="reveal-up" style={{ 
-            fontSize: 'clamp(3rem, 8vw, 6rem)', 
+            fontSize: 'clamp(3rem, 8vw, 5.5rem)', 
             fontWeight: 800, 
-            lineHeight: 1, 
-            letterSpacing: '-0.04em',
+            lineHeight: 1.1, 
+            letterSpacing: '-0.02em',
             marginBottom: '40px',
             color: '#fff',
-            maxWidth: '900px'
+            maxWidth: '1200px',
+            textAlign: 'left',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            gap: '0',
+            padding: 0,
+            margin: 0
           }}>
-            {data.title} <span style={{ color: 'rgba(90, 104, 130, 0.6)' }}>{data.title_accent}</span>
+            <span style={{ display: 'block' }}>{data.title}</span>
+            <span style={{ color: 'rgba(90, 104, 130, 0.6)', display: 'block' }}>{data.title_accent}</span>
           </h1>
 
           <p className="reveal-up stagger-1" style={{ 
             fontSize: '1.25rem', 
             lineHeight: 1.6, 
             color: 'rgba(255, 255, 255, 0.6)', 
-            maxWidth: '900px',
+            maxWidth: '800px',
             marginBottom: '48px',
-            textAlign: 'left'
+            textAlign: 'left',
+            padding: 0,
+            margin: '0 0 48px 0'
           }}>
             {data.subtitle}
           </p>
 
-          <div className="reveal-up stagger-2" style={{ marginBottom: '64px' }}>
+          <div className="reveal-up stagger-2" style={{ marginBottom: '64px', textAlign: 'left' }}>
             <Link href={data.cta_link} className="btn-primary" style={{ padding: '18px 48px', fontSize: '1rem', borderRadius: '12px' }}>
               {data.cta_text}
             </Link>

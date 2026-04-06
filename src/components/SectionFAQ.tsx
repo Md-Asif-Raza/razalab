@@ -21,10 +21,10 @@ export default function SectionFAQ() {
   }, []);
 
   return (
-    <section id="faq" style={{ padding: '80px 0' }}>
-      <div className="container" style={{ maxWidth: '1000px' }}>
-        <div style={{ textAlign: 'center', marginBottom: '80px', width: '100%' }}>
-          <h2 className="section-title reveal-up">FAQ</h2>
+    <section id="faq" style={{ padding: '0 0 40px 0' }}>
+      <div className="standard-container" style={{ maxWidth: '1000px', marginLeft: '0' }}>
+        <div style={{ textAlign: 'left', marginBottom: '80px', width: '100%' }}>
+          <h2 className="section-title reveal-up" style={{ textAlign: 'left', margin: 0 }}>FAQ</h2>
         </div>
 
         <div className="reveal-up">

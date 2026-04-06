@@ -11,14 +11,28 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export type Campaign = {
   id: string;
-  title: string;
-  creator: string;
-  budget: number;
-  earned: number;
-  members: number;
-  platforms: string[];
-  verified: boolean;
-  media_url: string | null;
+  name: string;
+  category: string;
+  result: string;
+  price: string;
+  description: string;
+  graph_data: string;
+  img_url: string;
+  sort_order: number;
+  is_active: boolean;
+  // Detailed View Fields (from image)
+  index_label?: string;
+  tag?: string;
+  views_total?: string;
+  roi?: string;
+  creators_count?: string;
+  budget_label?: string;
+  cpm_label?: string;
+  duration_label?: string;
+  challenge_text?: string;
+  what_we_did_text?: string;
+  why_it_worked_text?: string;
+  learned_text?: string;
   created_at: string;
   updated_at: string;
 };

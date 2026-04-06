@@ -137,6 +137,7 @@ body::after {
     rgba(255, 255, 255, 0.8) 320deg, 
     transparent 360deg);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   opacity: 0;
@@ -306,6 +307,7 @@ body::after {
   border: 1px solid transparent;
   background: linear-gradient(135deg, rgba(90, 104, 130, 0.4), transparent 40%) border-box;
   -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
@@ -1664,4 +1666,37 @@ body::after {
   .calc-pane-right .giant-val { font-size: 2.5rem !important; }
   .btn-primary { padding: 12px 20px; }
   .nav-full { padding: 0 16px; }
+  /* SECTION STARTER GLOW (Premium Brand Cyan) */
+  .section-starter-glow {
+    position: absolute;
+    top: -150px;
+    left: 0;
+    right: 0;
+    height: 500px;
+    background: radial-gradient(50% 100% at 50% 0%, rgba(0, 230, 118, 0.15) 0%, transparent 100%);
+    z-index: 1;
+    pointer-events: none;
+  }
+  
+  .section-starter-glow::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: radial-gradient(50% 50% at 50% 0%, rgba(0, 230, 118, 0.1) 0%, transparent 100%);
+    filter: blur(60px);
+  }
+
+  .glow-blend-divider {
+    position: absolute;
+    top: -1px;
+    left: 0;
+    right: 0;
+    height: 200px;
+    background: linear-gradient(to bottom, #050304, transparent);
+    z-index: 2;
+    pointer-events: none;
+  }
 }

@@ -439,6 +439,25 @@
   border: 1px solid rgba(255,255,255,0.08);
 }
 
+/* GRAPH EDITOR GRID */
+.graph-grid-inputs {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+.graph-day-input {
+  text-align: center;
+  padding: 8px !important;
+  font-size: 0.75rem !important;
+}
+.graph-day-label {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  text-align: center;
+  margin-bottom: 4px;
+}
+
 /* LOADING BAR */
 .cms-loading-shimmer {
   position: fixed;

@@ -74,6 +74,9 @@ const nextConfig: NextConfig = {
   // Experimental features
   experimental: {
     optimizePackageImports: ['framer-motion', '@supabase/supabase-js'],
+    serverActions: {
+      bodySizeLimit: '5mb',
+    },
   },
 };
 

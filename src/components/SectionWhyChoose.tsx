@@ -26,11 +26,11 @@ export default function SectionWhyChoose() {
   const prev = () => setIndex((index - 1 + (maxIdx + 1)) % (maxIdx + 1));
 
   return (
-    <section id="testimonial-features">
+    <section id="testimonials">
       <div className="standard-container">
         <PremiumWrapper className="why-premium-container" style={{ padding: '60px' }}>
-          <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-            <h2 className="section-title">Testimonials</h2>
+          <div style={{ textAlign: 'left', marginBottom: '60px' }}>
+            <h2 className="section-title" style={{ textAlign: 'left', margin: 0 }}>Testimonials</h2>
           </div>
 
           <div className="pro-testimonial-row reveal-up" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>

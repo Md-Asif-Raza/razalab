@@ -24,21 +24,6 @@ export default function Home() {
       <SectionCTA />         {/* 7: End */}
       <Footer />
 
-      {/* Hidden admin access — tiny dot, bottom-left corner */}
-      <Link href="/admin" aria-label="Admin" style={{
-        position: 'fixed',
-        bottom: 8,
-        left: 8,
-        width: 6,
-        height: 6,
-        borderRadius: '50%',
-        background: 'rgba(90,104,130,0.15)',
-        border: 'none',
-        cursor: 'none',
-        zIndex: 500,
-        textDecoration: 'none',
-        opacity: 0.3,
-      }} />
     </>
   );
 }

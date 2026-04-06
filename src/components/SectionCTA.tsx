@@ -15,7 +15,7 @@ export default function SectionCTA() {
   useEffect(() => {
     getSiteSettings().then(res => {
       if (res) setData(res);
-    }).catch(() => {});
+    }).catch(() => { });
   }, []);
 
   return (
@@ -29,7 +29,7 @@ export default function SectionCTA() {
           }}></div>
         ))}
       </div>
-      <div className="cta-content container reveal-up" style={{ padding: '200px 0', textAlign: 'center' }}>
+      <div className="cta-content container reveal-up" style={{ padding: '60px 0', textAlign: 'center' }}>
         <h2 className="section-title" style={{ opacity: 0.1, marginBottom: '32px' }}></h2>
         <h2 className="cta-title">{data.cta_title}<br /> <span style={{ color: 'var(--c1)' }}>{data.cta_title_accent}</span></h2>
         <p className="cta-sub">{data.cta_subtitle}</p>

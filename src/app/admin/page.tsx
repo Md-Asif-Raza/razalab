@@ -99,6 +99,7 @@ function ConfirmModal({ message, onConfirm, onCancel }: { message: string; onCon
 // =============================================
 export default function AdminPage() {
   const [mounted, setMounted] = useState(false);
+  const [authed, setAuthed] = useState(false);
   const [tab, setTab] = useState('dashboard');
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const [loading, setLoading] = useState(false);
@@ -127,7 +128,16 @@ export default function AdminPage() {
   const [editItem, setEditItem] = useState<any>(null);
   const [editType, setEditType] = useState<string>('');
 
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    setMounted(true);
+    // Auth check — redirect if no session cookie
+    const cookies = document.cookie;
+    if (!cookies.includes('sb-session')) {
+      window.location.href = '/login';
+      return;
+    }
+    setAuthed(true);
+  }, []);
 
   const showToast = useCallback((message: string, type: 'success' | 'error' = 'success') => {
     setToast({ message, type });
@@ -153,9 +163,40 @@ export default function AdminPage() {
 
   useEffect(() => { if (mounted) loadData(); }, [mounted, loadData]);
 
-  if (!mounted) return null;
+  if (!mounted || !authed) return (
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#050304', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+      Authenticating...
+    </div>
+  );
+
+  const validateItem = (): string | null => {
+    if (!editItem) return 'No item to save';
+    if (editType === 'campaign') {
+      if (!editItem.name?.trim()) return 'Campaign name is required';
+      if (!editItem.category?.trim()) return 'Category is required';
+    } else if (editType === 'testimonial') {
+      if (!editItem.name?.trim()) return 'Name is required';
+      if (!editItem.quote?.trim()) return 'Quote is required';
+    } else if (editType === 'review') {
+      if (!editItem.name?.trim()) return 'Name is required';
+      if (!editItem.content?.trim()) return 'Review content is required';
+    } else if (editType === 'faq') {
+      if (!editItem.question?.trim()) return 'Question is required';
+      if (!editItem.answer?.trim()) return 'Answer is required';
+    } else if (editType === 'brand') {
+      if (!editItem.name?.trim()) return 'Brand name is required';
+    } else if (editType === 'tech') {
+      if (!editItem.name?.trim()) return 'Service name is required';
+    }
+    return null;
+  };
 
   const handleSave = async () => {
+    const validationError = validateItem();
+    if (validationError) {
+      showToast(validationError, 'error');
+      return;
+    }
     setLoading(true);
     try {
       if (editType === 'campaign') await syncCampaign(editItem);
@@ -288,15 +329,17 @@ export default function AdminPage() {
               <button className="cms-btn cms-btn-primary" onClick={() => { setEditType('campaign'); setEditItem({ name: '', category: '', result: '', price: '', description: '', graph_data: '', img_url: '', sort_order: campaigns.length }); }}>+ Add Campaign</button>
             </div>
             <div className="cms-card-grid">
+              {campaigns.length === 0 && <div className="cms-empty">No campaigns yet. Click "+ Add Campaign" to get started.</div>}
               {campaigns.map(c => (
                 <div key={c.id} className="cms-item-card">
                   {c.img_url && <img src={c.img_url} alt={c.name} className="cms-item-thumb" />}
                   <div className="cms-item-body">
                     <h3 className="cms-item-name">{c.name}</h3>
-                    <div className="cms-item-meta">{c.category} · {c.result}</div>
+                    <div className="cms-item-meta">{c.category} · {c.result} · {c.price || 'N/A'}</div>
+                    {c.description && <p className="cms-item-desc">{c.description.slice(0, 100)}{c.description.length > 100 ? '...' : ''}</p>}
                     <div className="cms-item-actions">
-                      <button className="td-btn" onClick={() => { setEditType('campaign'); setEditItem(c); }}>Edit</button>
-                      <button className="td-btn danger" onClick={() => setDeleteTarget({ type: 'campaign', id: c.id, name: c.name })}>Delete</button>
+                      <button className="td-btn" onClick={() => { setEditType('campaign'); setEditItem(c); }}>✎ Edit</button>
+                      <button className="td-btn danger" onClick={() => setDeleteTarget({ type: 'campaign', id: c.id, name: c.name })}>✕ Delete</button>
                     </div>
                   </div>
                 </div>
@@ -329,12 +372,21 @@ export default function AdminPage() {
               <button className="cms-btn cms-btn-primary" onClick={() => { setEditType('review'); setEditItem({ name: '', handle: '', content: '', stars: 5, avatar_url: '', sort_order: reviews.length }); }}>+ Add Review</button>
             </div>
             <div className="cms-card-grid">
+              {reviews.length === 0 && <div className="cms-empty">No reviews yet. Click "+ Add Review" to get started.</div>}
               {reviews.map(r => (
                 <div key={r.id} className="cms-item-card">
-                  <h3 className="cms-item-name">{r.name}</h3><div className="cms-item-meta">{r.handle} · {'★'.repeat(r.stars || 5)}</div>
-                  <div className="cms-item-actions mt-12">
-                    <button className="td-btn" onClick={() => { setEditType('review'); setEditItem(r); }}>Edit</button>
-                    <button className="td-btn danger" onClick={() => setDeleteTarget({ type: 'review', id: r.id, name: r.name })}>Delete</button>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                    {r.avatar_url && <img src={r.avatar_url} alt={r.name} style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }} />}
+                    <div>
+                      <h3 className="cms-item-name" style={{ marginBottom: 0 }}>{r.name}</h3>
+                      <div className="cms-item-meta" style={{ marginBottom: 0 }}>{r.handle}</div>
+                    </div>
+                  </div>
+                  <div style={{ color: '#ffc107', fontSize: '0.75rem', marginBottom: '8px' }}>{'★'.repeat(r.stars || 5)}</div>
+                  {r.content && <p className="cms-item-desc">{r.content.slice(0, 100)}{r.content.length > 100 ? '...' : ''}</p>}
+                  <div className="cms-item-actions">
+                    <button className="td-btn" onClick={() => { setEditType('review'); setEditItem(r); }}>✎ Edit</button>
+                    <button className="td-btn danger" onClick={() => setDeleteTarget({ type: 'review', id: r.id, name: r.name })}>✕ Delete</button>
                   </div>
                 </div>
               ))}
@@ -435,12 +487,20 @@ export default function AdminPage() {
               <button className="cms-btn cms-btn-primary" onClick={() => { setEditType('testimonial'); setEditItem({ name: '', role: '', quote: '', avatar_url: '', sort_order: testimonials.length }); }}>+ Add Entry</button>
             </div>
             <div className="cms-card-grid">
+              {testimonials.length === 0 && <div className="cms-empty">No testimonials yet. Click "+ Add Entry" to get started.</div>}
               {testimonials.map(t => (
                 <div key={t.id} className="cms-item-card">
-                  <h3 className="cms-item-name">{t.name}</h3><div className="cms-item-meta">{t.role}</div>
-                  <div className="cms-item-actions mt-12">
-                    <button className="td-btn" onClick={() => { setEditType('testimonial'); setEditItem(t); }}>Edit</button>
-                    <button className="td-btn danger" onClick={() => setDeleteTarget({ type: 'testimonial', id: t.id, name: t.name })}>Delete</button>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                    {t.avatar_url && <img src={t.avatar_url} alt={t.name} style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }} />}
+                    <div>
+                      <h3 className="cms-item-name" style={{ marginBottom: 0 }}>{t.name}</h3>
+                      <div className="cms-item-meta" style={{ marginBottom: 0 }}>{t.role}</div>
+                    </div>
+                  </div>
+                  {t.quote && <p className="cms-item-desc">"{t.quote.slice(0, 100)}{t.quote.length > 100 ? '...' : ''}"</p>}
+                  <div className="cms-item-actions">
+                    <button className="td-btn" onClick={() => { setEditType('testimonial'); setEditItem(t); }}>✎ Edit</button>
+                    <button className="td-btn danger" onClick={() => setDeleteTarget({ type: 'testimonial', id: t.id, name: t.name })}>✕ Delete</button>
                   </div>
                 </div>
               ))}
@@ -470,13 +530,15 @@ export default function AdminPage() {
               <button className="cms-btn cms-btn-primary" onClick={() => { setEditType('tech'); setEditItem({ name: '', icon: '', description: '', sort_order: techStack.length }); }}>+ Add Service</button>
             </div>
             <div className="cms-card-grid">
+              {techStack.length === 0 && <div className="cms-empty">No services yet. Click "+ Add Service" to get started.</div>}
               {techStack.map(ts => (
                 <div key={ts.id} className="cms-item-card">
                   <div style={{fontSize:'1.5rem', marginBottom:'8px'}}>{ts.icon}</div>
-                  <h3 className="cms-item-name">{ts.name}</h3><div className="cms-item-meta">{ts.description}</div>
-                  <div className="cms-item-actions mt-12">
-                    <button className="td-btn" onClick={() => { setEditType('tech'); setEditItem(ts); }}>Edit</button>
-                    <button className="td-btn danger" onClick={() => setDeleteTarget({ type: 'tech', id: ts.id, name: ts.name })}>Delete</button>
+                  <h3 className="cms-item-name">{ts.name}</h3>
+                  {ts.description && <p className="cms-item-desc">{ts.description}</p>}
+                  <div className="cms-item-actions">
+                    <button className="td-btn" onClick={() => { setEditType('tech'); setEditItem(ts); }}>✎ Edit</button>
+                    <button className="td-btn danger" onClick={() => setDeleteTarget({ type: 'tech', id: ts.id, name: ts.name })}>✕ Delete</button>
                   </div>
                 </div>
               ))}

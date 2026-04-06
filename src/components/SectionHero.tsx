@@ -30,25 +30,51 @@ export default function SectionHero() {
   }, []);
 
   return (
-    <section id="hero">
-      <div className="hero-bg-glow"></div>
-      <div className="hero-grid-overlay"></div>
+    <section id="hero" style={{ padding: '160px 0 80px 0' }}>
+      <div className="standard-container">
+        <div style={{ maxWidth: '900px' }}>
+          <h1 className="reveal-up" style={{ 
+            fontSize: 'clamp(3rem, 8vw, 6rem)', 
+            fontWeight: 800, 
+            lineHeight: 1, 
+            letterSpacing: '-0.04em',
+            marginBottom: '40px',
+            color: '#fff',
+            maxWidth: '900px'
+          }}>
+            {data.title} <span style={{ color: 'rgba(90, 104, 130, 0.6)' }}>{data.title_accent}</span>
+          </h1>
 
-      <div className="hero-content-left">
-        <h1 className="hero-h1 reveal-up">
-          {data.title} <span className="hero-accent">{data.title_accent}</span>
-        </h1>
+          <p className="reveal-up stagger-1" style={{ 
+            fontSize: '1.25rem', 
+            lineHeight: 1.6, 
+            color: 'rgba(255, 255, 255, 0.6)', 
+            maxWidth: '900px',
+            marginBottom: '48px',
+            textAlign: 'left'
+          }}>
+            {data.subtitle}
+          </p>
 
-        <p className="hero-sub reveal-up stagger-1">
-          {data.subtitle}
-        </p>
+          <div className="reveal-up stagger-2" style={{ marginBottom: '64px' }}>
+            <Link href={data.cta_link} className="btn-primary" style={{ padding: '18px 48px', fontSize: '1rem', borderRadius: '12px' }}>
+              {data.cta_text}
+            </Link>
+          </div>
 
-        <div className="hero-actions reveal-up stagger-2">
-          <Link href={data.cta_link} className="btn-primary">{data.cta_text}</Link>
-        </div>
-
-        <div className="hero-views-line reveal-up stagger-3">
-          <CountUp endString={data.stats_text} /> views tracked for your favorite
+          <div className="reveal-up stagger-3" style={{ 
+            fontSize: '0.9rem', 
+            color: 'rgba(255, 255, 255, 0.4)',
+            letterSpacing: '0.02em',
+            display: 'flex',
+            alignItems: 'baseline',
+            gap: '8px'
+          }}>
+            <span style={{ fontWeight: 700, color: '#fff' }}>
+              <CountUp endString={data.stats_text} />
+            </span> 
+            views tracked for your favorite
+          </div>
         </div>
       </div>
     </section>

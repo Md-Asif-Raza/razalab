@@ -3,6 +3,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AnalyticsGraph from './AnalyticsGraph';
 import { getCampaigns } from '@/lib/actions';
+import { PremiumWrapper, SpotlightCard } from './ui/PremiumUI';
 
 const FALLBACK_CLIENTS = [
   { id: '1', name: 'Dank Drops', category: 'Viral Distribution', result: '+114%', price: '$4,500', description: 'We deployed a network of 50 viral clippers to distribute Dank Drops product launches. Resulted in 12M+ organic views in 30 days.', graph_data: '20,35,25,45,60,85,114', img_url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80' },
@@ -28,35 +29,97 @@ const TripleChevron = () => (
 function ClientCard({ client, onClick }: { client: any; onClick: () => void }) {
   return (
     <motion.div 
-      className="client-crystal-card" 
-      style={{ minWidth: '320px', height: '440px', cursor: 'pointer', position: 'relative' }} 
-      onClick={onClick} 
-      whileHover={{ scale: 1.15, zIndex: 100, height: 'auto', minHeight: '480px' }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      whileHover={{ scale: 1.05, zIndex: 10 }}
+      transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+      style={{ position: 'relative', cursor: 'pointer', flex: '0 0 350px' }}
     >
-      <div className="crystal-media-wrapper" style={{ height: '50%', minHeight: '200px' }}>
-        <img src={client.img_url} loading="lazy" alt={client.name} className="crystal-img" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-        <div className="client-cat-badge" style={{ position: 'absolute', top: 20, left: 20 }}>{client.category}</div>
-        <div className="inner-glow-highlight" />
-      </div>
-      <div className="crystal-text-area" style={{ padding: '24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-        <div className="crystal-divider" />
-        <h3 className="client-name" style={{ fontSize: '1.4rem', fontWeight: 800, marginBottom: '12px' }}>{client.name}</h3>
-        <div className="client-result-pill" style={{ color: 'var(--aura-neon)', fontWeight: 800, marginBottom: '16px' }}>
-          {client.result} <span style={{ opacity: 0.5, fontSize: '0.7rem', fontWeight: 400 }}>Views Growth</span>
+      <SpotlightCard 
+        className="reveal-card" 
+        style={{ 
+          height: '450px', 
+          width: '100%',
+          overflow: 'hidden',
+          borderRadius: '32px'
+        }}
+      >
+        <div onClick={onClick} style={{ height: '100%', position: 'relative' }}>
+          {/* BACKGROUND IMAGE */}
+          <img 
+            src={client.img_url} 
+            loading="lazy" 
+            alt={client.name} 
+            style={{ 
+              width: '100%', 
+              height: '100%', 
+              objectFit: 'cover', 
+              opacity: 0.4
+            }} 
+          />
+
+          {/* INITIAL STATS OVERLAY (GROW & MONEY) */}
+          <div style={{ 
+            position: 'absolute', 
+            inset: 0, 
+            padding: '32px', 
+            display: 'flex', 
+            flexDirection: 'column', 
+            justifyContent: 'space-between',
+            background: 'linear-gradient(to bottom, rgba(0,0,0,0.2), transparent, rgba(0,0,0,0.8))'
+          }}>
+            <div>
+              <div style={{ backgroundColor: 'rgba(255,255,255,0.1)', padding: '6px 12px', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase', display: 'inline-block', marginBottom: '12px' }}>
+                {client.category}
+              </div>
+              <h3 style={{ fontSize: '2rem', fontWeight: 800, color: '#fff', margin: 0, letterSpacing: '-1px' }}>{client.name}</h3>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+              <div style={{ background: 'rgba(0, 230, 118, 0.1)', border: '1px solid rgba(0, 230, 118, 0.2)', padding: '12px', borderRadius: '16px' }}>
+                <div style={{ fontSize: '0.65rem', opacity: 0.6, textTransform: 'uppercase', marginBottom: '2px' }}>Growth</div>
+                <div style={{ color: '#00e676', fontWeight: 800, fontSize: '1.25rem' }}>{client.result}</div>
+              </div>
+              <div style={{ background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', padding: '12px', borderRadius: '16px' }}>
+                <div style={{ fontSize: '0.65rem', opacity: 0.6, textTransform: 'uppercase', marginBottom: '2px' }}>Payout</div>
+                <div style={{ color: '#fff', fontWeight: 800, fontSize: '1.25rem' }}>{client.price}</div>
+              </div>
+            </div>
+          </div>
+
+          {/* HOVER DESCRIPTION REVEAL (BOTTOM ALIGNED) */}
+          <div 
+            className="hover-desc-reveal"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'linear-gradient(to top, rgba(5, 3, 4, 1) 0%, rgba(5, 3, 4, 0.98) 70%, transparent 100%)',
+              padding: '40px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'flex-end',
+              opacity: 0,
+              transform: 'translateY(100%)',
+              transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+              zIndex: 30, /* Higher z-index to stay above initial stats */
+              pointerEvents: 'none'
+            }}
+          >
+            <div style={{ marginBottom: 'auto', paddingTop: '20px' }}>
+               <div style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px' }}>
+                 Project Overview
+               </div>
+               <h4 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#fff', marginBottom: '12px' }}>{client.name}</h4>
+            </div>
+            
+            <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.95rem', lineHeight: '1.6', marginBottom: '32px' }}>
+              {client.description}
+            </p>
+            
+            <button style={{ background: 'var(--c1)', color: '#fff', border: 'none', padding: '16px 28px', borderRadius: '12px', fontSize: '0.9rem', fontWeight: 700, alignSelf: 'flex-start', cursor: 'pointer', pointerEvents: 'auto' }}>
+              Scale Like This →
+            </button>
+          </div>
         </div>
-        
-        {/* Hidden initially, shown on hover via CSS child combinator if needed, but framer variants is better. Here we use a CSS max-height trick or simple Framer Motion layout */}
-        <motion.div 
-          className="client-desc-popup"
-          initial={{ opacity: 0, height: 0 }}
-          whileHover={{ opacity: 1, height: 'auto', marginTop: 12 }}
-          transition={{ duration: 0.3 }}
-          style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.5' }}
-        >
-          {client.description}
-        </motion.div>
-      </div>
+      </SpotlightCard>
     </motion.div>
   );
 }
@@ -65,48 +128,54 @@ export default function SectionCampaigns() {
   const [clients, setClients] = useState(FALLBACK_CLIENTS);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [isPaused, setIsPaused] = useState(false);
-  const [manualOffset, setManualOffset] = useState(0);
 
   useEffect(() => {
     getCampaigns().then(data => { if (data && data.length > 0) setClients(data); }).catch(() => {});
   }, []);
 
   const selectedClient = selectedIndex !== null ? clients[selectedIndex] : null;
-  const marqueeItems = useMemo(() => [...clients, ...clients, ...clients], [clients]);
-
-  const handleManualStep = (dir: 'left' | 'right') => {
-    const step = 412;
-    setManualOffset(prev => dir === 'left' ? prev + step : prev - step);
-    setIsPaused(true);
-    setTimeout(() => setIsPaused(false), 2000);
-  };
+  const marqueeItems = useMemo(() => [...clients, ...clients, ...clients, ...clients], [clients]);
 
   return (
-    <section id="campaigns" className="clients-section" style={{ padding: '200px 0' }}>
-      <div className="clients-header container">
-        <div style={{ textAlign: 'center', marginBottom: '80px', width: '100%' }}>
-          <h2 className="section-title reveal-up">Clients</h2>
-        </div>
-      </div>
+    <section id="campaigns">
+      <div className="standard-container">
+        <PremiumWrapper className="campaigns-premium-container">
+          <div style={{ textAlign: 'center', marginBottom: '80px' }}>
+            <h2 className="section-title reveal-up">Clients</h2>
+            <p style={{ opacity: 0.5, marginTop: '16px' }}>Proven distribution results across major niches.</p>
+          </div>
 
-      <div className="marquee-container" style={{ overflow: 'hidden', padding: '40px 0', position: 'relative' }} onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)}>
-        <button className="portfolio-side-btn left" onClick={(e) => { e.stopPropagation(); handleManualStep('left'); }} style={{ position: 'absolute', left: '20px', zIndex: 20, top: '50%', transform: 'translateY(-50%)' }}>
-          <div style={{ transform: 'rotate(180deg)', display: 'flex' }}><TripleChevron /></div>
-        </button>
-        <button className="portfolio-side-btn right" onClick={(e) => { e.stopPropagation(); handleManualStep('right'); }} style={{ position: 'absolute', right: '20px', zIndex: 20, top: '50%', transform: 'translateY(-50%)' }}>
-          <TripleChevron />
-        </button>
-
-        <motion.div
-          className="marquee-track"
-          animate={!isPaused ? { x: [manualOffset, manualOffset - 2060] } : { x: manualOffset }}
-          transition={{ x: { repeat: Infinity, repeatType: "loop", duration: 40, ease: "linear" } }}
-          style={{ display: 'flex', gap: '32px' }}
-        >
-          {marqueeItems.map((client, idx) => (
-            <ClientCard key={`${client.id}-${idx}`} client={client} onClick={() => setSelectedIndex(idx % clients.length)} />
-          ))}
-        </motion.div>
+          <div 
+            className="marquee-container" 
+            style={{ 
+              overflow: 'visible', 
+              padding: '60px 0', 
+              position: 'relative',
+              maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)'
+            }} 
+            onMouseEnter={() => setIsPaused(true)} 
+            onMouseLeave={() => setIsPaused(false)}
+          >
+            <div
+              className="marquee-track"
+              style={{ 
+                display: 'flex', 
+                gap: '24px',
+                width: 'fit-content',
+                animation: 'marquee 80s linear infinite',
+                animationPlayState: isPaused ? 'paused' : 'running'
+              }}
+            >
+              {marqueeItems.map((client, idx) => (
+                <ClientCard 
+                  key={`${client.id}-${idx}`} 
+                  client={client} 
+                  onClick={() => setSelectedIndex(idx % clients.length)} 
+                />
+              ))}
+            </div>
+          </div>
+        </PremiumWrapper>
       </div>
 
       <AnimatePresence>
@@ -123,17 +192,17 @@ export default function SectionCampaigns() {
                 <img src={selectedClient.img_url} loading="lazy" alt={selectedClient.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 <div style={{ position: 'absolute', bottom: 40, left: 40, right: 40, background: 'rgba(5,3,4,0.6)', padding: '24px', borderRadius: '24px', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.1)' }}>
                   <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '4px', opacity: 0.5, marginBottom: '8px' }}>Performance Analytics</div>
-                  <AnalyticsGraph data={parseGraphData(selectedClient.graph_data)} color="var(--aura-neon)" height={120} />
+                  <AnalyticsGraph data={parseGraphData(selectedClient.graph_data)} color="#00e676" height={120} />
                 </div>
               </div>
               <div style={{ padding: '60px', display: 'flex', flexDirection: 'column' }}>
-                <div style={{ color: 'var(--aura-neon)', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '4px', textTransform: 'uppercase', marginBottom: '16px' }}>{selectedClient.category}</div>
+                <div style={{ color: '#00e676', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '4px', textTransform: 'uppercase', marginBottom: '16px' }}>{selectedClient.category}</div>
                 <h2 style={{ fontSize: '3.5rem', fontWeight: 800, color: '#fff', marginBottom: '24px', textAlign: 'left', letterSpacing: '-2px' }}>{selectedClient.name}</h2>
                 <p style={{ fontSize: '1.15rem', opacity: 0.6, lineHeight: '1.7', marginBottom: '48px' }}>{selectedClient.description}</p>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px', marginTop: 'auto' }}>
                   <div style={{ background: 'rgba(255,255,255,0.03)', padding: '24px', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.05)' }}>
                     <div style={{ fontSize: '0.7rem', opacity: 0.4, textTransform: 'uppercase', marginBottom: '8px' }}>ROI Growth</div>
-                    <div style={{ fontSize: '2.2rem', fontWeight: 800, color: 'var(--aura-neon)' }}>{selectedClient.result}</div>
+                    <div style={{ fontSize: '2.2rem', fontWeight: 800, color: '#00e676' }}>{selectedClient.result}</div>
                   </div>
                   <div style={{ background: 'rgba(255,255,255,0.03)', padding: '24px', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.05)' }}>
                     <div style={{ fontSize: '0.7rem', opacity: 0.4, textTransform: 'uppercase', marginBottom: '8px' }}>Total Payout</div>
@@ -141,8 +210,8 @@ export default function SectionCampaigns() {
                   </div>
                 </div>
                 <div style={{ marginTop: '48px', display: 'flex', gap: '16px' }}>
-                  <button onClick={() => setSelectedIndex(null)} className="speed-btn" style={{ flex: 1, padding: '18px 32px' }}>Close Case Study</button>
-                  <button className="speed-btn" style={{ padding: '18px 32px', background: 'var(--aura-neon)', color: '#000', fontWeight: 800 }}>Scale Like This →</button>
+                  <button onClick={() => setSelectedIndex(null)} className="btn-ghost" style={{ flex: 1, padding: '18px 32px' }}>Close Case Study</button>
+                  <button className="btn-primary" style={{ padding: '18px 32px', background: 'var(--c1)', color: '#fff', fontWeight: 800 }}>Scale Like This →</button>
                 </div>
               </div>
             </motion.div>

@@ -1,45 +1,79 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { getFaqs } from '@/lib/actions';
 
-const FALLBACK = [
-  { q: 'What exactly does Raza Labs build for my brand?', a: 'We deploy a full content distribution system — a vetted network of 500+ clippers, quality review pipelines, automated payout infrastructure, and real-time analytics. You provide your long-form content. We turn it into hundreds of short-form clips distributed natively across TikTok, Instagram Reels, YouTube Shorts, and X.' },
-  { q: 'Who gets the best results from this?', a: 'Brands and creators producing regular long-form content (podcasts, streams, courses, talks) who want to scale organic reach without $25+ CPM ad spend. Our top-performing clients already have content — they just need distribution at scale.' },
-  { q: 'How does a campaign actually run?', a: 'We onboard your brand in 48 hours. Clippers from our network join your campaign and post clips to their own social accounts — you get organic reach through real accounts, not ads. Every submission is quality-reviewed before approval. Clippers earn based on views generated. You only pay for results.' },
-  { q: 'What does it cost compared to paid ads?', a: 'Our average effective CPM is $0.50–$1.00 — compared to $25+ for paid social ads. A typical campaign generating 10M views costs roughly $5,000–$10,000 with us versus $250,000+ in paid media. We build custom plans after a strategy call.' },
-  { q: 'What do I need to get started?', a: 'Your long-form content (Google Drive or similar), brand guidelines, and a 30-minute strategy call. We handle clipper recruitment, content coaching, quality review, distribution, and payouts. Most brands launch their first campaign within 5 business days.' },
-  { q: 'How fast will I see results?', a: 'Most clients see their first viral clips within 7 days of campaign launch. Average campaigns reach 1M+ views within the first month. We provide real-time dashboards so you can track performance as it happens — no waiting for monthly reports.' },
+const FALLBACK_FAQS = [
+  { id: '1', question: 'What exactly does Raza Labs build for my brand?', answer: 'We deploy a full content distribution system — a vetted network of clippers, quality review pipelines, and automated infrastructure. You provide long-form content, we turn it into hundreds of viral clips distributed across all major platforms.' },
+  { id: '2', question: 'Who gets the best results from this?', answer: 'Brands and creators producing regular long-form content (podcasts, courses, talks) who want to scale organic reach without high ad spend. Our top-performing clients already have content — they just need distribution at scale.' },
+  { id: '3', question: 'How does a campaign actually run?', answer: 'We onboard your brand, clippers join your campaign and post to their own accounts — giving you organic reach through real accounts. Every submission is quality-reviewed. You only pay for performance.' },
+  { id: '4', question: 'What does it cost compared to paid ads?', answer: 'Our effective CPM is often 10-20x lower than paid ads. You build organic authority while reaching millions for a fraction of the budget of traditional media buying.' },
+  { id: '5', question: 'What do I need to get started?', answer: 'Your long-form content (Google Drive or similar), brand guidelines, and a strategy call. We handle recruitment, quality review, and distribution. Most brands launch in under 5 days.' },
+  { id: '6', question: 'How fast will I see results?', answer: 'Most clients see viral clips within 7 days. Average campaigns reach 1M+ views in the first month. We provide real-time dashboards so you can track performance daily.' },
 ];
 
 export default function SectionFAQ() {
-  const [openIdx, setOpenIdx] = useState<number | null>(null);
-  const [items, setItems] = useState(FALLBACK);
+  const [faqs, setFaqs] = useState<{ id: string; question: string; answer: string }[]>(FALLBACK_FAQS);
+  const [openId, setOpenId] = useState<string | null>(null);
 
   useEffect(() => {
-    getFaqs().then(data => {
-      if (data && data.length > 0) setItems(data.map((f: any) => ({ q: f.question, a: f.answer })));
-    }).catch(() => {});
+    getFaqs().then(data => { if (data && data.length > 0) setFaqs(data); }).catch(() => {});
   }, []);
 
-  const toggleFaq = (idx: number) => {
-    setOpenIdx(openIdx === idx ? null : idx);
-  };
-
   return (
-    <section id="faq" className="faq-section container" style={{ padding: '200px 0' }}>
-      <div style={{ textAlign: 'center', marginBottom: '80px', width: '100%' }}>
-        <h2 className="section-title reveal-up">FAQs</h2>
-      </div>
-      <div className="faq-list reveal-up stagger-1" style={{ maxWidth: '800px', margin: '0 auto' }}>
-        {items.map((faq, idx) => (
-          <div key={idx} className={`faq-item ${openIdx === idx ? 'open' : ''}`}>
-            <div className="faq-q" onClick={() => toggleFaq(idx)}>
-              <span className="faq-q-text">{faq.q}</span>
-              <span className="faq-icon">+</span>
+    <section id="faq" style={{ padding: '80px 0' }}>
+      <div className="container" style={{ maxWidth: '1000px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '80px', width: '100%' }}>
+          <h2 className="section-title reveal-up">FAQ</h2>
+        </div>
+
+        <div className="reveal-up">
+          {faqs.map((faq) => (
+            <div key={faq.id} className="accordion-item" style={{ 
+              background: 'rgba(255,255,255,0.02)', 
+              border: '1px solid rgba(255,255,255,0.05)', 
+              borderRadius: '16px', 
+              marginBottom: '12px',
+              overflow: 'hidden'
+            }}>
+              <button 
+                onClick={() => setOpenId(openId === faq.id ? null : faq.id)}
+                style={{ 
+                  width: '100%', 
+                  padding: '24px', 
+                  display: 'flex', 
+                  justifyContent: 'space-between', 
+                  alignItems: 'center', 
+                  background: 'none', 
+                  border: 'none', 
+                  color: '#fff', 
+                  cursor: 'pointer',
+                  textAlign: 'left'
+                }}
+              >
+                <span style={{ fontWeight: 600, fontSize: '1.1rem' }}>{faq.question}</span>
+                <motion.span animate={{ rotate: openId === faq.id ? 180 : 0 }} transition={{ duration: 0.3 }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </motion.span>
+              </button>
+              
+              <AnimatePresence>
+                {openId === faq.id && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div style={{ padding: '0 24px 24px 24px', color: 'rgba(255,255,255,0.6)', lineHeight: 1.6 }}>
+                      {faq.answer}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
-            <div className="faq-a">{faq.a}</div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );

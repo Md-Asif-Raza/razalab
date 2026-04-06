@@ -108,7 +108,6 @@ export default function AdminPage() {
   // Data states
   const [campaigns, setCampaigns] = useState<any[]>([]);
   const [testimonials, setTestimonials] = useState<any[]>([]);
-  const [reviews, setReviews] = useState<any[]>([]);
   const [faqs, setFaqsList] = useState<any[]>([]);
   const [brands, setBrandsList] = useState<any[]>([]);
   const [techStack, setTechStackList] = useState<any[]>([]);
@@ -146,12 +145,11 @@ export default function AdminPage() {
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
-      const [c, t, r, f, h, s, b, ts] = await Promise.all([
-        getCampaigns(), getTestimonials(), getReviews(), getFaqs(), getHeroContent(), getSiteSettings(), getBrands(), getTechStack()
+      const [c, t, f, h, s, b, ts] = await Promise.all([
+        getCampaigns(), getTestimonials(), getFaqs(), getHeroContent(), getSiteSettings(), getBrands(), getTechStack()
       ]);
       setCampaigns(c || []);
       setTestimonials(t || []);
-      setReviews(r || []);
       setFaqsList(f || []);
       setBrandsList(b || []);
       setTechStackList(ts || []);
@@ -267,7 +265,6 @@ export default function AdminPage() {
     { key: 'dashboard', icon: '📊', label: 'Dashboard' },
     { key: 'campaigns', icon: '💼', label: 'Campaigns' },
     { key: 'testimonials', icon: '🧩', label: 'Testimonials' },
-    { key: 'reviews', icon: '⭐', label: 'Reviews' },
     { key: 'faqs', icon: '❓', label: 'FAQs' },
     { key: 'brands', icon: '🏢', label: 'Brands & Logos' },
     { key: 'tech', icon: '⚙️', label: 'What We Do' },
@@ -364,50 +361,6 @@ export default function AdminPage() {
           </>
         )}
 
-        {/* REVIEWS */}
-        {tab === 'reviews' && (
-          <>
-            <div className="cms-section-header">
-              <h1 className="cms-page-title">Reviews</h1>
-              <button className="cms-btn cms-btn-primary" onClick={() => { setEditType('review'); setEditItem({ name: '', handle: '', content: '', stars: 5, avatar_url: '', sort_order: reviews.length }); }}>+ Add Review</button>
-            </div>
-            <div className="cms-card-grid">
-              {reviews.length === 0 && <div className="cms-empty">No reviews yet. Click "+ Add Review" to get started.</div>}
-              {reviews.map(r => (
-                <div key={r.id} className="cms-item-card">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-                    {r.avatar_url && <img src={r.avatar_url} alt={r.name} style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }} />}
-                    <div>
-                      <h3 className="cms-item-name" style={{ marginBottom: 0 }}>{r.name}</h3>
-                      <div className="cms-item-meta" style={{ marginBottom: 0 }}>{r.handle}</div>
-                    </div>
-                  </div>
-                  <div style={{ color: '#ffc107', fontSize: '0.75rem', marginBottom: '8px' }}>{'★'.repeat(r.stars || 5)}</div>
-                  {r.content && <p className="cms-item-desc">{r.content.slice(0, 100)}{r.content.length > 100 ? '...' : ''}</p>}
-                  <div className="cms-item-actions">
-                    <button className="td-btn" onClick={() => { setEditType('review'); setEditItem(r); }}>✎ Edit</button>
-                    <button className="td-btn danger" onClick={() => setDeleteTarget({ type: 'review', id: r.id, name: r.name })}>✕ Delete</button>
-                  </div>
-                </div>
-              ))}
-            </div>
-            {editType === 'review' && (
-              <div className="cms-edit-overlay" onClick={() => { setEditItem(null); setEditType(''); }}>
-                <div className="cms-edit-modal" onClick={(e) => e.stopPropagation()}>
-                  <h2>Review</h2>
-                  <div className="form-row"><div className="form-group"><label className="form-label">Name</label><input className="form-input" value={editItem.name} onChange={e => setEditItem({...editItem, name: e.target.value})} /></div><div className="form-group"><label className="form-label">Handle</label><input className="form-input" value={editItem.handle} onChange={e => setEditItem({...editItem, handle: e.target.value})} /></div></div>
-                  <div className="form-group mb-16"><label className="form-label">Content</label><textarea className="form-input form-textarea" value={editItem.content} onChange={e => setEditItem({...editItem, content: e.target.value})} /></div>
-                  <div className="form-group mb-16"><label className="form-label">Stars (1-5)</label><input type="range" min="1" max="5" className="form-input" value={editItem.stars} onChange={e => setEditItem({...editItem, stars: parseInt(e.target.value)})} /></div>
-                  <ImageField value={editItem.avatar_url} onChange={v => setEditItem({...editItem, avatar_url: v})} label="Avatar" />
-                  <div className="cms-modal-footer">
-                    <button className="cms-btn cms-btn-ghost" onClick={() => { setEditItem(null); setEditType(''); }}>Cancel</button>
-                    <button className="cms-btn cms-btn-primary" onClick={handleSave} disabled={loading}>Save</button>
-                  </div>
-                </div>
-              </div>
-            )}
-          </>
-        )}
 
         {/* FAQS */}
         {tab === 'faqs' && (

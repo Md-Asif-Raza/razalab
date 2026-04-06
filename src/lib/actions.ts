@@ -307,19 +307,34 @@ export async function deleteTechStack(id: string) {
 // =============================================
 // IMAGE UPLOAD to Supabase Storage
 // =============================================
+const MAX_FILE_SIZE = 3 * 1024 * 1024; // 3MB
+
 export async function uploadImage(formData: FormData) {
   const supabase = createServerClient();
   const file = formData.get('file') as File;
   if (!file) throw new Error('No file provided');
 
+  // ENFORCE SIZE LIMIT (3MB)
+  if (file.size > MAX_FILE_SIZE) {
+    throw new Error('File is too large. Max size is 3MB.');
+  }
+
   const ext = file.name.split('.').pop();
   const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
 
-  const { data, error } = await supabase.storage
+  // Attempt upload to 'media' bucket
+  const { data, error: uploadError } = await supabase.storage
     .from('media')
-    .upload(filename, file, { cacheControl: '3600', upsert: false });
+    .upload(filename, file, { 
+      cacheControl: '3600', 
+      upsert: false,
+      contentType: file.type || 'image/png' 
+    });
 
-  if (error) throw new Error(`Upload Failed: ${error.message}`);
+  if (uploadError) {
+    console.error('Supabase Upload Error:', uploadError);
+    throw new Error(`Upload Failed: ${uploadError.message}. Make sure 'media' bucket exists and is public.`);
+  }
 
   const { data: urlData } = supabase.storage.from('media').getPublicUrl(filename);
   return { url: urlData.publicUrl };

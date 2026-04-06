@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getTestimonials } from '@/lib/actions';
+import { PremiumWrapper, SpotlightCard } from './ui/PremiumUI';
 
 const FALLBACK = [
   { id: '01', name: 'Sarah Jones', role: 'High ROI Clips', quote: 'Turn long-form content into viral clips that generate more views, followers, and revenue without extra recording.', avatar_url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80' },
@@ -25,31 +26,36 @@ export default function SectionWhyChoose() {
   const prev = () => setIndex((index - 1 + (maxIdx + 1)) % (maxIdx + 1));
 
   return (
-    <section id="testimonial-features" style={{ padding: '200px 0', overflow: 'hidden' }}>
-      <div style={{ textAlign: 'center', marginBottom: '80px', width: '100%' }}>
-        <h2 className="section-title reveal-up">Testimonials</h2>
-      </div>
+    <section id="testimonial-features">
+      <div className="standard-container">
+        <PremiumWrapper className="why-premium-container" style={{ padding: '60px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+            <h2 className="section-title">Testimonials</h2>
+          </div>
 
-      <div className="glass-panel-container container reveal-up">
-        <div className="pro-testimonial-row">
-          <AnimatePresence mode="wait">
-            {items.slice(index, index + 3).map((t) => (
-              <motion.div key={t.id} className="pro-testimonial-card" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.5 }}>
-                <div className="pro-avatar">
-                  <img src={t.avatar_url} loading="lazy" alt={t.name} />
-                </div>
-                <h3 className="pro-name">{t.name}</h3>
-                <div className="pro-role">{t.role}</div>
-                <p className="pro-quote">&quot;{t.quote}&quot;</p>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </div>
+          <div className="pro-testimonial-row reveal-up" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
+            <AnimatePresence mode="wait">
+              {items.slice(index, index + 3).map((t) => (
+                <motion.div key={t.id} className="pro-testimonial-card" 
+                  initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.5 }}
+                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '32px' }}
+                >
+                  <div className="pro-avatar" style={{ width: '60px', height: '60px', borderRadius: '50%', overflow: 'hidden', marginBottom: '20px' }}>
+                    <img src={t.avatar_url} loading="lazy" alt={t.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  </div>
+                  <h3 className="pro-name" style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '4px' }}>{t.name}</h3>
+                  <div className="pro-role" style={{ fontSize: '0.85rem', color: 'var(--c1)', marginBottom: '16px', fontWeight: 600 }}>{t.role}</div>
+                  <p className="pro-quote" style={{ fontSize: '0.95rem', opacity: 0.7, lineHeight: 1.6 }}>&quot;{t.quote}&quot;</p>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
 
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '24px', marginTop: '60px' }}>
-          <button onClick={prev} className="speed-btn" style={{ padding: '12px 24px' }}>←</button>
-          <button onClick={next} className="speed-btn" style={{ padding: '12px 24px' }}>→</button>
-        </div>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', marginTop: '48px' }}>
+            <button onClick={prev} className="btn-ghost" style={{ padding: '12px 24px', borderRadius: '12px' }}>←</button>
+            <button onClick={next} className="btn-ghost" style={{ padding: '12px 24px', borderRadius: '12px' }}>→</button>
+          </div>
+        </PremiumWrapper>
       </div>
     </section>
   );

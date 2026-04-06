@@ -5,7 +5,6 @@ import SectionVideo from "@/components/SectionVideo";
 import SectionCampaigns from "@/components/SectionCampaigns";
 import SectionCalculator from "@/components/SectionCalculator";
 import SectionWhyChoose from "@/components/SectionWhyChoose";
-import SectionTestimonials from "@/components/SectionTestimonials";
 import SectionFAQ from "@/components/SectionFAQ";
 import SectionCTA from "@/components/SectionCTA";
 import Footer from "@/components/Footer";
@@ -20,10 +19,9 @@ export default function Home() {
       <SectionVideo />      {/* 2: Explainer Video */}
       <SectionCampaigns />  {/* 3: Clients */}
       <SectionCalculator /> {/* 4: Calculator */}
-      <SectionWhyChoose />   {/* 5: Testimonials */}
-      <SectionTestimonials /> {/* 6: Reviews */}
-      <SectionFAQ />         {/* 7: FAQs */}
-      <SectionCTA />         {/* 8: End */}
+      <SectionWhyChoose />   {/* 5: Testimonials (Preserved) */}
+      <SectionFAQ />         {/* 6: FAQs */}
+      <SectionCTA />         {/* 7: End */}
       <Footer />
 
       {/* Hidden admin access — tiny dot, bottom-left corner */}

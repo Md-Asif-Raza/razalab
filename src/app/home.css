@@ -947,61 +947,9 @@ body::after {
 
 /* HERO — LEFT ALIGNED */
 #hero {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 0 72px;
   padding-top: 80px;
   overflow: hidden;
   position: relative;
-}
-#hero2 {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 0 72px;
-  padding-top: 80px;
-  overflow: hidden;
-  position: relative;
-  background: linear-gradient(160deg, #13171f 0%, rgba(90,104,130,0.08) 40%, #0c1015 100%);
-  border-top: 1px solid rgba(90,104,130,0.1);
-}
-.hero-content-left {
-  max-width: 700px;
-}
-.hero-h1 {
-  font-family: var(--font-head);
-  font-size: clamp(2.8rem, 6vw, 5rem);
-  font-weight: 800;
-  line-height: 1.08;
-  letter-spacing: -0.04em;
-  color: var(--text);
-}
-.hero-accent {
-  color: #5a6882;
-}
-.hero-sub {
-  max-width: 520px;
-  font-size: 0.95rem;
-  color: var(--text-muted);
-  line-height: 1.7;
-  margin-top: 28px;
-  font-weight: 300;
-}
-.hero-sub strong { color: var(--text); font-weight: 500; }
-.hero-actions {
-  display: flex;
-  gap: 14px;
-  margin-top: 32px;
-}
-.hero-views-line {
-  margin-top: 48px;
-  font-family: var(--font-head);
-  font-size: 0.95rem;
-  color: var(--text-muted);
-  letter-spacing: 0.01em;
 }
 
 /* MODAL — CENTERED & STANDARD SIZE */
@@ -1576,9 +1524,7 @@ body::after {
 
 /* BRANDS MARQUEE SECTION */
 #brands {
-  padding: 80px 72px 60px;
-  border-top: 1px solid rgba(90,104,130,0.15);
-  background: linear-gradient(180deg, #0c1015 0%, #13171f 100%);
+  padding: 0;
   overflow: hidden;
 }
 .brands-heading {

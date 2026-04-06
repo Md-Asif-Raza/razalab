@@ -27,18 +27,35 @@ const TripleChevron = () => (
 
 function ClientCard({ client, onClick }: { client: any; onClick: () => void }) {
   return (
-    <motion.div className="client-crystal-card" style={{ minWidth: '380px', height: '480px', cursor: 'pointer' }} onClick={onClick} whileHover={{ y: -10 }}>
-      <div className="crystal-media-wrapper" style={{ height: '60%' }}>
-        <img src={client.img_url} alt={client.name} className="crystal-img" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+    <motion.div 
+      className="client-crystal-card" 
+      style={{ minWidth: '320px', height: '440px', cursor: 'pointer', position: 'relative' }} 
+      onClick={onClick} 
+      whileHover={{ scale: 1.15, zIndex: 100, height: 'auto', minHeight: '480px' }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+    >
+      <div className="crystal-media-wrapper" style={{ height: '50%', minHeight: '200px' }}>
+        <img src={client.img_url} loading="lazy" alt={client.name} className="crystal-img" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         <div className="client-cat-badge" style={{ position: 'absolute', top: 20, left: 20 }}>{client.category}</div>
         <div className="inner-glow-highlight" />
       </div>
-      <div className="crystal-text-area" style={{ padding: '32px' }}>
+      <div className="crystal-text-area" style={{ padding: '24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div className="crystal-divider" />
         <h3 className="client-name" style={{ fontSize: '1.4rem', fontWeight: 800, marginBottom: '12px' }}>{client.name}</h3>
-        <div className="client-result-pill" style={{ color: 'var(--aura-neon)', fontWeight: 800 }}>
+        <div className="client-result-pill" style={{ color: 'var(--aura-neon)', fontWeight: 800, marginBottom: '16px' }}>
           {client.result} <span style={{ opacity: 0.5, fontSize: '0.7rem', fontWeight: 400 }}>Views Growth</span>
         </div>
+        
+        {/* Hidden initially, shown on hover via CSS child combinator if needed, but framer variants is better. Here we use a CSS max-height trick or simple Framer Motion layout */}
+        <motion.div 
+          className="client-desc-popup"
+          initial={{ opacity: 0, height: 0 }}
+          whileHover={{ opacity: 1, height: 'auto', marginTop: 12 }}
+          transition={{ duration: 0.3 }}
+          style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.5' }}
+        >
+          {client.description}
+        </motion.div>
       </div>
     </motion.div>
   );
@@ -103,7 +120,7 @@ export default function SectionCampaigns() {
               onClick={(e) => e.stopPropagation()}
             >
               <div style={{ height: '100%', minHeight: '600px', position: 'relative' }}>
-                <img src={selectedClient.img_url} alt={selectedClient.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={selectedClient.img_url} loading="lazy" alt={selectedClient.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 <div style={{ position: 'absolute', bottom: 40, left: 40, right: 40, background: 'rgba(5,3,4,0.6)', padding: '24px', borderRadius: '24px', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.1)' }}>
                   <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '4px', opacity: 0.5, marginBottom: '8px' }}>Performance Analytics</div>
                   <AnalyticsGraph data={parseGraphData(selectedClient.graph_data)} color="var(--aura-neon)" height={120} />

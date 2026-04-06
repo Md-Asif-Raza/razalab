@@ -1635,10 +1635,87 @@ body::after {
   100% { transform: translateX(-50%); }
 }
 
+@media (max-width: 1024px) {
+  #hero { padding: 100px 32px 60px; }
+  .testi-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .dual-pane-calc { grid-template-columns: 1fr; }
+  .calc-pane-right { border-left: none; border-top: 1px solid rgba(255, 255, 255, 0.05); }
+  .calc-pane-left, .calc-pane-right { padding: 40px; }
+  .pro-testimonial-row { flex-wrap: wrap; }
+}
+
+/* DESKTOP NAV DEFAULTS */
+.mobile-menu-btn { display: none !important; }
+.mobile-nav-overlay { display: none; }
+
 @media (max-width: 768px) {
-  #hero { padding: 80px 32px 60px; }
-  .hero-h1 { font-size: clamp(2rem, 8vw, 3rem); }
-  .hero-sub { font-size: 0.88rem; }
-  #brands { padding: 60px 32px 40px; }
-  .nav-full { padding: 0 24px; }
+  .desktop-only { display: none !important; }
+  .mobile-menu-btn { display: flex !important; align-items: center; justify-content: center; z-index: 1001; }
+  
+  .mobile-nav-overlay {
+    display: flex;
+    position: fixed; inset: 0;
+    background: rgba(5, 3, 4, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 1000;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.4s ease;
+  }
+  .mobile-nav-overlay.open { opacity: 1; pointer-events: auto; }
+  .mobile-nav-links { list-style: none; text-align: center; margin-bottom: 40px; }
+  .mobile-nav-links li { margin: 24px 0; }
+  .mobile-nav-links a { font-family: var(--font-head); font-size: 2rem; font-weight: 700; color: #fff; text-decoration: none; }
+  .mobile-nav-socials { display: flex; gap: 24px; }
+  .mobile-nav-socials .social-icon { color: #fff; opacity: 0.7; transition: opacity 0.3s; }
+
+  section { padding-left: 20px !important; padding-right: 20px !important; overflow-x: hidden; }
+  #hero { padding: 80px 20px 40px !important; }
+  
+  /* TYPOGRAPHY SCALING */
+  .hero-h1 { font-size: clamp(2rem, 8vw, 3rem) !important; line-height: 1.1; }
+  .section-title { font-size: clamp(2rem, 8vw, 2.5rem) !important; margin-bottom: 24px; }
+  .hero-sub { font-size: 0.95rem !important; }
+  .giant-val { font-size: 3rem !important; }
+  .res-val-giant { font-size: 3rem !important; }
+
+  /* FLEX & GRID STACKING */
+  .testi-grid { grid-template-columns: 1fr; gap: 20px; }
+  .calc-pane-left, .calc-pane-right { padding: 24px !important; }
+  .dual-pane-calc { border-radius: 16px; margin: 0 10px; }
+  .pro-testimonial-card { min-width: 100%; padding: 32px 20px; }
+  
+  .aura-fan-container { height: auto; padding: 40px 0; perspective: none; }
+  .aura-card { position: relative; width: 100%; height: auto; padding: 24px; margin-bottom: 20px; }
+
+  .stacked-carousel { height: auto; flex-direction: column; gap: 20px; padding: 20px 0; }
+  .stacked-card { position: relative; width: 100%; height: auto; padding: 24px; transform: none !important; opacity: 1 !important; filter: none !important; box-shadow: none !important; margin-bottom: 16px;}
+  
+  .crystal-media-wrapper { display: none; } /* On mobile, 60% media blocks may be unneeded or stack vertically */
+  .client-crystal-card { min-height: auto; width: 100%; }
+
+  /* OVERFLOW FIXES */
+  body, html { overflow-x: hidden; width: 100%; max-width: 100vw; }
+  .brands-marquee { width: 100vw; margin-left: -20px; }
+  
+  /* SPACING SYSTEM */
+  .glass-panel-container { padding: 40px 20px; border-radius: 24px; }
+  .video-modern-frame { padding: 12px; border-radius: 16px; }
+  
+  /* BUTTONS & IMAGES */
+  .btn-primary { width: 100%; text-align: center; justify-content: center; display: flex; align-items: center;}
+  img, video { max-width: 100%; height: auto; object-fit: cover; }
+  .video-aspect-ratio { border-radius: 8px; }
+  
+  /* ANIMATIONS (reduce) */
+  .reveal, .reveal-up, .reveal-left, .reveal-right { transform: translateY(10px); transition-duration: 0.4s; }
+}
+
+@media (max-width: 480px) {
+  .calc-pane-right .giant-val { font-size: 2.5rem !important; }
+  .btn-primary { padding: 12px 20px; }
+  .nav-full { padding: 0 16px; }
 }

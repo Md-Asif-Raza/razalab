@@ -8,6 +8,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [visible, setVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const [socials, setSocials] = useState({
     instagram_url: 'https://instagram.com',
@@ -43,9 +44,8 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Full navbar — visible at top */}
-      <nav className={`nav-full ${!visible ? 'nav-hidden' : ''} ${scrolled ? 'nav-scrolled' : ''}`}>
-        <Link href="/" className="nav-logo" style={{ display: 'flex', alignItems: 'center', gap: '12px', transition: 'transform 0.3s ease', textDecoration: 'none' }}>
+      <nav className={`nav-full ${!visible ? 'nav-hidden' : ''} ${scrolled || isMobileMenuOpen ? 'nav-scrolled' : ''}`}>
+        <Link href="/" className="nav-logo" onClick={() => setIsMobileMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '12px', transition: 'transform 0.3s ease', textDecoration: 'none', zIndex: 1001 }}>
           <div className="logo-circle" style={{ 
             width: 44, height: 44, borderRadius: '50%', background: '#000', 
             display: 'flex', alignItems: 'center', justifyContent: 'center', 
@@ -60,25 +60,90 @@ export default function Navbar() {
           </div>
           <span style={{ fontWeight: 800, fontSize: '1rem', letterSpacing: '-0.5px', color: '#fff' }}>Raza<span style={{ color: 'var(--c1)' }}>Labs</span></span>
         </Link>
-        <ul className="nav-links">
+        <ul className="nav-links desktop-only">
           <li><Link href="#hero">Home</Link></li>
           <li><Link href="#campaigns">Clients</Link></li>
           <li><Link href="#video-showcase">Explainer</Link></li>
           <li><Link href="#faq">FAQ</Link></li>
         </ul>
-        <div className="nav-socials">
+         <div className="nav-socials desktop-only">
           <a href={socials.instagram_url} target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="Instagram">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="url(#ig-grad)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <defs>
+                <linearGradient id="ig-grad" x1="0%" y1="100%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#f09433" />
+                  <stop offset="25%" stopColor="#e6683c" />
+                  <stop offset="50%" stopColor="#dc2743" />
+                  <stop offset="75%" stopColor="#cc2366" />
+                  <stop offset="100%" stopColor="#bc1888" />
+                </linearGradient>
+              </defs>
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
           </a>
           <a href={socials.youtube_url} target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="YouTube">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#FF0000" stroke="#FF0000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+               <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z" fill="#FF0000" stroke="none"/>
+               <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="#FFFFFF" stroke="#FFFFFF"/>
+            </svg>
           </a>
           <a href={socials.twitter_url} target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="X">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#1DA1F2">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
           </a>
         </div>
+        
+        <button className="mobile-menu-btn" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} aria-label="Toggle menu" style={{ zIndex: 1001, background: 'none', border: 'none', color: '#fff', cursor: 'pointer' }}>
+          {isMobileMenuOpen ? (
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          ) : (
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          )}
+        </button>
       </nav>
 
+      {/* Full screen mobile menu overlay */}
+      <div className={`mobile-nav-overlay ${isMobileMenuOpen ? 'open' : ''}`}>
+        <ul className="mobile-nav-links">
+          <li><Link href="#hero" onClick={() => setIsMobileMenuOpen(false)}>Home</Link></li>
+          <li><Link href="#campaigns" onClick={() => setIsMobileMenuOpen(false)}>Clients</Link></li>
+          <li><Link href="#video-showcase" onClick={() => setIsMobileMenuOpen(false)}>Explainer</Link></li>
+          <li><Link href="#faq" onClick={() => setIsMobileMenuOpen(false)}>FAQ</Link></li>
+        </ul>
+        
+        <div className="mobile-nav-socials">
+          <a href={socials.instagram_url} target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="Instagram">
+             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="url(#ig-grad)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <defs>
+                <linearGradient id="ig-grad" x1="0%" y1="100%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#f09433" />
+                  <stop offset="25%" stopColor="#e6683c" />
+                  <stop offset="50%" stopColor="#dc2743" />
+                  <stop offset="75%" stopColor="#cc2366" />
+                  <stop offset="100%" stopColor="#bc1888" />
+                </linearGradient>
+              </defs>
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </a>
+          <a href={socials.youtube_url} target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="YouTube">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="#FF0000" stroke="#FF0000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+               <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z" fill="#FF0000" stroke="none"/>
+               <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="#FFFFFF" stroke="#FFFFFF"/>
+            </svg>
+          </a>
+          <a href={socials.twitter_url} target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="X">
+             <svg width="20" height="20" viewBox="0 0 24 24" fill="#1DA1F2">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
     </>
   );
 }

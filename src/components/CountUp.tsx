@@ -12,8 +12,8 @@ export default function CountUp({
   const ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    // Parse the endString to find the number and suffix
-    const match = endString.match(/^([\d.]+)([a-zA-Z+%]*)$/);
+    // Parse the endString to find the number and suffix, allowing commas
+    const match = endString.replace(/,/g, '').match(/^([\d.]+)([\s\S]*)$/);
     if (!match) {
       setCount(endString);
       return;
@@ -32,9 +32,9 @@ export default function CountUp({
           // Expo Out interpolation
           const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
           const currentVal = endNum * easeProgress;
-          
           if (progress < 1) {
-            const formatted = endNum % 1 !== 0 ? currentVal.toFixed(1) : Math.floor(currentVal).toString();
+            const isFloat = endNum % 1 !== 0;
+            const formatted = isFloat ? currentVal.toFixed(1) : Math.floor(currentVal).toLocaleString();
             setCount(formatted + suffix);
             requestAnimationFrame(step);
           } else {

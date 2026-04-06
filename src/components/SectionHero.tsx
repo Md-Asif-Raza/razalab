@@ -16,7 +16,16 @@ export default function SectionHero() {
 
   useEffect(() => {
     getHeroContent().then(res => {
-      if (res) setData(res);
+      if (res) {
+        setData(prev => ({
+          title: res.title || prev.title,
+          title_accent: res.title_accent || prev.title_accent,
+          subtitle: res.subtitle || prev.subtitle,
+          cta_text: res.cta_text || prev.cta_text,
+          cta_link: res.cta_link || prev.cta_link,
+          stats_text: res.stats_text || prev.stats_text,
+        }));
+      }
     }).catch(() => {});
   }, []);
 

@@ -28,7 +28,7 @@ export default function SectionTestimonials() {
             {items.slice(0, 3).map((r) => (
               <motion.div key={r.id} className="pro-testimonial-card shadow-lg" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ duration: 0.4 }}>
                 <div className="pro-avatar">
-                  <img src={r.avatar_url} alt={r.name} />
+                  <img src={r.avatar_url} loading="lazy" alt={r.name} />
                 </div>
                 <h3 className="pro-name">{r.name}</h3>
                 <div className="pro-role">{r.handle}</div>

@@ -36,7 +36,7 @@ export default function SectionWhyChoose() {
             {items.slice(index, index + 3).map((t) => (
               <motion.div key={t.id} className="pro-testimonial-card" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.5 }}>
                 <div className="pro-avatar">
-                  <img src={t.avatar_url} alt={t.name} />
+                  <img src={t.avatar_url} loading="lazy" alt={t.name} />
                 </div>
                 <h3 className="pro-name">{t.name}</h3>
                 <div className="pro-role">{t.role}</div>

@@ -424,3 +424,43 @@ section {
   div[style*='right: -30px'] { right: 5px !important; }
 }
 
+
+/* MOBILE RESPONSIVENESS OVERRIDES */
+@media (max-width: 768px) {
+  section { padding: 40px 0; }
+  
+  .standard-container { padding: 0 20px; }
+  
+  .premium-wrapper { 
+    padding: 30px 20px; 
+    border-radius: 28px; 
+  }
+
+  .section-title { 
+    font-size: 2.2rem !important; 
+    line-height: 1.1 !important;
+  }
+
+  .btn-primary, .btn-ghost {
+    padding: 12px 24px;
+    font-size: 0.85rem;
+    width: 100%;
+    text-align: center;
+  }
+
+
+  /* Marquee track mobile speed/touch */
+  .marquee-track { animation-duration: 40s !important; }
+
+  /* Responsive Cards */
+  .card-track-item { flex: 0 0 260px !important; }
+  
+  /* Modal Mobile Tweaks */
+  .modal-content-box { border-radius: 0 !important; }
+  .modal-inner-padding { padding: 40px 20px !important; }
+  .modal-hero-title { font-size: 2.2rem !important; }
+  .modal-metrics-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
+  .modal-content-split { grid-template-columns: 1fr !important; gap: 32px !important; }
+  .modal-hero-img-box { height: 250px !important; }
+  .modal-floating-header { bottom: 20px !important; left: 20px !important; right: 20px !important; }
+}

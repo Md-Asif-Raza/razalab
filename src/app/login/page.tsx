@@ -133,6 +133,11 @@ export default function LoginPage() {
           text-decoration: none;
           cursor: pointer;
         }
+        @media (max-width: 768px) {
+          .login-card { padding: 32px 24px; border-radius: 30px; margin: 20px; }
+          .brand { margin-bottom: 24px; }
+          .login-btn { padding: 14px; font-size: 0.9rem; }
+        }
       `}</style>
 
       <div className="login-glow" />

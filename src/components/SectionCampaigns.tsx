@@ -36,6 +36,7 @@ function ClientCard({ client: rawClient, onClick }: { client: any; onClick: () =
     <motion.div
       whileHover={{ scale: 1.2, zIndex: 50 }}
       transition={{ type: 'spring', damping: 20, stiffness: 300, mass: 0.8 }}
+      className="card-track-item"
       style={{ position: 'relative', cursor: 'pointer', flex: '0 0 280px' }}
     >
       <SpotlightCard
@@ -294,21 +295,21 @@ export default function SectionCampaigns() {
               onClick={(e) => e.stopPropagation()}
             >
               {/* CAMPAIGN HERO IMAGE */}
-              <div style={{ width: '100%', height: '350px', position: 'relative', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+              <div className="modal-hero-img-box" style={{ width: '100%', height: '350px', position: 'relative', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
                 {selectedClient.img_url && (
                   <img src={selectedClient.img_url} alt={selectedClient.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 )}
                 <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 40%, #0c1015 100%)' }} />
                 
                 {/* FLOATING HEADER ON IMAGE */}
-                <div style={{ position: 'absolute', bottom: '32px', left: '48px', right: '48px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                <div className="modal-floating-header" style={{ position: 'absolute', bottom: '32px', left: '48px', right: '48px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                   <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-                      <div style={{ padding: '6px 16px', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '10px', fontSize: '1rem', opacity: 0.8, fontWeight: 800, background: 'rgba(0,0,0,0.3)', backdropFilter: 'blur(10px)' }}>
+                      <div className="modal-index-badge" style={{ padding: '6px 16px', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '10px', fontSize: '1rem', opacity: 0.8, fontWeight: 800, background: 'rgba(0,0,0,0.3)', backdropFilter: 'blur(10px)' }}>
                         {selectedClient.index_label || '01'}
                       </div>
                       <div>
-                        <h2 style={{ fontSize: '3.5rem', fontWeight: 900, color: '#fff', margin: 0, letterSpacing: '-2.5px', lineHeight: 1 }}>{cleanStr(selectedClient.name)}</h2>
+                        <h2 className="modal-hero-title" style={{ fontSize: '3.5rem', fontWeight: 900, color: '#fff', margin: 0, letterSpacing: '-2.5px', lineHeight: 1 }}>{cleanStr(selectedClient.name)}</h2>
                         <div style={{ marginTop: '12px', padding: '4px 14px', background: 'var(--c1)', borderRadius: '20px', fontSize: '0.75rem', color: '#000', fontWeight: 800, display: 'inline-block' }}>
                           {cleanStr(selectedClient.tag || selectedClient.category)}
                         </div>
@@ -328,7 +329,7 @@ export default function SectionCampaigns() {
                 </div>
               </div>
 
-              <div style={{ padding: '64px 48px' }}>
+              <div className="modal-inner-padding" style={{ padding: '64px 48px' }}>
                 {/* PROJECT OVERVIEW / DESCRIPTION (Moved Higher) */}
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} style={{ marginBottom: '48px', background: 'rgba(255,255,255,0.03)', padding: '40px', borderRadius: '32px', border: '1px solid rgba(255,255,255,0.05)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
@@ -341,7 +342,7 @@ export default function SectionCampaigns() {
                 </motion.div>
 
                 {/* 5-GRID METRICS RIBBON */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px', marginBottom: '48px' }}>
+                <div className="modal-metrics-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px', marginBottom: '48px' }}>
                   {[
                     { label: 'Total Views', val: selectedClient.views_total || '0', sub: 'VIEWS' },
                     { label: 'Creators', val: selectedClient.creators_count || '0', sub: 'CREATORS' },
@@ -358,7 +359,7 @@ export default function SectionCampaigns() {
 
 
                 {/* MAIN CONTENT AREA */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.1fr', gap: '48px' }}>
+                <div className="modal-content-split" style={{ display: 'grid', gridTemplateColumns: '1fr 1.1fr', gap: '48px' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>

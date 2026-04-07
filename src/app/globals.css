@@ -280,7 +280,7 @@ section {
   border: 1px solid rgba(255, 255, 255, 0.04);
   /* Faint base border */
   border-radius: 44px;
-  padding: 60px;
+  padding: 40px;
   position: relative;
   overflow: hidden;
   backdrop-filter: blur(20px);

@@ -4,6 +4,7 @@ import { getSiteSettings } from '@/lib/actions';
 import { PremiumWrapper, SpotlightCard } from './ui/PremiumUI';
 
 export default function SectionCalculator() {
+  const [isMounted, setIsMounted] = useState(false);
   const [clippers, setClippers] = useState(10);
   const [posts, setPosts] = useState(2);
   const [platforms, setPlatforms] = useState(3);
@@ -16,6 +17,7 @@ export default function SectionCalculator() {
   });
 
   useEffect(() => {
+    setIsMounted(true);
     getSiteSettings().then(res => {
       if (res) {
         setCalcConfig({
@@ -42,9 +44,9 @@ export default function SectionCalculator() {
       <div className="section-starter-glow" />
       <div className="glow-blend-divider" />
       <div className="standard-container">
-        <div style={{ textAlign: 'left', marginBottom: '80px' }}>
-          <h2 className="section-title reveal-up" style={{ textAlign: 'left', margin: 0 }}>ROI Calculator</h2>
-          <p className="reveal-up stagger-1" style={{ opacity: 0.5, marginTop: '16px', textAlign: 'left' }}>Project your growth through the Raza Labs distribution engine.</p>
+        <div style={{ textAlign: 'center', marginBottom: '80px' }}>
+          <h2 className="section-title reveal-up" style={{ textAlign: 'center', margin: '0 auto' }}>ROI Calculator</h2>
+          <p className="reveal-up stagger-1" style={{ opacity: 0.5, marginTop: '16px', textAlign: 'center' }}>Project your growth through the Raza Labs distribution engine.</p>
         </div>
 
         <PremiumWrapper className="calc-premium-container" style={{ padding: '0', borderRadius: '48px' }}>
@@ -89,7 +91,7 @@ export default function SectionCalculator() {
                 <div className="calc-slider-group">
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
                     <span style={{ fontSize: '0.85rem', fontWeight: 600, opacity: 0.6 }}>Avg. Views per Post</span>
-                    <span style={{ fontWeight: 800, color: 'var(--c1)' }}>{viewsPerPost.toLocaleString()}</span>
+                    <span style={{ fontWeight: 800, color: 'var(--c1)' }}>{isMounted ? viewsPerPost.toLocaleString() : viewsPerPost}</span>
                   </div>
                   <input type="range" min="1000" max="100000" step="1000" value={viewsPerPost} onChange={(e) => setViewsPerPost(parseInt(e.target.value))} style={{ width: '100%', accentColor: 'var(--c1)' }} />
                 </div>
@@ -101,7 +103,7 @@ export default function SectionCalculator() {
               <div className="reveal-up">
                 <span style={{ fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '4px', opacity: 0.4 }}>Annual Content Savings</span>
                 <div style={{ fontSize: '4.5rem', fontWeight: 900, color: '#fff', margin: '20px 0', letterSpacing: '-3px' }}>
-                  ${savings.toLocaleString()}
+                  ${isMounted ? savings.toLocaleString() : savings}
                 </div>
                 
                 <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', width: '60%', margin: '40px auto' }} />

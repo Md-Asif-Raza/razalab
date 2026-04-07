@@ -147,6 +147,7 @@ export default function AdminPage() {
   const [settingsData, setSettingsData] = useState<any>({
     instagram_url: 'https://instagram.com', youtube_url: 'https://youtube.com', twitter_url: 'https://x.com',
     video_url: '', video_poster: '', video_caption: 'Over 527 million views generated across clients',
+    video_cta_text: 'Book a Call →', video_cta_link: 'https://calendly.com/razalabs',
     cta_title: 'The Raza Labs', cta_title_accent: 'for organic growth',
     cta_subtitle: '', cta_button_text: 'Get in Touch →', cta_button_link: '#calculator',
     target_cpm: 25.0, organic_cpm: 1.0, platform_multiplier: 3, days_multiplier: 7
@@ -358,7 +359,7 @@ export default function AdminPage() {
               {campaigns.length === 0 && <div className="cms-empty">No campaigns yet. Click "+ Add Campaign" to get started.</div>}
               {campaigns.map(c => (
                 <div key={c.id} className="cms-item-card">
-                  {c.img_url && <img src={c.img_url} alt={c.name} className="cms-item-thumb" />}
+                  {(c.img_url || c.media_url || c.img) && <img src={c.img_url || c.media_url || c.img} alt={c.name || c.title} className="cms-item-thumb" />}
                   <div className="cms-item-body">
                     <h3 className="cms-item-name">{c.name}</h3>
                     <div className="cms-item-meta">{c.category} · {c.result} · {c.price || 'N/A'}</div>
@@ -409,6 +410,7 @@ export default function AdminPage() {
                   <div className="form-group mb-12"><label className="form-label">What the Studio Learned</label><textarea className="form-input" style={{ minHeight: '60px' }} value={editItem.learned_text || ''} onChange={e => setEditItem({ ...editItem, learned_text: e.target.value })} /></div>
 
                   <div className="form-group mb-16"><label className="form-label">General Description (Short)</label><textarea className="form-input" style={{ minHeight: '60px' }} value={editItem.description || ''} onChange={e => setEditItem({ ...editItem, description: e.target.value })} /></div>
+
                   <GraphDataInputs value={editItem.graph_data || ''} onChange={v => setEditItem({ ...editItem, graph_data: v })} />
                   <ImageField value={editItem.img_url || ''} onChange={v => setEditItem({ ...editItem, img_url: v })} label="Cover Image" />
                   <div className="cms-modal-footer">
@@ -607,7 +609,11 @@ export default function AdminPage() {
               <h3 className="cms-settings-heading">🎬 Video Settings</h3>
               <div className="form-group mb-16"><label className="form-label">Video URL (MP4 or YouTube)</label><input className="form-input" value={settingsData.video_url} onChange={e => setSettingsData({ ...settingsData, video_url: e.target.value })} /></div>
               <ImageField value={settingsData.video_poster} onChange={v => setSettingsData({ ...settingsData, video_poster: v })} label="Poster Image" />
-              <div className="form-group mb-24 mt-16"><label className="form-label">Video Caption</label><input className="form-input" value={settingsData.video_caption} onChange={e => setSettingsData({ ...settingsData, video_caption: e.target.value })} /></div>
+              <div className="form-group mb-16 mt-16"><label className="form-label">Video Caption</label><input className="form-input" value={settingsData.video_caption} onChange={e => setSettingsData({ ...settingsData, video_caption: e.target.value })} /></div>
+              <div className="form-row mb-24">
+                <div className="form-group"><label className="form-label">Video CTA Text</label><input className="form-input" value={settingsData.video_cta_text} onChange={e => setSettingsData({ ...settingsData, video_cta_text: e.target.value })} /></div>
+                <div className="form-group"><label className="form-label">Video CTA Link</label><input className="form-input" value={settingsData.video_cta_link} onChange={e => setSettingsData({ ...settingsData, video_cta_link: e.target.value })} /></div>
+              </div>
               <button className="cms-btn cms-btn-primary" onClick={handleSaveMedia} disabled={loading}>Save Media</button>
             </div>
           </>

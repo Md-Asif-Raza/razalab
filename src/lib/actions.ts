@@ -232,6 +232,8 @@ export async function syncSiteSettings(data: any) {
     video_url: data.video_url,
     video_poster: data.video_poster,
     video_caption: data.video_caption,
+    video_cta_text: data.video_cta_text,
+    video_cta_link: data.video_cta_link,
     cta_title: data.cta_title,
     cta_title_accent: data.cta_title_accent,
     cta_subtitle: data.cta_subtitle,

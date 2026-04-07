@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import PremiumPlayer from './PremiumPlayer';
 import { getSiteSettings } from '@/lib/actions';
 import { PremiumWrapper, SpotlightCard } from './ui/PremiumUI';
@@ -9,6 +10,8 @@ export default function SectionVideo() {
     video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
     video_poster: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1600&q=80',
     video_caption: 'Over 527 million views generated across clients',
+    video_cta_text: 'Book a Call →',
+    video_cta_link: 'https://calendly.com/razalabs',
   });
 
   useEffect(() => {
@@ -24,7 +27,7 @@ export default function SectionVideo() {
       <div className="standard-container">
         <PremiumWrapper className="video-premium-container" style={{ padding: '60px' }}>
           <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-            <h2 className="section-title">Explainer Video</h2>
+            <h2 className="section-title" style={{ textAlign: 'center', margin: '0 auto' }}>Explainer Video</h2>
           </div>
 
           <div className="video-modern-wrapper" style={{ maxWidth: '1000px', margin: '0 auto' }}>
@@ -50,9 +53,12 @@ export default function SectionVideo() {
           </div>
 
           <div style={{ textAlign: 'center', marginTop: '48px' }}>
-            <p style={{ fontSize: '1.2rem', fontWeight: 500, color: 'rgba(255,255,255,0.7)', letterSpacing: '0.02em' }}>
+            <p style={{ fontSize: '1.2rem', fontWeight: 500, color: 'rgba(255,255,255,0.7)', letterSpacing: '0.02em', marginBottom: '32px' }}>
               {data.video_caption}
             </p>
+            <Link href={data.video_cta_link || 'https://calendly.com/razalabs'} className="btn-primary" target="_blank" rel="noopener noreferrer">
+              {data.video_cta_text || 'Book a Call →'}
+            </Link>
           </div>
         </PremiumWrapper>
       </div>

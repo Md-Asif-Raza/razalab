@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { getSiteSettings } from '@/lib/actions';
 
 export default function SectionCTA() {
+  const [isMounted, setIsMounted] = useState(false);
   const [data, setData] = useState({
     cta_title: 'The Raza Labs',
     cta_title_accent: 'for organic growth',
@@ -13,6 +14,7 @@ export default function SectionCTA() {
   });
 
   useEffect(() => {
+    setIsMounted(true);
     getSiteSettings().then(res => {
       if (res) setData(res);
     }).catch(() => { });
@@ -21,7 +23,7 @@ export default function SectionCTA() {
   return (
     <section id="cta-end">
       <div className="particles-container">
-        {[...Array(25)].map((_, i) => (
+        {isMounted && [...Array(25)].map((_, i) => (
           <div key={i} className="particle" style={{
             left: `${Math.random() * 100}%`,
             animationDelay: `${Math.random() * 5}s`,

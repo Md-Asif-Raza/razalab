@@ -29,8 +29,8 @@ export default function SectionWhyChoose() {
     <section id="testimonials">
       <div className="standard-container">
         <PremiumWrapper className="why-premium-container" style={{ padding: '60px' }}>
-          <div style={{ textAlign: 'left', marginBottom: '60px' }}>
-            <h2 className="section-title" style={{ textAlign: 'left', margin: 0 }}>Testimonials</h2>
+          <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+            <h2 className="section-title" style={{ textAlign: 'center', margin: '0 auto' }}>Testimonials</h2>
           </div>
 
           <div className="pro-testimonial-row reveal-up" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
@@ -41,7 +41,7 @@ export default function SectionWhyChoose() {
                   style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '32px' }}
                 >
                   <div className="pro-avatar" style={{ width: '60px', height: '60px', borderRadius: '50%', overflow: 'hidden', marginBottom: '20px' }}>
-                    <img src={t.avatar_url} loading="lazy" alt={t.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    {t.avatar_url && <img src={t.avatar_url} loading="lazy" alt={t.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
                   </div>
                   <h3 className="pro-name" style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '4px' }}>{t.name}</h3>
                   <div className="pro-role" style={{ fontSize: '0.85rem', color: 'var(--c1)', marginBottom: '16px', fontWeight: 600 }}>{t.role}</div>

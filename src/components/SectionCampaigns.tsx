@@ -69,11 +69,12 @@ function ClientCard({ client: rawClient, onClick }: { client: any; onClick: () =
               loading="lazy"
               alt={client.name}
               onLoad={() => setIsLoaded(true)}
+              onError={() => setIsLoaded(true)}
               style={{
                 width: '100%',
                 height: '100%',
                 objectFit: 'cover',
-                opacity: isLoaded ? 0.8 : 0,
+                opacity: isLoaded ? 0.6 : 0,
                 position: 'absolute',
                 inset: 0,
                 transition: 'opacity 1s ease'
@@ -93,18 +94,13 @@ function ClientCard({ client: rawClient, onClick }: { client: any; onClick: () =
             background: 'linear-gradient(to bottom, transparent, rgba(5,3,4,0.4) 30%, rgba(5,3,4,0.9) 95%)',
             zIndex: 10
           }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <div style={{ backgroundColor: 'var(--c1)', color: '#fff', padding: '4px 10px', borderRadius: '6px', fontSize: '0.6rem', fontWeight: 800, textTransform: 'uppercase', display: 'inline-block', width: 'fit-content' }}>
-                {cleanStr(client.category)}
-              </div>
-              <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#fff', margin: 0, letterSpacing: '-0.5px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+              <h3 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#fff', margin: 0, letterSpacing: '-0.5px', textTransform: 'uppercase' }}>
                 {cleanStr(client.name)}
               </h3>
-            </div>
-            
-            <div style={{ display: 'flex', gap: '8px' }}>
-               <div style={{ padding: '4px 10px', background: 'rgba(0, 230, 118, 0.1)', border: '1px solid rgba(0, 230, 118, 0.2)', borderRadius: '10px', color: '#00e676', fontWeight: 800, fontSize: '0.8rem' }}>{cleanStr(client.result)}</div>
-               <div style={{ padding: '4px 10px', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '10px', color: '#fff', fontWeight: 600, fontSize: '0.8rem' }}>{cleanStr(client.price)}</div>
+              <div style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--c1)', letterSpacing: '1px', textTransform: 'uppercase' }}>
+                {cleanStr(client.result)}
+              </div>
             </div>
           </div>
 

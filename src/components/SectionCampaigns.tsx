@@ -82,7 +82,7 @@ function ClientCard({ client: rawClient, onClick }: { client: any; onClick: () =
             />
           )}
 
-          {/* INITIAL CONTENT (Always visible overlay) */}
+          {/* CONTENT (Always visible overlay) */}
           <div style={{
             position: 'absolute',
             inset: 0,
@@ -91,10 +91,11 @@ function ClientCard({ client: rawClient, onClick }: { client: any; onClick: () =
             flexDirection: 'column',
             justifyContent: 'flex-end',
             gap: '12px',
-            background: 'linear-gradient(to bottom, transparent, rgba(5,3,4,0.4) 30%, rgba(5,3,4,0.9) 95%)',
-            zIndex: 10
+            background: 'linear-gradient(to bottom, transparent, rgba(5,3,4,0.4) 30%, rgba(5,3,4,0.95) 100%)',
+            zIndex: 40,
+            pointerEvents: 'none'
           }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', pointerEvents: 'auto' }}>
               <h3 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#fff', margin: 0, letterSpacing: '-0.5px', textTransform: 'uppercase' }}>
                 {cleanStr(client.name)}
               </h3>
@@ -102,27 +103,16 @@ function ClientCard({ client: rawClient, onClick }: { client: any; onClick: () =
                  <div style={{ padding: '4px 10px', background: 'rgba(0, 230, 118, 0.1)', border: '1px solid rgba(0, 230, 118, 0.2)', borderRadius: '10px', color: '#00e676', fontWeight: 800, fontSize: '0.8rem' }}>{cleanStr(client.result)}</div>
                  <div style={{ padding: '4px 10px', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '10px', color: '#fff', fontWeight: 600, fontSize: '0.8rem' }}>{cleanStr(client.price)}</div>
               </div>
+              
+              {/* DESCRIPTION TEXT - SLIDES DOWN ON HOVER */}
+              <div className="hover-desc-wrapper">
+                <div className="hover-desc-inner">
+                  <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.9rem', fontWeight: 500, lineHeight: '1.6', margin: 0, paddingTop: '10px' }}>
+                    {cleanStr(client.description)}
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
-
-          {/* HOVER REVEAL EFFECT (Content at bottom) */}
-          <div
-            className="hover-desc-reveal"
-            style={{
-              position: 'absolute',
-              inset: 0,
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'flex-end',
-              padding: '24px 20px',
-              background: 'linear-gradient(to top, #000 0%, rgba(0,0,0,0.92) 80%, transparent 100%)',
-              zIndex: 30,
-              pointerEvents: 'none'
-            }}
-          >
-            <p style={{ color: '#fff', fontSize: '0.85rem', fontWeight: 500, lineHeight: '1.5', margin: 0, opacity: 0.9 }}>
-              {cleanStr(client.description)}
-            </p>
           </div>
         </div>
       </SpotlightCard>
@@ -247,6 +237,7 @@ export default function SectionCampaigns() {
         {selectedClient && (
           <motion.div 
             className="cinematic-modal-overlay" 
+            data-lenis-prevent="true"
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
             exit={{ opacity: 0 }}

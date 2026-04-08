@@ -406,6 +406,21 @@ section {
   --glow-radius: 250px;
 }
 
+/* Campaign Card Inline Hover Reveal */
+.hover-desc-wrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.4s ease, opacity 0.4s ease;
+}
+.reveal-card:hover .hover-desc-wrapper {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+.hover-desc-inner {
+  overflow: hidden;
+}
+
 .spotlight-content {
   position: relative;
   z-index: 10;

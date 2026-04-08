@@ -16,7 +16,12 @@ export default function SectionCTA() {
   useEffect(() => {
     setIsMounted(true);
     getSiteSettings().then(res => {
-      if (res) setData(res);
+      if (res) {
+        setData(prev => ({
+          ...prev,
+          ...(Object.fromEntries(Object.entries(res).filter(([_, v]) => v != null && v !== '')))
+        }));
+      }
     }).catch(() => { });
   }, []);
 

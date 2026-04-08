@@ -36,16 +36,17 @@ export default function SectionWhyChoose() {
           <div className="pro-testimonial-row reveal-up" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
             <AnimatePresence mode="wait">
               {items.slice(index, index + 3).map((t) => (
-                <motion.div key={t.id} className="pro-testimonial-card" 
+                <motion.div key={t.id}
                   initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.5 }}
-                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '32px' }}
                 >
-                  <div className="pro-avatar" style={{ width: '60px', height: '60px', borderRadius: '50%', overflow: 'hidden', marginBottom: '20px' }}>
-                    {t.avatar_url && <img src={t.avatar_url} loading="lazy" alt={t.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
-                  </div>
-                  <h3 className="pro-name" style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '4px' }}>{t.name}</h3>
-                  <div className="pro-role" style={{ fontSize: '0.85rem', color: 'var(--c1)', marginBottom: '16px', fontWeight: 600 }}>{t.role}</div>
-                  <p className="pro-quote" style={{ fontSize: '0.95rem', opacity: 0.7, lineHeight: 1.6 }}>&quot;{t.quote}&quot;</p>
+                  <SpotlightCard size="small" className="pro-testimonial-card" style={{ padding: '32px', height: '100%' }}>
+                    <div className="pro-avatar" style={{ width: '60px', height: '60px', borderRadius: '50%', overflow: 'hidden', marginBottom: '20px' }}>
+                      {t.avatar_url && <img src={t.avatar_url} loading="lazy" alt={t.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
+                    </div>
+                    <h3 className="pro-name" style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '4px' }}>{t.name}</h3>
+                    <div className="pro-role" style={{ fontSize: '0.85rem', color: 'var(--c1)', marginBottom: '16px', fontWeight: 600 }}>{t.role}</div>
+                    <p className="pro-quote" style={{ fontSize: '0.95rem', opacity: 0.7, lineHeight: 1.6 }}>&quot;{t.quote}&quot;</p>
+                  </SpotlightCard>
                 </motion.div>
               ))}
             </AnimatePresence>

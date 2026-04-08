@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { getTechStack } from '@/lib/actions';
+import { SpotlightCard } from './ui/PremiumUI';
 
 interface TechStackItem {
   name: string;
@@ -45,13 +46,14 @@ export default function SectionTechStack() {
 
         <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {techStack.map((tech, index) => (
-            <motion.div key={index} variants={itemVariants} whileHover={{ y: -8, scale: 1.05 }} className="group relative p-6 rounded-2xl backdrop-blur-lg bg-white/5 border border-white/10 hover:border-white/20 transition-all duration-300">
-              <div className="relative z-10">
-                <div className="text-4xl mb-4">{tech.icon}</div>
-                <h3 className="text-lg font-semibold text-white mb-2">{tech.name}</h3>
-                <p className="text-sm text-white/60">{tech.description}</p>
-              </div>
-              <motion.div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 via-cyan-500/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500" initial={{ opacity: 0 }} whileHover={{ opacity: 1 }} />
+            <motion.div key={index} variants={itemVariants} whileHover={{ y: -8, scale: 1.05 }}>
+              <SpotlightCard size="small" className="group relative p-6 h-full transition-all duration-300" style={{ borderRadius: '16px' }}>
+                <div className="relative z-10 w-full">
+                  <div className="text-4xl mb-4">{tech.icon}</div>
+                  <h3 className="text-lg font-semibold text-white mb-2">{tech.name}</h3>
+                  <p className="text-sm text-white/60">{tech.description}</p>
+                </div>
+              </SpotlightCard>
             </motion.div>
           ))}
         </motion.div>

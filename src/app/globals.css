@@ -339,25 +339,77 @@ section {
   position: relative;
   overflow: hidden;
   border-radius: 28px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  transition: border-color 0.3s ease, background 0.3s ease;
+  background: rgba(12, 16, 21, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.spotlight-card::before {
-  content: "";
+.spotlight-border-base {
   position: absolute;
   inset: 0;
-  background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y),
-      rgba(255, 255, 255, 0.06),
-      transparent 40%);
-  opacity: 0;
-  transition: opacity 0.5s ease;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.05);
   pointer-events: none;
+  z-index: 0;
 }
 
-.spotlight-card:hover::before {
+.spotlight-border-glow {
+  position: absolute;
+  inset: 0; /* Brings the outline to the inside */
+  padding: 2px; /* Thicker, softer outline */
+  border-radius: inherit;
+  background: radial-gradient(var(--glow-radius, 400px) circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      rgba(150, 180, 255, 0.8), /* Vibrant blue/silver match */
+      rgba(120, 100, 255, 0.2) 20%,
+      transparent 50%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 5;
+}
+
+.spotlight-surface-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(var(--glow-radius, 400px) circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      rgba(150, 180, 255, 0.12),
+      transparent 70%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  z-index: 20;
+  mix-blend-mode: screen;
+}
+
+.spotlight-card:hover .spotlight-border-glow,
+.spotlight-card:hover .spotlight-surface-glow {
   opacity: 1;
+}
+
+.glow-big {
+  --glow-radius: 450px;
+}
+
+/* Remove torch surface effect for big blocks, keep only outline */
+.glow-big .spotlight-surface-glow {
+  display: none !important;
+}
+
+.glow-small {
+  --glow-radius: 250px;
+}
+
+.spotlight-content {
+  position: relative;
+  z-index: 10;
+  height: 100%;
 }
 
 /* MARQUEE ANIMATION */
@@ -371,7 +423,7 @@ section {
   }
 }
 
-.marquee-container:hover .marquee-track {
+.marquee-track:hover {
   animation-play-state: paused;
 }
 

@@ -40,14 +40,14 @@ function ClientCard({ client: rawClient, onClick }: { client: any; onClick: () =
       style={{ position: 'relative', cursor: 'pointer', flex: '0 0 280px' }}
     >
       <SpotlightCard
+        size="big"
         className="reveal-card"
         style={{
           height: '420px',
           width: '100%',
           overflow: 'hidden',
-          borderRadius: '35px',
-          position: 'relative',
-          background: '#0c1015'
+          borderRadius: '32px',
+          position: 'relative'
         }}
       >
         <div onClick={onClick} style={{ height: '100%', position: 'relative' }}>
@@ -160,11 +160,9 @@ export default function SectionCampaigns() {
     };
   }, [selectedClientRaw]);
   const marqueeItems = useMemo(() => {
-    // If we have very few clients, repeat them enough to fill the scrolling track
+    // For a seamless -50% translation loop, we always need exactly two sets of items
     if (clients.length === 0) return [];
-    if (clients.length < 3) return [...clients, ...clients, ...clients]; 
-    if (clients.length < 6) return [...clients, ...clients];
-    return clients;
+    return [...clients, ...clients];
   }, [clients]);
 
   const scroll = (direction: 'left' | 'right') => {
@@ -181,7 +179,7 @@ export default function SectionCampaigns() {
   return (
     <section id="campaigns">
       <div className="standard-container">
-        <PremiumWrapper className="campaigns-premium-container" style={{ paddingLeft: '20px', paddingRight: '20px' }}>
+        <PremiumWrapper className="campaigns-premium-container" style={{ paddingTop: '80px', paddingBottom: '80px', paddingLeft: '20px', paddingRight: '20px' }}>
           <div style={{ textAlign: 'center', marginBottom: '80px' }}>
             <h2 className="section-title reveal-up" style={{ textAlign: 'center', margin: '0 auto' }}>Clients</h2>
             <p className="reveal-up stagger-1" style={{ opacity: 0.5, marginTop: '16px', textAlign: 'center' }}>Proven distribution results across major niches.</p>
@@ -215,20 +213,21 @@ export default function SectionCampaigns() {
               style={{
                 overflowX: 'auto',
                 scrollbarWidth: 'none',
-                padding: '120px 0',
+                padding: '80px 0', // Reduced from 120px to tighten hover zone
                 position: 'relative',
                 cursor: 'grab'
               }}
-              onMouseEnter={() => setIsPaused(true)}
-              onMouseLeave={() => setIsPaused(false)}
             >
               <div
                 className="marquee-track"
+                onMouseEnter={() => setIsPaused(true)}
+                onMouseLeave={() => setIsPaused(false)}
                 style={{
                   display: 'flex',
                   gap: '24px',
                   width: 'fit-content',
-                  animation: isPaused ? 'none' : 'marquee 80s linear infinite',
+                  animation: 'marquee 80s linear infinite',
+                  animationPlayState: isPaused ? 'paused' : 'running',
                 }}
               >
               {marqueeItems.map((client: Campaign, idx: number) => (

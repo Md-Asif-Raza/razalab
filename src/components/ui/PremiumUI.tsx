@@ -3,81 +3,48 @@ import React, { useRef, useState, ReactNode } from 'react';
 
 /**
  * PremiumWrapper - A rectangular container with a cursor-tracking border glow.
+ * Now wraps SpotlightCard to unify the vibrant glow effect across all big sections.
  */
 export const PremiumWrapper = ({ children, className = "", style = {} }: { children: ReactNode, className?: string, style?: React.CSSProperties }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    containerRef.current.style.setProperty('--mouse-x', `${x}px`);
-    containerRef.current.style.setProperty('--mouse-y', `${y}px`);
-  };
-
   return (
-    <div 
-      ref={containerRef}
-      className={`premium-wrapper ${className}`} 
-      onMouseMove={handleMouseMove}
-      style={style}
-    >
+    <SpotlightCard size="big" className={`premium-wrapper-unified ${className}`} style={style}>
       {children}
-    </div>
+    </SpotlightCard>
   );
 };
 
-export const SpotlightCard = ({ children, className = "", style = {} }: { children: ReactNode, className?: string, style?: any }) => {
+export const SpotlightCard = ({ children, className = "", style = {}, size = "big" }: { children: ReactNode, className?: string, style?: any, size?: "big" | "small" }) => {
   const divRef = useRef<HTMLDivElement>(null);
-  const [isFocused, setIsFocused] = useState(false);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [opacity, setOpacity] = useState(0);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!divRef.current || isFocused) return;
-
+    if (!divRef.current) return;
     const rect = divRef.current.getBoundingClientRect();
-    setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-  };
-
-  const handleMouseEnter = () => {
-    setOpacity(1);
-  };
-
-  const handleMouseLeave = () => {
-    setOpacity(0);
-  };
-
-  const handleFocus = () => {
-    setIsFocused(true);
-    setOpacity(1);
-  };
-
-  const handleBlur = () => {
-    setIsFocused(false);
-    setOpacity(0);
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    divRef.current.style.setProperty('--mouse-x', `${x}px`);
+    divRef.current.style.setProperty('--mouse-y', `${y}px`);
   };
 
   return (
     <div
       ref={divRef}
       onMouseMove={handleMouseMove}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
-      className={`spotlight-card ${className}`}
-      style={style}
+      className={`spotlight-card ${size === "big" ? "glow-big" : "glow-small"} ${className}`}
+      style={{ ...style } as any}
     >
-      <div
-        className="spotlight-layer"
-        style={{
-          opacity,
-          background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(255,255,255,0.06), transparent 40%)`,
-        }}
-      />
-      {children}
+      {/* INITIAL BORDER (FAINT) */}
+      <div className="spotlight-border-base" />
+      
+      {/* DYNAMIC BORDER HIGHLIGHT */}
+      <div className="spotlight-border-glow" />
+
+      {/* DYNAMIC SURFACE GLOW */}
+      <div className="spotlight-surface-glow" />
+      
+      <div className="spotlight-content">
+        {children}
+      </div>
     </div>
   );
 };

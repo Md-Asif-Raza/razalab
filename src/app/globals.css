@@ -752,4 +752,139 @@ section {
     left: 20px !important;
     right: 20px !important;
   }
+
+  /* CALCULATOR: Force single column on mobile */
+  .dual-pane-calc {
+    grid-template-columns: 1fr !important;
+  }
+  .dual-pane-calc > div {
+    padding: 32px 20px !important;
+    border-right: none !important;
+  }
+
+  /* HERO: Reduce massive top padding */
+  #hero {
+    padding: 100px 0 40px 0 !important;
+  }
+  #hero h1 {
+    font-size: clamp(2rem, 7vw, 3rem) !important;
+    margin-bottom: 24px !important;
+  }
+  #hero p {
+    font-size: 1rem !important;
+    margin-bottom: 32px !important;
+  }
+  #hero .btn-primary {
+    padding: 14px 32px !important;
+    font-size: 0.95rem !important;
+    width: auto !important;
+  }
+
+  /* FAQ: Reduce top padding on mobile */
+  #faq {
+    padding: 60px 0 30px 0 !important;
+  }
+
+  /* CTA: Mobile spacing */
+  #cta-end .cta-content {
+    padding: 40px 20px !important;
+  }
+  .cta-title {
+    font-size: clamp(1.8rem, 6vw, 2.5rem) !important;
+  }
+  .cta-sub {
+    font-size: 0.9rem !important;
+    padding: 0 10px;
+  }
+  .cta-btn {
+    padding: 14px 32px !important;
+    font-size: 0.95rem !important;
+  }
+
+  /* TESTIMONIALS: Reduce premium wrapper padding */
+  .why-premium-container {
+    padding: 30px 16px !important;
+  }
+  .pro-testimonial-row {
+    grid-template-columns: 1fr !important;
+  }
+  .pro-testimonial-card {
+    min-width: 100% !important;
+  }
+
+  /* SAVINGS NUMBER: Responsive scaling */
+  .calc-premium-container {
+    border-radius: 20px !important;
+  }
+
+  /* FOOTER: Stack on mobile */
+  footer {
+    flex-direction: column !important;
+    gap: 24px !important;
+    text-align: center;
+    padding: 40px 20px !important;
+  }
+  .footer-links {
+    flex-wrap: wrap;
+    justify-content: center !important;
+    gap: 12px !important;
+  }
+  .footer-socials {
+    justify-content: center !important;
+  }
+}
+
+/* ===== SMALL MOBILE (≤480px) ===== */
+@media (max-width: 480px) {
+  .standard-container {
+    padding: 0 16px !important;
+  }
+  #hero h1 {
+    font-size: clamp(1.8rem, 8vw, 2.5rem) !important;
+  }
+  .section-title {
+    font-size: 1.8rem !important;
+  }
+  .btn-primary,
+  .btn-ghost {
+    padding: 10px 20px !important;
+    font-size: 0.8rem !important;
+  }
+  .dual-pane-calc > div {
+    padding: 24px 16px !important;
+  }
+  .cta-title {
+    font-size: clamp(1.5rem, 7vw, 2rem) !important;
+  }
+  .nav-full {
+    padding: 0 12px !important;
+    height: 70px !important;
+  }
+}
+
+/* ===== TABLET (769px–1024px) ===== */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .dual-pane-calc {
+    grid-template-columns: 1fr !important;
+  }
+  .dual-pane-calc > div {
+    padding: 40px !important;
+    border-right: none !important;
+  }
+  .pro-testimonial-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  #hero {
+    padding: 120px 0 60px 0 !important;
+  }
+  .why-premium-container {
+    padding: 40px 24px !important;
+  }
+}
+
+/* ===== LARGE SCREENS (≥1440px) ===== */
+@media (min-width: 1440px) {
+  .standard-container {
+    max-width: 1600px;
+  }
 }

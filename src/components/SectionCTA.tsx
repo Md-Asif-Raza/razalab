@@ -25,6 +25,18 @@ export default function SectionCTA() {
     }).catch(() => { });
   }, []);
 
+  const handleCtaClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const target = e.currentTarget;
+    target.classList.add('animate-ripple');
+    setTimeout(() => {
+      target.classList.remove('animate-ripple');
+    }, 800);
+    if (data.cta_button_link.startsWith('#')) {
+      e.preventDefault();
+      document.querySelector(data.cta_button_link)?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section id="cta-end">
       <div className="particles-container">
@@ -41,7 +53,7 @@ export default function SectionCTA() {
         <h2 className="cta-title">{data.cta_title}<br /> <span style={{ color: 'var(--c1)' }}>{data.cta_title_accent}</span></h2>
         <p className="cta-sub">{data.cta_subtitle}</p>
         <div className="cta-actions">
-          <Link href={data.cta_button_link} className="btn-primary">{data.cta_button_text}</Link>
+          <Link href={data.cta_button_link} className="cta-btn" onClick={handleCtaClick}>{data.cta_button_text}</Link>
         </div>
       </div>
     </section>

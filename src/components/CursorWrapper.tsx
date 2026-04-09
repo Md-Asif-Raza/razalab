@@ -6,7 +6,7 @@ import { motion, useSpring, useMotionValue } from 'framer-motion';
 export default function CursorWrapper() {
   const pathname = usePathname();
   const [isVisible, setIsVisible] = useState(false);
-  
+
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
@@ -33,7 +33,7 @@ export default function CursorWrapper() {
     window.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseleave', handleMouseLeave);
     document.addEventListener('mouseenter', handleMouseEnter);
-    
+
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseleave', handleMouseLeave);
@@ -60,7 +60,23 @@ export default function CursorWrapper() {
           boxShadow: '0 0 20px rgba(255,255,255,0.05)',
         }}
       />
-      
+
+      {/* AMBIENT MOUSE LIGHT (Fix 6) */}
+      <motion.div
+        style={{
+          x: trailX, y: trailY,
+          width: 800, height: 800,
+          borderRadius: '50%',
+          position: 'absolute',
+          top: -400, left: -400,
+          background: 'radial-gradient(circle, rgba(90, 104, 130, 0.06) 0%, transparent 70%)',
+          pointerEvents: 'none',
+          zIndex: -1,
+          mixBlendMode: 'screen',
+          filter: 'blur(30px)'
+        }}
+      />
+
       {/* MAIN DOT */}
       <motion.div
         style={{

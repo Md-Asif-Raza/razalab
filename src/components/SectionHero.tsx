@@ -54,7 +54,7 @@ export default function SectionHero() {
           </h1>
 
           <p className="reveal-up stagger-1" style={{ 
-            fontSize: '1.25rem', 
+            fontSize: '1.25rem',
             lineHeight: 1.6, 
             color: 'rgba(255, 255, 255, 0.6)', 
             maxWidth: '800px',

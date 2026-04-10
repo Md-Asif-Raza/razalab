@@ -2,17 +2,41 @@ import { createClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
 import { env } from './env';
 
+// =============================================
+// ADMIN EMAIL — Only this email can access admin
+// =============================================
+export const ADMIN_EMAIL = 'arifm9991@gmail.com';
+
 const COOKIE_NAME = 'sb-session';
 
-export function getSupabaseAuthClient() {
-  return createClient(env.NEXT_PUBLIC_SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false,
-    },
+/**
+ * Creates a Supabase client with the ANON key (for auth operations like signIn).
+ */
+export function getAuthClient() {
+  return createClient(env.NEXT_PUBLIC_SUPABASE_URL, env.NEXT_PUBLIC_SUPABASE_ANON_KEY, {
+    auth: { autoRefreshToken: false, persistSession: false },
   });
 }
 
+/**
+ * Creates a Supabase client with the SERVICE ROLE key (for admin operations).
+ */
+export function getAdminClient() {
+  return createClient(env.NEXT_PUBLIC_SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  });
+}
+
+/**
+ * Checks if the given email matches the admin email.
+ */
+export function isAdminEmail(email: string): boolean {
+  return email.trim().toLowerCase() === ADMIN_EMAIL;
+}
+
+/**
+ * Stores the Supabase session in an httpOnly cookie.
+ */
 export async function setSession(session: any) {
   const cookieStore = await cookies();
   cookieStore.set(COOKIE_NAME, JSON.stringify(session), {
@@ -24,11 +48,17 @@ export async function setSession(session: any) {
   });
 }
 
+/**
+ * Clears the session cookie.
+ */
 export async function clearSession() {
   const cookieStore = await cookies();
   cookieStore.delete(COOKIE_NAME);
 }
 
+/**
+ * Reads the session from the cookie.
+ */
 export async function getSession() {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get(COOKIE_NAME);
@@ -40,13 +70,17 @@ export async function getSession() {
   }
 }
 
+/**
+ * Validates the current session against Supabase and checks admin email.
+ */
 export async function validateSession() {
   const session = await getSession();
   if (!session?.access_token) return null;
 
-  const supabase = getSupabaseAuthClient();
+  const supabase = getAdminClient();
   const { data: { user }, error } = await supabase.auth.getUser(session.access_token);
   if (error || !user) return null;
+  if (!isAdminEmail(user.email || '')) return null;
   return user;
 }
 

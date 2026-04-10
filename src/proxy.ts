@@ -1,13 +1,16 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+const ADMIN_EMAIL = 'arifm9991@gmail.com';
+const COOKIE_NAME = 'sb-session';
+
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const method = request.method;
 
-  // 1. PUBLIC ROUTES (Exempt from Auth)
+  // ─── PUBLIC ROUTES (exempt from auth) ───
   const isPublicApi = 
-    pathname === '/api/auth/login' || 
+    pathname.startsWith('/api/auth/') ||
     pathname === '/api/track-view' || 
     (pathname === '/api/campaigns' && method === 'GET') ||
     (pathname === '/api/posts' && method === 'GET');
@@ -16,7 +19,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // 2. PROTECTED ROUTES
+  // ─── PROTECTED ROUTES ───
   const isProtected = 
     pathname.startsWith('/admin') ||
     pathname.startsWith('/api/posts') ||
@@ -24,7 +27,7 @@ export async function proxy(request: NextRequest) {
     (pathname.startsWith('/api/campaigns/') && ['PATCH', 'DELETE'].includes(method));
 
   if (isProtected) {
-    const sessionCookie = request.cookies.get('sb-session');
+    const sessionCookie = request.cookies.get(COOKIE_NAME);
     
     if (!sessionCookie?.value) {
       if (pathname.startsWith('/api/')) {
@@ -35,13 +38,17 @@ export async function proxy(request: NextRequest) {
 
     try {
       const session = JSON.parse(sessionCookie.value);
-      if (!session?.access_token) throw new Error();
+      if (!session?.access_token) throw new Error('No access token');
+
+      // ─── ADMIN EMAIL CHECK ───
+      const email = session.user?.email?.trim().toLowerCase();
+      if (email !== ADMIN_EMAIL) throw new Error('Not admin');
 
       // We add a header for downstream use
       const response = NextResponse.next();
       response.headers.set('x-user-id', session.user?.id || '');
       
-      // Add Security Headers (Section 7.2)
+      // Security Headers
       response.headers.set('X-Frame-Options', 'DENY');
       response.headers.set('X-Content-Type-Options', 'nosniff');
       response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
@@ -65,5 +72,6 @@ export const config = {
     '/api/posts/:path*',
     '/api/campaigns/:path*',
     '/api/analytics/:path*',
+    '/api/auth/:path*',
   ],
 };

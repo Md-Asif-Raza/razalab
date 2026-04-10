@@ -61,22 +61,6 @@ export default function CursorWrapper() {
         }}
       />
 
-      {/* AMBIENT MOUSE LIGHT (Fix 6) */}
-      <motion.div
-        style={{
-          x: trailX, y: trailY,
-          width: 800, height: 800,
-          borderRadius: '50%',
-          position: 'absolute',
-          top: -400, left: -400,
-          background: 'radial-gradient(circle, rgba(90, 104, 130, 0.06) 0%, transparent 70%)',
-          pointerEvents: 'none',
-          zIndex: -1,
-          mixBlendMode: 'screen',
-          filter: 'blur(30px)'
-        }}
-      />
-
       {/* MAIN DOT */}
       <motion.div
         style={{

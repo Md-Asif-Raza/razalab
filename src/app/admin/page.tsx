@@ -159,12 +159,7 @@ export default function AdminPage() {
 
   useEffect(() => {
     setMounted(true);
-    // Auth check — redirect if no session cookie
-    const cookies = document.cookie;
-    if (!cookies.includes('sb-session')) {
-      window.location.href = '/login';
-      return;
-    }
+    // Auth is enforced by the proxy — if we reached this page, we're authenticated
     setAuthed(true);
   }, []);
 

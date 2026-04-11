@@ -7,7 +7,7 @@ type AuthMode = 'password' | 'otp-send' | 'otp-verify';
 
 export default function LoginPage() {
   const [mode, setMode] = useState<AuthMode>('password');
-  const [email, setEmail] = useState('arifm9991@gmail.com');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [otpCode, setOtpCode] = useState('');
   const [error, setError] = useState('');

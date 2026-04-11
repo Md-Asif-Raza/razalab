@@ -38,7 +38,20 @@ export default function SectionCTA() {
   };
 
   return (
-    <section id="cta-end">
+    <section id="cta-end" style={{ position: 'relative' }}>
+      {/* ═══ AMBIENT GLOW — behind CTA headline ═══ */}
+      <div aria-hidden="true" style={{
+        position: 'absolute',
+        top: '40%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: '700px',
+        height: '250px',
+        background: 'radial-gradient(ellipse at center, rgba(90, 104, 130, 0.30) 0%, rgba(100, 80, 180, 0.15) 40%, transparent 70%)',
+        filter: 'blur(120px)',
+        pointerEvents: 'none',
+        zIndex: 0,
+      }} />
       <div className="particles-container">
         {isMounted && [...Array(25)].map((_, i) => (
           <div key={i} className="particle" style={{
@@ -48,7 +61,7 @@ export default function SectionCTA() {
           }}></div>
         ))}
       </div>
-      <div className="cta-content container reveal-up" style={{ padding: '60px 0', textAlign: 'center' }}>
+      <div className="cta-content container reveal-up" style={{ padding: '60px 0', textAlign: 'center', position: 'relative', zIndex: 1 }}>
         <h2 className="section-title" style={{ opacity: 0.1, marginBottom: '32px' }}></h2>
         <h2 className="cta-title">{data.cta_title}<br /> <span style={{ color: 'var(--c1)' }}>{data.cta_title_accent}</span></h2>
         <p className="cta-sub">{data.cta_subtitle}</p>

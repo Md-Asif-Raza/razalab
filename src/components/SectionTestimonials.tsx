@@ -35,7 +35,7 @@ export default function SectionTestimonials() {
                   <h3 className="pro-name">{r.name}</h3>
                   <div className="pro-role">{r.handle}</div>
                   <div style={{ color: 'var(--aura-neon)', fontSize: '0.7rem', marginBottom: '16px' }}>{'★'.repeat(r.stars || 5)}</div>
-                  <p className="pro-quote">&quot;{r.content}&quot;</p>
+                  <p className="pro-quote">{r.content}</p>
                 </SpotlightCard>
               </motion.div>
             ))}

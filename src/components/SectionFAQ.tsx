@@ -17,7 +17,7 @@ export default function SectionFAQ() {
   const [openId, setOpenId] = useState<string | null>(null);
 
   useEffect(() => {
-    getFaqs().then(data => { if (data && data.length > 0) setFaqs(data); }).catch(() => {});
+    getFaqs().then(data => { if (data && data.length > 0) setFaqs(data); }).catch(() => { });
   }, []);
 
   return (
@@ -29,24 +29,27 @@ export default function SectionFAQ() {
 
         <div className="reveal-up">
           {faqs.map((faq) => (
-            <div key={faq.id} className="accordion-item" style={{ 
-              background: 'rgba(255,255,255,0.02)', 
-              border: '1px solid rgba(255,255,255,0.05)', 
-              borderRadius: '16px', 
+            <div key={faq.id} className="accordion-item" style={{
+              background: 'rgba(255, 255, 255, 0.04)',
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+              borderRadius: '16px',
               marginBottom: '12px',
-              overflow: 'hidden'
+              overflow: 'hidden',
+              transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
             }}>
-              <button 
+              <button
                 onClick={() => setOpenId(openId === faq.id ? null : faq.id)}
-                style={{ 
-                  width: '100%', 
-                  padding: '24px', 
-                  display: 'flex', 
-                  justifyContent: 'space-between', 
-                  alignItems: 'center', 
-                  background: 'none', 
-                  border: 'none', 
-                  color: '#fff', 
+                style={{
+                  width: '100%',
+                  padding: '24px',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  background: 'none',
+                  border: 'none',
+                  color: '#fff',
                   cursor: 'pointer',
                   textAlign: 'left'
                 }}
@@ -56,7 +59,7 @@ export default function SectionFAQ() {
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                 </motion.span>
               </button>
-              
+
               <AnimatePresence>
                 {openId === faq.id && (
                   <motion.div

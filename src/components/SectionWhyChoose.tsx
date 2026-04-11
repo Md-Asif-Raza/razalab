@@ -18,7 +18,7 @@ export default function SectionWhyChoose() {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    getTestimonials().then(data => { if (data && data.length > 0) setItems(data); }).catch(() => {});
+    getTestimonials().then(data => { if (data && data.length > 0) setItems(data); }).catch(() => { });
   }, []);
 
   const maxIdx = Math.max(0, items.length - 3);
@@ -26,7 +26,7 @@ export default function SectionWhyChoose() {
   const prev = () => setIndex((index - 1 + (maxIdx + 1)) % (maxIdx + 1));
 
   return (
-    <section id="testimonials">
+    <section id="testimonials" className="blur-bottom">
       <div className="standard-container">
         <PremiumWrapper className="why-premium-container" style={{ padding: '60px' }}>
           <div style={{ textAlign: 'center', marginBottom: '60px' }}>
@@ -45,7 +45,7 @@ export default function SectionWhyChoose() {
                     </div>
                     <h3 className="pro-name" style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '4px' }}>{t.name}</h3>
                     <div className="pro-role" style={{ fontSize: '0.85rem', color: 'var(--c1)', marginBottom: '16px', fontWeight: 600 }}>{t.role}</div>
-                    <p className="pro-quote" style={{ fontSize: '0.95rem', opacity: 0.7, lineHeight: 1.6 }}>&quot;{t.quote}&quot;</p>
+                    <p className="pro-quote" style={{ fontSize: '0.95rem', opacity: 0.7, lineHeight: 1.6 }}>{t.quote}</p>
                   </SpotlightCard>
                 </motion.div>
               ))}
@@ -53,8 +53,8 @@ export default function SectionWhyChoose() {
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', marginTop: '48px' }}>
-            <button onClick={prev} className="btn-ghost" style={{ padding: '12px 24px', borderRadius: '12px' }}>←</button>
-            <button onClick={next} className="btn-ghost" style={{ padding: '12px 24px', borderRadius: '12px' }}>→</button>
+            <button onClick={prev} className="btn-ghost" style={{ padding: '12px 24px', borderRadius: '12px' }}>&larr;</button>
+            <button onClick={next} className="btn-ghost" style={{ padding: '12px 24px', borderRadius: '12px' }}>&rarr;</button>
           </div>
         </PremiumWrapper>
       </div>

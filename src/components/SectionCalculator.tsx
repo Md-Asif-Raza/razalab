@@ -34,16 +34,29 @@ export default function SectionCalculator() {
   const weeklyViews = weeklyPosts * viewsPerPost;
   const monthlyViews = weeklyViews * 4;
   const annualViews = monthlyViews * 12;
-  
+
   const paidCost = (annualViews / 1000) * calcConfig.target_cpm;
   const organicCost = (annualViews / 1000) * calcConfig.organic_cpm;
   const savings = Math.round(paidCost - organicCost);
 
   return (
     <section id="calculator" style={{ position: 'relative', overflow: 'visible' }}>
+      {/* ═══ AMBIENT GLOW — behind calculator card ═══ */}
+      <div aria-hidden="true" style={{
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: '600px',
+        height: '300px',
+        background: 'radial-gradient(ellipse at center, rgba(90, 104, 130, 0.20) 0%, rgba(100, 80, 180, 0.10) 40%, transparent 70%)',
+        filter: 'blur(100px)',
+        pointerEvents: 'none',
+        zIndex: 0,
+      }} />
       <div className="section-starter-glow" />
       <div className="glow-blend-divider" />
-      <div className="standard-container">
+      <div className="standard-container" style={{ position: 'relative', zIndex: 1 }}>
         <div style={{ textAlign: 'center', marginBottom: '80px' }}>
           <h2 className="section-title reveal-up" style={{ textAlign: 'center', margin: '0 auto' }}>ROI Calculator</h2>
           <p className="reveal-up stagger-1" style={{ opacity: 0.5, marginTop: '16px', textAlign: 'center' }}>Project your growth through the Raza Labs distribution engine.</p>
@@ -54,7 +67,7 @@ export default function SectionCalculator() {
             {/* LEFT PANE: CONFIGURATION */}
             <div style={{ padding: '60px', borderRight: '1px solid rgba(255,255,255,0.05)' }}>
               <h3 style={{ fontSize: '1.4rem', fontWeight: 700, marginBottom: '40px', letterSpacing: '-0.5px' }}>Strategic Variables</h3>
-              
+
               <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
                 <div className="calc-slider-group">
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
@@ -105,7 +118,7 @@ export default function SectionCalculator() {
                 <div style={{ fontSize: '4.5rem', fontWeight: 900, color: '#fff', margin: '20px 0', letterSpacing: '-3px' }}>
                   ${isMounted ? savings.toLocaleString() : savings}
                 </div>
-                
+
                 <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', width: '60%', margin: '40px auto' }} />
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>

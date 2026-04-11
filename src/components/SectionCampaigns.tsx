@@ -39,6 +39,21 @@ function ClientCard({ client: rawClient, onClick }: { client: any; onClick: () =
       className="card-track-item"
       style={{ position: 'relative', cursor: 'pointer', flex: '0 0 280px' }}
     >
+      {/* Card Ambient Glow */}
+      <div style={{
+        position: 'absolute',
+        bottom: '-25px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        width: '75%',
+        height: '100px',
+        background: 'radial-gradient(ellipse at center, rgba(90, 104, 130, 0.50) 0%, rgba(70, 80, 150, 0.25) 40%, transparent 70%)',
+        filter: 'blur(25px)',
+        pointerEvents: 'none',
+        zIndex: -1,
+        opacity: 0.8,
+        transition: 'opacity 0.4s ease',
+      }} />
       <SpotlightCard
         size="big"
         className="reveal-card"
@@ -53,10 +68,10 @@ function ClientCard({ client: rawClient, onClick }: { client: any; onClick: () =
         <div onClick={onClick} style={{ height: '100%', position: 'relative' }}>
           {/* SKELETON LOADER */}
           {!isLoaded && (
-            <div className="skeleton-pulse" style={{ 
-              position: 'absolute', 
-              inset: 0, 
-              background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent)', 
+            <div className="skeleton-pulse" style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent)',
               backgroundSize: '200% 100%',
               zIndex: 5
             }} />
@@ -74,7 +89,8 @@ function ClientCard({ client: rawClient, onClick }: { client: any; onClick: () =
                 width: '100%',
                 height: '100%',
                 objectFit: 'cover',
-                opacity: isLoaded ? 0.6 : 0,
+                opacity: isLoaded ? 0.85 : 0,
+                filter: 'brightness(0.85)',
                 position: 'absolute',
                 inset: 0,
                 transition: 'opacity 1s ease'
@@ -91,7 +107,7 @@ function ClientCard({ client: rawClient, onClick }: { client: any; onClick: () =
             flexDirection: 'column',
             justifyContent: 'flex-end',
             gap: '12px',
-            background: 'linear-gradient(to bottom, transparent, rgba(5,3,4,0.4) 30%, rgba(5,3,4,0.95) 100%)',
+            background: 'linear-gradient(to bottom, transparent 10%, rgba(5,3,4,0.3) 40%, rgba(5,3,4,0.85) 100%)',
             zIndex: 40,
             pointerEvents: 'none'
           }}>
@@ -100,10 +116,10 @@ function ClientCard({ client: rawClient, onClick }: { client: any; onClick: () =
                 {cleanStr(client.name)}
               </h3>
               <div style={{ display: 'flex', gap: '8px' }}>
-                 <div style={{ padding: '4px 10px', background: 'rgba(0, 230, 118, 0.1)', border: '1px solid rgba(0, 230, 118, 0.2)', borderRadius: '10px', color: '#00e676', fontWeight: 800, fontSize: '0.8rem' }}>{cleanStr(client.result)}</div>
-                 <div style={{ padding: '4px 10px', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '10px', color: '#fff', fontWeight: 600, fontSize: '0.8rem' }}>{cleanStr(client.price)}</div>
+                <div style={{ padding: '4px 10px', background: 'rgba(0, 230, 118, 0.1)', border: '1px solid rgba(0, 230, 118, 0.2)', borderRadius: '10px', color: '#00e676', fontWeight: 800, fontSize: '0.8rem' }}>{cleanStr(client.result)}</div>
+                <div style={{ padding: '4px 10px', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '10px', color: '#fff', fontWeight: 600, fontSize: '0.8rem' }}>{cleanStr(client.price)}</div>
               </div>
-              
+
               {/* DESCRIPTION TEXT - SLIDES DOWN ON HOVER */}
               <div className="hover-desc-wrapper">
                 <div className="hover-desc-inner">
@@ -167,7 +183,7 @@ export default function SectionCampaigns() {
   };
 
   return (
-    <section id="campaigns">
+    <section id="campaigns" style={{ position: 'relative' }}>
       <div className="standard-container">
         <PremiumWrapper className="campaigns-premium-container" style={{ paddingTop: '80px', paddingBottom: '80px', paddingLeft: '20px', paddingRight: '20px' }}>
           <div style={{ textAlign: 'center', marginBottom: '80px' }}>
@@ -179,22 +195,22 @@ export default function SectionCampaigns() {
           <div style={{ position: 'relative' }}>
             {/* FLOATING NAVIGATION BUTTONS - FIXED POSITIONING */}
             <div style={{ position: 'absolute', top: '50%', left: '-30px', zIndex: 100, transform: 'translateY(-50%)' }}>
-               <button 
+              <button
                 onClick={() => scroll('left')}
                 className="nav-slide-btn"
                 style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', color: '#fff', fontSize: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'all 0.3s ease', boxShadow: '0 10px 30px rgba(0,0,0,0.3)' }}
                 onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.boxShadow = '0 0 20px var(--c1)'; }}
                 onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)'; }}
-               >‹</button>
+              >‹</button>
             </div>
             <div style={{ position: 'absolute', top: '50%', right: '-30px', zIndex: 100, transform: 'translateY(-50%)' }}>
-               <button 
+              <button
                 onClick={() => scroll('right')}
                 className="nav-slide-btn"
                 style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', color: '#fff', fontSize: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'all 0.3s ease', boxShadow: '0 10px 30px rgba(0,0,0,0.3)' }}
                 onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.boxShadow = '0 0 20px var(--c1)'; }}
                 onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)'; }}
-               >›</button>
+              >›</button>
             </div>
 
             <div
@@ -220,62 +236,62 @@ export default function SectionCampaigns() {
                   animationPlayState: isPaused ? 'paused' : 'running',
                 }}
               >
-              {marqueeItems.map((client: Campaign, idx: number) => (
-                <ClientCard
-                  key={`${client.id}-${idx}`}
-                  client={client}
-                  onClick={() => setSelectedIndex(idx % clients.length)}
-                />
-              ))}
+                {marqueeItems.map((client: Campaign, idx: number) => (
+                  <ClientCard
+                    key={`${client.id}-${idx}`}
+                    client={client}
+                    onClick={() => setSelectedIndex(idx % clients.length)}
+                  />
+                ))}
+              </div>
             </div>
           </div>
-        </div>
         </PremiumWrapper>
       </div>
 
       <AnimatePresence>
         {selectedClient && (
-          <motion.div 
-            className="cinematic-modal-overlay" 
+          <motion.div
+            className="cinematic-modal-overlay"
             data-lenis-prevent="true"
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }} 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            style={{ 
-              position: 'fixed', 
-              inset: 0, 
-              background: 'rgba(0,0,0,0.9)', 
-              backdropFilter: 'blur(30px)', 
-              zIndex: 10000, 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center', 
+            style={{
+              position: 'fixed',
+              inset: 0,
+              background: 'rgba(0,0,0,0.9)',
+              backdropFilter: 'blur(30px)',
+              zIndex: 10000,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
               padding: '40px',
               overflowY: 'auto'
             }}
             onClick={() => setSelectedIndex(null)}
           >
             {/* GLOBAL CLOSE BUTTON (TOP RIGHT) */}
-            <button 
-              onClick={() => setSelectedIndex(null)} 
+            <button
+              onClick={() => setSelectedIndex(null)}
               style={{ position: 'fixed', top: '40px', right: '40px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', width: '50px', height: '50px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 10001, transition: 'all 0.3s ease' }}
               onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
               onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
             >✕</button>
 
-            <motion.div 
-              className="modal-content-box" 
-              initial={{ scale: 0.9, opacity: 0, y: 30 }} 
-              animate={{ scale: 1, opacity: 1, y: 0 }} 
+            <motion.div
+              className="modal-content-box"
+              initial={{ scale: 0.9, opacity: 0, y: 30 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 30 }}
-              style={{ 
-                maxWidth: '1000px', 
-                width: '100%', 
-                background: '#0c1015', 
-                borderRadius: '40px', 
-                border: '1px solid rgba(255,255,255,0.08)', 
-                overflow: 'hidden', 
-                boxShadow: '0 50px 150px rgba(0,0,0,1)', 
+              style={{
+                maxWidth: '1000px',
+                width: '100%',
+                background: '#0c1015',
+                borderRadius: '40px',
+                border: '1px solid rgba(255,255,255,0.08)',
+                overflow: 'hidden',
+                boxShadow: '0 50px 150px rgba(0,0,0,1)',
                 position: 'relative',
                 margin: 'auto',
               }}
@@ -284,16 +300,16 @@ export default function SectionCampaigns() {
               {/* CAMPAIGN HERO IMAGE */}
               <div className="modal-hero-img-box" style={{ width: '100%', height: '350px', position: 'relative', borderBottom: '1px solid rgba(255,255,255,0.08)', background: '#050304' }}>
                 {selectedClient.img_url && (
-                  <img 
-                    src={selectedClient.img_url} 
-                    alt={selectedClient.name} 
-                    onLoad={(e) => (e.currentTarget.style.opacity = '1')} 
+                  <img
+                    src={selectedClient.img_url}
+                    alt={selectedClient.name}
+                    onLoad={(e) => (e.currentTarget.style.opacity = '1')}
                     onError={(e) => (e.currentTarget.style.opacity = '1')}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0, transition: 'opacity 0.6s ease' }} 
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0, transition: 'opacity 0.6s ease' }}
                   />
                 )}
                 <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 40%, #0c1015 100%)' }} />
-                
+
                 {/* FLOATING HEADER ON IMAGE */}
                 <div className="modal-floating-header" style={{ position: 'absolute', bottom: '32px', left: '48px', right: '48px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                   <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}>
@@ -413,6 +429,18 @@ export default function SectionCampaigns() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* ═══ BOTTOM FADE MASK — cards dissolve into background ═══ */}
+      <div aria-hidden="true" style={{
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: '120px',
+        background: 'linear-gradient(to bottom, transparent, #050304)',
+        pointerEvents: 'none',
+        zIndex: 10,
+      }} />
     </section>
   );
 }

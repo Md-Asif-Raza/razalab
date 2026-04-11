@@ -4,10 +4,14 @@ import BgCanvas from "@/components/BgCanvas";
 import CursorWrapper from "@/components/CursorWrapper";
 import ScrollObserver from "@/components/ScrollObserver";
 import SmoothScroll from "@/components/SmoothScroll";
+import { useAnimations } from "@/hooks/useAnimations";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isAuth = pathname?.startsWith('/admin') || pathname?.startsWith('/login');
+
+  // Pure animation layer — auto-detects elements, zero color changes
+  useAnimations();
 
   return (
     <>

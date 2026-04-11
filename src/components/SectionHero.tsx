@@ -26,17 +26,30 @@ export default function SectionHero() {
           stats_text: res.stats_text || prev.stats_text,
         }));
       }
-    }).catch(() => {});
+    }).catch(() => { });
   }, []);
 
   return (
-    <section id="hero" style={{ padding: '160px 0 80px 0' }}>
-      <div className="standard-container">
+    <section id="hero" style={{ padding: '160px 0 80px 0', position: 'relative' }}>
+      {/* ═══ AMBIENT GLOW — large elliptical behind headline ═══ */}
+      <div aria-hidden="true" style={{
+        position: 'absolute',
+        top: '20%',
+        left: '30%',
+        width: '800px',
+        height: '250px',
+        background: 'radial-gradient(ellipse at center, rgba(90, 104, 130, 0.25) 0%, rgba(100, 80, 180, 0.12) 40%, transparent 70%)',
+        filter: 'blur(120px)',
+        pointerEvents: 'none',
+        zIndex: 0,
+      }} />
+
+      <div className="standard-container" style={{ position: 'relative', zIndex: 1 }}>
         <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-          <h1 className="reveal-up" style={{ 
-            fontSize: 'clamp(3rem, 8vw, 5.5rem)', 
-            fontWeight: 800, 
-            lineHeight: 1.1, 
+          <h1 className="reveal-up hero-anim-1" style={{
+            fontSize: 'clamp(3rem, 8vw, 5.5rem)',
+            fontWeight: 800,
+            lineHeight: 1.1,
             letterSpacing: '-0.02em',
             marginBottom: '40px',
             color: '#fff',
@@ -53,10 +66,10 @@ export default function SectionHero() {
             <span style={{ color: 'rgba(90, 104, 130, 0.6)', display: 'block' }}>{data.title_accent}</span>
           </h1>
 
-          <p className="reveal-up stagger-1" style={{ 
+          <p className="reveal-up stagger-1 hero-anim-2" style={{
             fontSize: '1.25rem',
-            lineHeight: 1.6, 
-            color: 'rgba(255, 255, 255, 0.6)', 
+            lineHeight: 1.6,
+            color: 'rgba(255, 255, 255, 0.6)',
             maxWidth: '800px',
             marginBottom: '48px',
             textAlign: 'left',
@@ -66,14 +79,14 @@ export default function SectionHero() {
             {data.subtitle}
           </p>
 
-          <div className="reveal-up stagger-2" style={{ marginBottom: '64px', textAlign: 'left' }}>
+          <div className="reveal-up stagger-2 hero-anim-3" style={{ marginBottom: '64px', textAlign: 'left' }}>
             <Link href={data.cta_link} className="btn-primary" style={{ padding: '18px 48px', fontSize: '1rem', borderRadius: '12px' }}>
               {data.cta_text}
             </Link>
           </div>
 
-          <div className="reveal-up stagger-3" style={{ 
-            fontSize: '0.9rem', 
+          <div className="reveal-up stagger-3 hero-anim-4" style={{
+            fontSize: '0.9rem',
             color: 'rgba(255, 255, 255, 0.4)',
             letterSpacing: '0.02em',
             display: 'flex',
@@ -82,7 +95,7 @@ export default function SectionHero() {
           }}>
             <span style={{ fontWeight: 700, color: '#fff' }}>
               <CountUp endString={data.stats_text} />
-            </span> 
+            </span>
             views tracked for your favorite
           </div>
         </div>

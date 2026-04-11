@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+@import '../styles/razalabs-animations.css';
 
 :root {
   --c1: #5a6882;
@@ -85,10 +86,12 @@ select {
     opacity: 0.3;
     transform: rotate(-30deg) translateX(-5vw) scale(1);
   }
+
   50% {
     opacity: 0.7;
     transform: rotate(-38deg) translateX(5vw) scale(1.1);
   }
+
   100% {
     opacity: 0.4;
     transform: rotate(-32deg) translateX(-3vw) scale(1.05);
@@ -100,10 +103,12 @@ select {
     opacity: 0.3;
     transform: rotate(20deg) translateX(5vw) scale(1);
   }
+
   50% {
     opacity: 0.6;
     transform: rotate(28deg) translateX(-5vw) scale(1.12);
   }
+
   100% {
     opacity: 0.35;
     transform: rotate(22deg) translateX(3vw) scale(0.95);
@@ -115,10 +120,12 @@ select {
     opacity: 0.2;
     transform: rotate(15deg) translateY(0) scale(1);
   }
+
   50% {
     opacity: 0.45;
     transform: rotate(20deg) translateY(-8vh) scale(1.15);
   }
+
   100% {
     opacity: 0.25;
     transform: rotate(17deg) translateY(5vh) scale(1.02);
@@ -360,9 +367,8 @@ body::before {
 /* SECTIONS */
 section {
   position: relative;
-  z-index: 2;
   padding: 80px 0;
-  /* Reduced from 200px for seamless blend */
+  /* z-index removed to allow GlowBand elements to show between sections */
 }
 
 .standard-container {
@@ -757,7 +763,8 @@ section {
   .dual-pane-calc {
     grid-template-columns: 1fr !important;
   }
-  .dual-pane-calc > div {
+
+  .dual-pane-calc>div {
     padding: 32px 20px !important;
     border-right: none !important;
   }
@@ -766,14 +773,17 @@ section {
   #hero {
     padding: 100px 0 40px 0 !important;
   }
+
   #hero h1 {
     font-size: clamp(2rem, 7vw, 3rem) !important;
     margin-bottom: 24px !important;
   }
+
   #hero p {
     font-size: 1rem !important;
     margin-bottom: 32px !important;
   }
+
   #hero .btn-primary {
     padding: 14px 32px !important;
     font-size: 0.95rem !important;
@@ -789,13 +799,16 @@ section {
   #cta-end .cta-content {
     padding: 40px 20px !important;
   }
+
   .cta-title {
     font-size: clamp(1.8rem, 6vw, 2.5rem) !important;
   }
+
   .cta-sub {
     font-size: 0.9rem !important;
     padding: 0 10px;
   }
+
   .cta-btn {
     padding: 14px 32px !important;
     font-size: 0.95rem !important;
@@ -805,9 +818,11 @@ section {
   .why-premium-container {
     padding: 30px 16px !important;
   }
+
   .pro-testimonial-row {
     grid-template-columns: 1fr !important;
   }
+
   .pro-testimonial-card {
     min-width: 100% !important;
   }
@@ -824,11 +839,13 @@ section {
     text-align: center;
     padding: 40px 20px !important;
   }
+
   .footer-links {
     flex-wrap: wrap;
     justify-content: center !important;
     gap: 12px !important;
   }
+
   .footer-socials {
     justify-content: center !important;
   }
@@ -839,23 +856,29 @@ section {
   .standard-container {
     padding: 0 16px !important;
   }
+
   #hero h1 {
     font-size: clamp(1.8rem, 8vw, 2.5rem) !important;
   }
+
   .section-title {
     font-size: 1.8rem !important;
   }
+
   .btn-primary,
   .btn-ghost {
     padding: 10px 20px !important;
     font-size: 0.8rem !important;
   }
-  .dual-pane-calc > div {
+
+  .dual-pane-calc>div {
     padding: 24px 16px !important;
   }
+
   .cta-title {
     font-size: clamp(1.5rem, 7vw, 2rem) !important;
   }
+
   .nav-full {
     padding: 0 12px !important;
     height: 70px !important;
@@ -867,16 +890,20 @@ section {
   .dual-pane-calc {
     grid-template-columns: 1fr !important;
   }
-  .dual-pane-calc > div {
+
+  .dual-pane-calc>div {
     padding: 40px !important;
     border-right: none !important;
   }
+
   .pro-testimonial-row {
     grid-template-columns: repeat(2, 1fr) !important;
   }
+
   #hero {
     padding: 120px 0 60px 0 !important;
   }
+
   .why-premium-container {
     padding: 40px 24px !important;
   }
@@ -887,4 +914,156 @@ section {
   .standard-container {
     max-width: 1600px;
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   REACHIFY-INSPIRED ANIMATION EFFECTS
+   Pure motion effects — no text, color, or layout changes
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── CARD HOVER LIFT + GLOW ── */
+.spotlight-card {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.4s ease;
+}
+.spotlight-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 40px rgba(90, 104, 130, 0.06);
+  border-color: rgba(255, 255, 255, 0.10);
+}
+
+/* ── BUTTON SHIMMER (light sweep on hover) ── */
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transition: none;
+  pointer-events: none;
+}
+.btn-primary:hover::after {
+  animation: btn-shimmer 0.6s ease forwards;
+}
+@keyframes btn-shimmer {
+  0% { left: -100%; }
+  100% { left: 150%; }
+}
+
+/* ── GLOWING LINE PULSE ── */
+.glow-line {
+  animation: line-pulse 4s ease-in-out infinite;
+}
+@keyframes line-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* ── FLOATING BREATH for ambient glow divs ── */
+@keyframes ambient-breathe {
+  0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.7; }
+  50% { transform: translateX(-50%) scale(1.05); opacity: 1; }
+}
+
+/* ── FAQ ACCORDION HOVER ── */
+.accordion-item {
+  transition: border-color 0.3s ease, 
+              box-shadow 0.3s ease,
+              transform 0.3s ease !important;
+}
+.accordion-item:hover {
+  border-color: rgba(255, 255, 255, 0.10) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  transform: translateY(-1px);
+}
+
+/* ── SOCIAL ICON HOVER BOUNCE ── */
+.social-icon, .social-btn {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.social-icon:hover, .social-btn:hover {
+  transform: translateY(-3px) scale(1.1) !important;
+}
+
+/* ── NAV LINK HOVER UNDERLINE SLIDE ── */
+.nav-links a, .desktop-only a {
+  position: relative;
+}
+.nav-links a::after, .desktop-only a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  background: var(--c1);
+  transition: width 0.3s ease, left 0.3s ease;
+}
+.nav-links a:hover::after, .desktop-only a:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+/* ── BRANDS MARQUEE SMOOTH FADE EDGES ── */
+.brands-marquee {
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 10%, #000 90%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 10%, #000 90%, transparent 100%);
+}
+
+/* ── SECTION TITLE GLOW ON SCROLL-REVEAL ── */
+.section-title {
+  transition: text-shadow 0.8s ease;
+}
+.reveal-up.visible .section-title,
+.section-title.visible {
+  text-shadow: 0 0 60px rgba(90, 104, 130, 0.15);
+}
+
+/* ── CTA BUTTON PULSE RING ── */
+.cta-btn {
+  position: relative;
+}
+.cta-btn::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  background: transparent;
+  border: 1px solid rgba(0, 102, 255, 0);
+  animation: cta-ring-pulse 2.5s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes cta-ring-pulse {
+  0%, 100% { border-color: rgba(0, 102, 255, 0); transform: scale(1); }
+  50% { border-color: rgba(0, 102, 255, 0.25); transform: scale(1.04); }
+}
+
+/* ── TESTIMONIAL CARD STAGGER ENTRANCE ── */
+.pro-testimonial-row > div:nth-child(1) { transition-delay: 0ms; }
+.pro-testimonial-row > div:nth-child(2) { transition-delay: 100ms; }
+.pro-testimonial-row > div:nth-child(3) { transition-delay: 200ms; }
+
+/* ── SLIDER THUMB GLOW ── */
+input[type="range"]::-webkit-slider-thumb {
+  box-shadow: 0 0 12px rgba(90, 104, 130, 0.4);
+  transition: box-shadow 0.3s ease;
+}
+input[type="range"]:hover::-webkit-slider-thumb {
+  box-shadow: 0 0 20px rgba(90, 104, 130, 0.6);
+}
+
+/* ── FOOTER HOVER EFFECTS ── */
+.footer-links a {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.footer-links a:hover {
+  opacity: 1 !important;
+  transform: translateX(3px);
 }

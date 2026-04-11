@@ -7,7 +7,7 @@ type ResetMode = 'request' | 'update' | 'success';
 
 export default function ResetPasswordPage() {
   const [mode, setMode] = useState<ResetMode>('request');
-  const [email, setEmail] = useState('arifm9991@gmail.com');
+  const [email, setEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');

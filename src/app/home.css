@@ -793,9 +793,11 @@ body::after {
   opacity: 0;
 }
 .nav-full.nav-scrolled {
-  background: rgba(5,3,4,0.7);
+  background: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
 }
 /* CINEMATIC MODAL NAVIGATION */
 .carousel-btn {
@@ -950,7 +952,7 @@ body::after {
 /* HERO — LEFT ALIGNED */
 #hero {
   padding-top: 80px;
-  overflow: hidden;
+  overflow: visible;
   position: relative;
 }
 

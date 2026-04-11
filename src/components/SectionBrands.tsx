@@ -28,20 +28,22 @@ export default function SectionBrands() {
   }, []);
 
   return (
-    <section id="brands">
+    <section id="brands" className="blur-bottom">
       <div className="brands-heading reveal-up" style={{ textAlign: 'center', marginBottom: '40px' }}>
         <h2 style={{ margin: '0 auto' }}>Trusted by <span className="brands-accent">leading</span> brands worldwide</h2>
       </div>
 
-      <div className="brands-marquee reveal-up stagger-1">
-        <div className="brands-track">
-          {brands.map((b, i) => (
-            <div key={i} className={`brand-item ${b.is_bold ? 'brand-bold' : ''}`}>{b.name}</div>
-          ))}
-          {/* Duplicate for infinite loop */}
-          {brands.map((b, i) => (
-            <div key={`dup-${i}`} className={`brand-item ${b.is_bold ? 'brand-bold' : ''}`}>{b.name}</div>
-          ))}
+      <div>
+        <div className="brands-marquee reveal-up stagger-1">
+          <div className="brands-track">
+            {brands.map((b, i) => (
+              <div key={i} className={`brand-item ${b.is_bold ? 'brand-bold' : ''}`}>{b.name}</div>
+            ))}
+            {/* Duplicate for infinite loop */}
+            {brands.map((b, i) => (
+              <div key={`dup-${i}`} className={`brand-item ${b.is_bold ? 'brand-bold' : ''}`}>{b.name}</div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

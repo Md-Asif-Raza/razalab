@@ -35,7 +35,8 @@ export function CampaignCard({ campaign, index }: CampaignCardProps) {
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-slate-800 to-slate-900" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+        {/* Only dim the bottom area for text readability, not the entire image */}
+        <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
       </div>
 
       {/* Content */}

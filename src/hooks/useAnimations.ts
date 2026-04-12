@@ -7,8 +7,15 @@ export function useAnimations() {
     // ── 1. NAVBAR SCROLL CLASS ──────────────
     const nav = document.querySelector('.nav-full') || document.querySelector('nav') || document.querySelector('header');
     const onScroll = () => {
-      if (!nav) return;
-      nav.classList.toggle('scrolled', window.scrollY > 40);
+      if (nav) nav.classList.toggle('scrolled', window.scrollY > 40);
+      
+      const progressBar = document.getElementById('global-scroll-progress');
+      if (progressBar) {
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        const docHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight) - window.innerHeight;
+        const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        progressBar.style.width = `${scrollPercent}%`;
+      }
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll(); // run once on mount
@@ -106,6 +113,7 @@ export function useAnimations() {
       }
     });
 
+    // GLOW TRANSITIONS
     const glowObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -117,11 +125,68 @@ export function useAnimations() {
     }, { threshold: 0.1 });
     document.querySelectorAll('.glow-transition').forEach(el => glowObserver.observe(el));
 
+    // SCROLL PROGRESS BAR
+    let progressBar = document.getElementById('global-scroll-progress');
+    if (!progressBar) {
+      progressBar = document.createElement('div');
+      progressBar.id = 'global-scroll-progress';
+      progressBar.style.cssText = 'position: fixed; top: 0; left: 0; height: 2px; background: var(--c2, #0052cc); z-index: 99999; width: 0%; transition: width 0.1s linear; pointer-events: none; box-shadow: 0 0 10px var(--c2, #0052cc);';
+      document.body.appendChild(progressBar);
+    }
+
+    // 3D CARD TILT
+    const cards = document.querySelectorAll('.hover-lift, .pro-testimonial-card, .card-track-item');
+    cards.forEach(card => {
+      const el = card as HTMLElement;
+      
+      // Skip 3D tilt for the calculator and video section
+      if (el.closest('#calculator') || el.closest('#video-showcase')) return;
+
+      el.style.transformStyle = 'preserve-3d';
+      
+      const onMouseMove = (e: Event) => {
+        if (window.innerWidth < 768) return; // Disable on mobile
+        const ev = e as MouseEvent;
+        const rect = el.getBoundingClientRect();
+        const x = ev.clientX - rect.left;
+        const y = ev.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = ((y - centerY) / centerY) * -8;
+        const rotateY = ((x - centerX) / centerX) * 8;
+        
+        el.style.transition = 'transform 0.1s ease, box-shadow 0.1s ease';
+        el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px) scale(1.02)`;
+      };
+      
+      const onMouseLeave = () => {
+        el.style.transition = 'transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1)';
+        el.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0) scale(1)`;
+      };
+
+      el.addEventListener('mousemove', onMouseMove);
+      el.addEventListener('mouseleave', onMouseLeave);
+      
+      // Store to clean up later just in case, but since it's an app re-render, passive listeners usually GC well if nodes are destroyed.
+      (el as any)._tiltMove = onMouseMove;
+      (el as any)._tiltLeave = onMouseLeave;
+    });
+
+
+
     return () => {
       window.removeEventListener('scroll', onScroll);
       observer.disconnect();
       counterObserver.disconnect();
       glowObserver.disconnect();
+      if (progressBar && progressBar.parentNode) {
+        progressBar.parentNode.removeChild(progressBar);
+      }
+      cards.forEach(card => {
+        const el = card as HTMLElement;
+        if ((el as any)._tiltMove) el.removeEventListener('mousemove', (el as any)._tiltMove);
+        if ((el as any)._tiltLeave) el.removeEventListener('mouseleave', (el as any)._tiltLeave);
+      });
     };
   }, []);
 }

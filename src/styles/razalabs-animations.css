@@ -203,3 +203,21 @@ nav a {
 nav a:hover {
   opacity: 0.7;
 }
+
+/* ── 15. DYNAMIC SECTION DIVIDERS ───────────── */
+section + section::before {
+  content: '';
+  display: block;
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(to right, transparent 0%, var(--c1, #0066ff) 50%, transparent 100%);
+  opacity: 0.25;
+  margin: 0 auto;
+  transform: scaleX(0);
+  transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+section.in-view + section::before,
+section + section.in-view::before {
+  transform: scaleX(1);
+}

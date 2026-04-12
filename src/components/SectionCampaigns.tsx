@@ -184,8 +184,8 @@ export default function SectionCampaigns() {
 
   return (
     <section id="campaigns" style={{ position: 'relative' }}>
-      <div className="standard-container">
-        <PremiumWrapper className="campaigns-premium-container" style={{ paddingTop: '80px', paddingBottom: '80px', paddingLeft: '20px', paddingRight: '20px' }}>
+      <div style={{ width: '100%', maxWidth: '100%', padding: '0 40px', margin: '0 auto' }}>
+        <PremiumWrapper className="campaigns-premium-container" style={{ paddingTop: '80px', paddingBottom: '80px', paddingLeft: '20px', paddingRight: '20px', borderRadius: '48px' }}>
           <div style={{ textAlign: 'center', marginBottom: '80px' }}>
             <h2 className="section-title reveal-up" style={{ textAlign: 'center', margin: '0 auto' }}>Clients</h2>
             <p className="reveal-up stagger-1" style={{ opacity: 0.5, marginTop: '16px', textAlign: 'center' }}>Proven distribution results across major niches.</p>

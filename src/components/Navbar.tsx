@@ -15,6 +15,10 @@ export default function Navbar() {
     youtube_url: 'https://youtube.com',
     twitter_url: 'https://x.com'
   });
+  const [ctaData, setCtaData] = useState({
+    text: 'Book a Call',
+    link: 'https://calendly.com/'
+  });
 
   useEffect(() => {
     getSiteSettings().then(res => {
@@ -23,6 +27,10 @@ export default function Navbar() {
           instagram_url: res.instagram_url || 'https://instagram.com',
           youtube_url: res.youtube_url || 'https://youtube.com',
           twitter_url: res.twitter_url || 'https://x.com'
+        });
+        setCtaData({
+          text: res.navbar_cta_text || 'Book a Call',
+          link: res.navbar_cta_link || 'https://calendly.com/'
         });
       }
     }).catch(() => {});

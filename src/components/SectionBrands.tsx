@@ -28,7 +28,7 @@ export default function SectionBrands() {
   }, []);
 
   return (
-    <section id="brands" className="blur-bottom">
+    <section id="brands">
       <div className="brands-heading reveal-up" style={{ textAlign: 'center', marginBottom: '40px' }}>
         <h2 style={{ margin: '0 auto' }}>Trusted by <span className="brands-accent">leading</span> brands worldwide</h2>
       </div>

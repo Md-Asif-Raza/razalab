@@ -48,7 +48,9 @@ export default function SectionVideo() {
   const isExternalLink = data.video_cta_link.startsWith('http');
 
   return (
-    <section id="video-showcase" ref={sectionRef}>
+    <section id="video-showcase" ref={sectionRef} className="section-glow-bottom section-glow-top glow-transition">
+      <div className="glow-top-inner"></div>
+      <div className="glow-top-outer"></div>
       <div className="standard-container">
         <PremiumWrapper className="video-premium-container" style={{ padding: '60px' }}>
           <div style={{ textAlign: 'center', marginBottom: '60px' }}>

@@ -1,6 +1,8 @@
 'use client';
 import { usePathname } from 'next/navigation';
 import BgCanvas from "@/components/BgCanvas";
+import BgAuth from "@/components/BgAuth";
+import BgAdmin from "@/components/BgAdmin";
 import CursorWrapper from "@/components/CursorWrapper";
 import ScrollObserver from "@/components/ScrollObserver";
 import SmoothScroll from "@/components/SmoothScroll";
@@ -8,14 +10,24 @@ import { useAnimations } from "@/hooks/useAnimations";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isAuth = pathname?.startsWith('/admin') || pathname?.startsWith('/login');
+  const isAuth = pathname?.startsWith('/login') || pathname?.startsWith('/reset-password');
+  const isAdmin = pathname?.startsWith('/admin');
+  const isLanding = !isAuth && !isAdmin;
 
   // Pure animation layer — auto-detects elements, zero color changes
   useAnimations();
 
   return (
     <>
-      {!isAuth && (
+      <div className="bottom-blur-vignette" style={{
+        position: 'fixed', bottom: 0, left: 0, right: 0, height: '140px',
+        backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
+        maskImage: 'linear-gradient(to bottom, transparent 0%, black 100%)',
+        WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 100%)',
+        pointerEvents: 'none', zIndex: 50
+      }}></div>
+
+      {isLanding && (
         <>
           <SmoothScroll />
           <ScrollObserver />
@@ -61,6 +73,10 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
           </div>
         </>
       )}
+
+      {isAdmin && <BgAdmin />}
+      {isAuth && <BgAuth />}
+
       <div className="site-content" id="site-content">
         {children}
       </div>

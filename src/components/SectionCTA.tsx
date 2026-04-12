@@ -38,7 +38,7 @@ export default function SectionCTA() {
   };
 
   return (
-    <section id="cta-end" style={{ position: 'relative' }}>
+    <section id="cta-end" className="section-glow-bottom glow-stronger glow-transition" style={{ position: 'relative' }}>
       {/* ═══ AMBIENT GLOW — behind CTA headline ═══ */}
       <div aria-hidden="true" style={{
         position: 'absolute',

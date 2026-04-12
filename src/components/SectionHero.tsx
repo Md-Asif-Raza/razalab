@@ -30,7 +30,7 @@ export default function SectionHero() {
   }, []);
 
   return (
-    <section id="hero" style={{ padding: '160px 0 80px 0', position: 'relative' }}>
+    <section id="hero" className="section-glow-bottom glow-transition" style={{ padding: '160px 0 80px 0', position: 'relative' }}>
       {/* ═══ AMBIENT GLOW — large elliptical behind headline ═══ */}
       <div aria-hidden="true" style={{
         position: 'absolute',

@@ -106,10 +106,22 @@ export function useAnimations() {
       }
     });
 
+    const glowObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('glow-in-view');
+        } else {
+          entry.target.classList.remove('glow-in-view');
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.glow-transition').forEach(el => glowObserver.observe(el));
+
     return () => {
       window.removeEventListener('scroll', onScroll);
       observer.disconnect();
       counterObserver.disconnect();
+      glowObserver.disconnect();
     };
   }, []);
 }

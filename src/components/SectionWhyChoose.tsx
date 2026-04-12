@@ -26,7 +26,7 @@ export default function SectionWhyChoose() {
   const prev = () => setIndex((index - 1 + (maxIdx + 1)) % (maxIdx + 1));
 
   return (
-    <section id="testimonials" className="blur-bottom">
+    <section id="testimonials">
       <div className="standard-container">
         <PremiumWrapper className="why-premium-container" style={{ padding: '60px' }}>
           <div style={{ textAlign: 'center', marginBottom: '60px' }}>

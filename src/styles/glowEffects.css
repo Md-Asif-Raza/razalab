@@ -1,0 +1,110 @@
+/* ============================================
+   REACHIFY-STYLE SOFT GLOW BLOOMS
+   ============================================ */
+
+:root {
+  --glow-color: #0066ff; /* RazaLabs Accent Color */
+}
+
+/* ── BOTTOM GLOW ── */
+.section-glow-bottom {
+  position: relative;
+}
+
+.section-glow-bottom::after,
+.section-glow-bottom::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) scale(0.8);
+  pointer-events: none;
+  z-index: 0;
+  border-radius: 50%;
+}
+
+/* Inner bottom bloom */
+.section-glow-bottom::after {
+  bottom: -60px;
+  width: 80%;
+  height: 400px;
+  background: radial-gradient(ellipse at 50% 100%, color-mix(in srgb, var(--glow-color) 25%, transparent) 0%, transparent 70%);
+  filter: blur(40px);
+}
+
+/* Outer softer bottom ring */
+.section-glow-bottom::before {
+  bottom: -60px;
+  width: 120%;
+  height: 500px;
+  background: radial-gradient(ellipse at 50% 100%, color-mix(in srgb, var(--glow-color) 12%, transparent) 0%, transparent 70%);
+  filter: blur(80px);
+}
+
+/* ── TOP GLOW ── */
+/* Since ::before and ::after are occupied by bottom glow, top glows use injected div overlays */
+.section-glow-top {
+  position: relative;
+}
+
+.glow-top-inner,
+.glow-top-outer {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) scale(0.8);
+  pointer-events: none;
+  z-index: 0;
+  border-radius: 50%;
+}
+
+.glow-top-inner {
+  top: -60px;
+  width: 80%;
+  height: 400px;
+  background: radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--glow-color) 25%, transparent) 0%, transparent 70%);
+  filter: blur(40px);
+}
+
+.glow-top-outer {
+  top: -60px;
+  width: 120%;
+  height: 500px;
+  background: radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--glow-color) 12%, transparent) 0%, transparent 70%);
+  filter: blur(80px);
+}
+
+/* ── VIEWPORT ANIMATION ── */
+.glow-transition::before,
+.glow-transition::after,
+.glow-transition .glow-top-inner,
+.glow-transition .glow-top-outer {
+  opacity: 0;
+  transition: opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1), transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
+}
+
+.glow-transition.glow-in-view::before,
+.glow-transition.glow-in-view::after,
+.glow-transition.glow-in-view .glow-top-inner,
+.glow-transition.glow-in-view .glow-top-outer {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+/* CTA slightly stronger */
+.glow-stronger.section-glow-bottom::after {
+  background: radial-gradient(ellipse at 50% 100%, color-mix(in srgb, var(--glow-color) 40%, transparent) 0%, transparent 70%);
+}
+
+/* ── MOBILE SCALING ── */
+@media (max-width: 768px) {
+  .section-glow-bottom::after,
+  .glow-top-inner {
+    filter: blur(24px);
+    opacity: 0.6;
+  }
+  .section-glow-bottom::before,
+  .glow-top-outer {
+    filter: blur(48px);
+    opacity: 0.6;
+  }
+}

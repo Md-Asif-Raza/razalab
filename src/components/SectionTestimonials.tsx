@@ -18,7 +18,7 @@ export default function SectionTestimonials() {
   }, []);
 
   return (
-    <section id="reviews" style={{ padding: '200px 0' }}>
+    <section id="reviews">
       <div style={{ textAlign: 'center', marginBottom: '80px', width: '100%' }}>
         <h2 className="section-title reveal-up">Reviews</h2>
       </div>

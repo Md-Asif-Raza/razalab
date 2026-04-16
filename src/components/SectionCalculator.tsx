@@ -1,146 +1,176 @@
 'use client';
-import { useState, useEffect } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { getSiteSettings } from '@/lib/actions';
-import { PremiumWrapper, SpotlightCard } from './ui/PremiumUI';
+import Link from 'next/link';
+
+// ROI Calculator in Pinterest Aesthetic
+// Bulletproof Architecture with Inline Styles for Core Columns
+
+const calcConfig = {
+  target_cpm: 25.00,
+  organic_cpm: 1.00,
+  avg_ctr: 0.05,
+  conversion_rate: 0.02
+};
 
 export default function SectionCalculator() {
-  const [isMounted, setIsMounted] = useState(false);
   const [clippers, setClippers] = useState(10);
   const [posts, setPosts] = useState(2);
-  const [platforms, setPlatforms] = useState(3);
-  const [days, setDays] = useState(7);
+  const [platforms, setPlatforms] = useState(1);
   const [viewsPerPost, setViewsPerPost] = useState(15000);
-
-  const [calcConfig, setCalcConfig] = useState({
-    target_cpm: 25.00,
-    organic_cpm: 1.00
+  const [settings, setSettings] = useState({
+    cta_text: 'Book Your Strategic Consultation \u2192',
+    cta_link: '#cta-end'
   });
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
     getSiteSettings().then(res => {
       if (res) {
-        setCalcConfig({
-          target_cpm: Number(res.target_cpm) || 25.00,
-          organic_cpm: Number(res.organic_cpm) || 1.00
+        setSettings({
+          cta_text: res.cta_button_text || 'Book Your Strategic Consultation \u2192',
+          cta_link: res.cta_button_link || '#cta-end'
         });
-        if (res.platform_multiplier) setPlatforms(Number(res.platform_multiplier));
-        if (res.days_multiplier) setDays(Number(res.days_multiplier));
       }
-    }).catch(() => { });
+    }).catch(() => {});
   }, []);
 
-  const weeklyPosts = clippers * posts * platforms * days;
-  const weeklyViews = weeklyPosts * viewsPerPost;
-  const monthlyViews = weeklyViews * 4;
+  const totalMonthlyPosts = clippers * posts * 4.33;
+  const monthlyViews = totalMonthlyPosts * platforms * viewsPerPost;
   const annualViews = monthlyViews * 12;
-
-  const paidCost = (annualViews / 1000) * calcConfig.target_cpm;
+  const organicValue = (annualViews / 1000) * calcConfig.target_cpm;
   const organicCost = (annualViews / 1000) * calcConfig.organic_cpm;
-  const savings = Math.round(paidCost - organicCost);
+  const savings = organicValue - organicCost;
 
   return (
-    <section id="calculator" style={{ position: 'relative', overflow: 'visible' }}>
-      {/* ═══ AMBIENT GLOW — behind calculator card ═══ */}
-      <div aria-hidden="true" style={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: '600px',
-        height: '300px',
-        background: 'radial-gradient(ellipse at center, rgba(90, 104, 130, 0.20) 0%, rgba(100, 80, 180, 0.10) 40%, transparent 70%)',
-        filter: 'blur(100px)',
-        pointerEvents: 'none',
-        zIndex: 0,
-      }} />
+    <section id="roi-calculator" style={{ position: 'relative', overflow: 'hidden' }}>
       <div className="section-starter-glow" />
       <div className="glow-blend-divider" />
-      <div className="standard-container" style={{ position: 'relative', zIndex: 1 }}>
-        <div style={{ textAlign: 'center', marginBottom: '80px' }}>
-          <h2 className="section-title reveal-up" style={{ textAlign: 'center', margin: '0 auto' }}>ROI Calculator</h2>
-          <p className="reveal-up stagger-1" style={{ opacity: 0.5, marginTop: '16px', textAlign: 'center' }}>Project your growth through the Raza Labs distribution engine.</p>
+      <div className="standard-container" style={{ position: 'relative', zIndex: 30, maxWidth: '1180px' }}>
+        <div className="text-center" style={{ marginBottom: '60px' }}>
+          <h2 className="section-title reveal-up" style={{ textAlign: 'center', margin: '0 auto', fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', fontWeight: 800 }}>ROI Calculator</h2>
+          <p className="reveal-up stagger-1" style={{ opacity: 0.4, marginTop: '24px', textAlign: 'center', fontSize: '1.25rem', maxWidth: '700px', margin: '24px auto 0' }}>Project your growth through the Raza Labs distribution engine.</p>
         </div>
 
-        <PremiumWrapper className="calc-premium-container" style={{ padding: '0', borderRadius: '48px' }}>
-          <div className="dual-pane-calc reveal-up" style={{ display: 'grid', gridTemplateColumns: 'minmax(400px, 1fr) 450px', background: 'transparent' }}>
-            {/* LEFT PANE: CONFIGURATION */}
-            <div style={{ padding: '60px', borderRight: '1px solid rgba(255,255,255,0.05)' }}>
-              <h3 style={{ fontSize: '1.4rem', fontWeight: 700, marginBottom: '40px', letterSpacing: '-0.5px' }}>Strategic Variables</h3>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-                <div className="calc-slider-group">
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-                    <span style={{ fontSize: '0.85rem', fontWeight: 600, opacity: 0.6 }}>Clippers (Creators)</span>
-                    <span style={{ fontWeight: 800, color: 'var(--c1)' }}>{clippers}</span>
-                  </div>
-                  <input type="range" min="1" max="100" value={clippers} onChange={(e) => setClippers(parseInt(e.target.value))} style={{ width: '100%', accentColor: 'var(--c1)' }} />
+        <div style={{ 
+          background: '#0c1015', 
+          border: '1px solid rgba(255,255,255,0.03)', 
+          borderRadius: '32px', 
+          padding: '24px',
+          boxShadow: '0 32px 128px rgba(0,0,0,0.8)',
+          width: '100%',
+          overflow: 'hidden'
+        }}> 
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
+            gap: '40px',
+            alignItems: 'start'
+          }}>
+            
+            {/* LEFT COLUMN: STRATEGIC VARIABLES */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ width: '3px', height: '24px', backgroundColor: '#3b82f6', borderRadius: '99px' }} />
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 900, color: 'rgba(255,255,255,0.9)' }}>Strategic Variables</h3>
+              </div>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                  <span style={{ fontSize: '10px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.2em', opacity: 0.3 }}>Clippers</span>
+                  <span style={{ fontSize: '1.5rem', fontWeight: 900, color: '#3b82f6' }}>{clippers.toLocaleString('en-US')}</span>
                 </div>
+                <input 
+                  type="range" 
+                  min="1" 
+                  max="100" 
+                  value={clippers} 
+                  onChange={(e) => setClippers(parseInt(e.target.value))} 
+                  style={{ width: '100%', cursor: 'pointer', accentColor: '#3b82f6', height: '4px' }} 
+                />
+              </div>
 
-                <div className="calc-slider-group">
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-                    <span style={{ fontSize: '0.85rem', fontWeight: 600, opacity: 0.6 }}>Daily Posts per Clipper</span>
-                    <span style={{ fontWeight: 800, color: 'var(--c1)' }}>{posts}</span>
-                  </div>
-                  <input type="range" min="1" max="10" value={posts} onChange={(e) => setPosts(parseInt(e.target.value))} style={{ width: '100%', accentColor: 'var(--c1)' }} />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                  <span style={{ fontSize: '10px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.2em', opacity: 0.3 }}>Weekly Posts</span>
+                  <span style={{ fontSize: '1.5rem', fontWeight: 900, color: '#3b82f6' }}>{posts.toLocaleString('en-US')}</span>
                 </div>
+                <input 
+                  type="range" 
+                  min="1" 
+                  max="10" 
+                  value={posts} 
+                  onChange={(e) => setPosts(parseInt(e.target.value))} 
+                  style={{ width: '100%', cursor: 'pointer', accentColor: '#3b82f6', height: '4px' }} 
+                />
+              </div>
 
-                <div className="calc-slider-group">
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-                    <span style={{ fontSize: '0.85rem', fontWeight: 600, opacity: 0.6 }}>Platforms Distributed</span>
-                    <span style={{ fontWeight: 800, color: 'var(--c1)' }}>{platforms}</span>
-                  </div>
-                  <input type="range" min="1" max="5" value={platforms} onChange={(e) => setPlatforms(parseInt(e.target.value))} style={{ width: '100%', accentColor: 'var(--c1)' }} />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                  <span style={{ fontSize: '10px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.2em', opacity: 0.3 }}>Scale</span>
+                  <span style={{ fontSize: '1.5rem', fontWeight: 900, color: '#3b82f6' }}>{platforms.toLocaleString('en-US')}</span>
                 </div>
+                <input 
+                  type="range" 
+                  min="1" 
+                  max="5" 
+                  value={platforms} 
+                  onChange={(e) => setPlatforms(parseInt(e.target.value))} 
+                  style={{ width: '100%', cursor: 'pointer', accentColor: '#3b82f6', height: '4px' }} 
+                />
+              </div>
 
-                <div className="calc-slider-group">
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-                    <span style={{ fontSize: '0.85rem', fontWeight: 600, opacity: 0.6 }}>Days Active per Week</span>
-                    <span style={{ fontWeight: 800, color: 'var(--c1)' }}>{days}</span>
-                  </div>
-                  <input type="range" min="1" max="7" value={days} onChange={(e) => setDays(parseInt(e.target.value))} style={{ width: '100%', accentColor: 'var(--c1)' }} />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                  <span style={{ fontSize: '10px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.2em', opacity: 0.3 }}>Video Views</span>
+                  <span style={{ fontSize: '1.5rem', fontWeight: 900, color: '#3b82f6' }}>{isMounted ? viewsPerPost.toLocaleString('en-US') : viewsPerPost}</span>
                 </div>
-
-                <div className="calc-slider-group">
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-                    <span style={{ fontSize: '0.85rem', fontWeight: 600, opacity: 0.6 }}>Avg. Views per Post</span>
-                    <span style={{ fontWeight: 800, color: 'var(--c1)' }}>{isMounted ? viewsPerPost.toLocaleString() : viewsPerPost}</span>
-                  </div>
-                  <input type="range" min="1000" max="100000" step="1000" value={viewsPerPost} onChange={(e) => setViewsPerPost(parseInt(e.target.value))} style={{ width: '100%', accentColor: 'var(--c1)' }} />
-                </div>
+                <input 
+                  type="range" 
+                  min="1000" 
+                  max="100000" 
+                  step="1000"
+                  value={viewsPerPost} 
+                  onChange={(e) => setViewsPerPost(parseInt(e.target.value))} 
+                  style={{ width: '100%', cursor: 'pointer', accentColor: '#3b82f6', height: '4px' }} 
+                />
               </div>
             </div>
 
-            {/* RIGHT PANE: PROJECTION RESULTS */}
-            <div style={{ padding: '60px', background: 'rgba(255,255,255,0.02)', display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'center' }}>
-              <div className="reveal-up">
-                <span style={{ fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '4px', opacity: 0.4 }}>Annual Content Savings</span>
-                <div style={{ fontSize: '4.5rem', fontWeight: 900, color: '#fff', margin: '20px 0', letterSpacing: '-3px' }}>
-                  ${isMounted ? savings.toLocaleString() : savings}
+            {/* RIGHT COLUMN: PROJECTION RESULTS */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+              <div style={{ 
+                background: '#161b22', 
+                borderRadius: '32px', 
+                padding: '40px 32px', 
+                display: 'flex', 
+                flexDirection: 'column', 
+                alignItems: 'center',
+                border: '1px solid rgba(255,255,255,0.05)',
+                boxShadow: 'inset 0 0 30px rgba(0,0,0,0.5)'
+              }}>
+                <span style={{ fontSize: '9px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.4em', color: 'rgba(255,255,255,0.3)', marginBottom: '20px' }}>Est. Annual Value</span>
+                <div style={{ fontSize: 'clamp(3rem, 6vw, 4.5rem)', fontWeight: 900, color: '#3b82f6', lineHeight: 1, letterSpacing: '-0.05em', marginBottom: '12px' }}>
+                  ${isMounted ? savings.toLocaleString('en-US') : savings}
                 </div>
+                <div style={{ fontSize: '11px', fontWeight: 800, opacity: 0.3, textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '32px' }}>SAVED ANNUALLY</div>
 
-                <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', width: '60%', margin: '40px auto' }} />
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
-                  <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--c1)' }}>{(monthlyViews / 1000000).toFixed(1)}M</div>
-                    <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', opacity: 0.4, letterSpacing: '1px', marginTop: '4px' }}>Monthly Views</div>
+                <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '20px' }}>
+                    <div style={{ fontSize: '9px', fontWeight: 900, textTransform: 'uppercase', color: 'rgba(255,255,255,0.2)', letterSpacing: '0.2em' }}>Monthly Reach</div>
+                    <div style={{ fontSize: '1.25rem', fontWeight: 900, color: 'rgba(255,255,255,0.9)' }}>{(monthlyViews / 1000000).toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}M+</div>
                   </div>
-                  <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#fff' }}>{(annualViews / 1000000).toFixed(1)}M</div>
-                    <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', opacity: 0.4, letterSpacing: '1px', marginTop: '4px' }}>Annual Scale</div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '20px' }}>
+                    <div style={{ fontSize: '9px', fontWeight: 900, textTransform: 'uppercase', color: 'rgba(255,255,255,0.2)', letterSpacing: '0.2em' }}>Annual Volume</div>
+                    <div style={{ fontSize: '1.25rem', fontWeight: 900, color: 'rgba(255,255,255,0.9)' }}>{(annualViews / 1000000).toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}M+</div>
                   </div>
-                </div>
-
-                <div style={{ marginTop: '60px' }}>
-                  <p style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.4)', lineHeight: '1.6' }}>
-                    Calculated using organic ecosystem efficiency (<strong>${calcConfig.organic_cpm}/CPM</strong>) versus traditional paid media (<strong>${calcConfig.target_cpm}/CPM</strong>).
-                  </p>
                 </div>
               </div>
             </div>
           </div>
-        </PremiumWrapper>
+        </div>
       </div>
     </section>
   );

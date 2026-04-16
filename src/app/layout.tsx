@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Outfit } from "next/font/google";
+import { Inter, Outfit, Syne, DM_Sans } from "next/font/google";
 import "./globals.css";
 import "./home.css";
 import "./home2.css";
@@ -8,8 +8,10 @@ import CursorWrapper from "@/components/CursorWrapper";
 import ScrollObserver from "@/components/ScrollObserver";
 import SmoothScroll from "@/components/SmoothScroll";
 
-const inter = Inter({ subsets: ["latin"] });
-const outfit = Outfit({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"] });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const outfit = Outfit({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"], variable: "--font-outfit" });
+const syne = Syne({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"], variable: "--font-syne" });
+const dmSans = DM_Sans({ subsets: ["latin"], weight: ["300", "400", "500"], variable: "--font-dm-sans" });
 
 import ClientLayout from "@/components/ClientLayout";
 import Script from "next/script";
@@ -59,7 +61,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} ${outfit.variable} ${syne.variable} ${dmSans.variable}`} suppressHydrationWarning>
       <head>
       </head>
       <body className={`${outfit.className} bg-surface text-foreground antialiased`}>

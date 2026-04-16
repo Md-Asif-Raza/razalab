@@ -30,7 +30,7 @@ export default function SectionHero() {
   }, []);
 
   return (
-    <section id="hero" className="section-glow-bottom glow-transition" style={{ padding: '160px 0 80px 0', position: 'relative' }}>
+    <section id="hero" className="section-glow-bottom glow-transition" style={{ position: 'relative' }}>
       {/* ═══ AMBIENT GLOW — large elliptical behind headline ═══ */}
       <div aria-hidden="true" style={{
         position: 'absolute',
@@ -44,7 +44,7 @@ export default function SectionHero() {
         zIndex: 0,
       }} />
 
-      <div className="standard-container" style={{ position: 'relative', zIndex: 1 }}>
+      <div className="standard-container" style={{ position: 'relative', zIndex: 1, maxWidth: '1180px' }}>
         <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
           <h1 className="reveal-up hero-anim-1" style={{
             fontSize: 'clamp(3rem, 8vw, 5.5rem)',

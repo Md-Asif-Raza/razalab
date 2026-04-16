@@ -51,13 +51,13 @@ export default function SectionVideo() {
     <section id="video-showcase" ref={sectionRef} className="section-glow-bottom section-glow-top glow-transition">
       <div className="glow-top-inner"></div>
       <div className="glow-top-outer"></div>
-      <div className="standard-container">
-        <PremiumWrapper className="video-premium-container" style={{ padding: '60px' }}>
+      <div className="standard-container" style={{ maxWidth: '1180px' }}>
+        <PremiumWrapper className="video-premium-container" style={{ padding: 'min(5vw, 60px)' }}> {/* // FIX: Responsive padding to prevent mobile overflow */}
           <div style={{ textAlign: 'center', marginBottom: '60px' }}>
             <h2 className="section-title" style={{ textAlign: 'center', margin: '0 auto' }}>Explainer Video</h2>
           </div>
 
-          <div className="video-modern-wrapper" style={{ maxWidth: '1000px', margin: '0 auto' }}>
+          <div className="video-modern-wrapper" style={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}> {/* // FIX: Added width: 100% to fixed maxWidth container */}
             <div className="video-glow-bezel" style={{ border: 'none', background: 'transparent' }}>
               {isYouTube ? (
                 <div style={{

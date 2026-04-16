@@ -38,7 +38,7 @@ export default function SectionCTA() {
   };
 
   return (
-    <section id="cta-end" className="section-glow-bottom glow-stronger glow-transition" style={{ position: 'relative' }}>
+    <section id="cta-end" className="section-glow-bottom glow-stronger glow-transition" style={{ position: 'relative', overflow: 'hidden' }}>
       {/* ═══ AMBIENT GLOW — behind CTA headline ═══ */}
       <div aria-hidden="true" style={{
         position: 'absolute',
@@ -61,7 +61,7 @@ export default function SectionCTA() {
           }}></div>
         ))}
       </div>
-      <div className="cta-content container reveal-up" style={{ padding: '60px 0', textAlign: 'center', position: 'relative', zIndex: 1 }}>
+      <div className="standard-container reveal-up" style={{ textAlign: 'center', position: 'relative', zIndex: 1, maxWidth: '1180px' }}> {/* // FIX: Standardized to standard-container 1180px */}
         <h2 className="section-title" style={{ opacity: 0.1, marginBottom: '32px' }}></h2>
         <h2 className="cta-title">{data.cta_title}<br /> <span style={{ color: 'var(--c1)' }}>{data.cta_title_accent}</span></h2>
         <p className="cta-sub">{data.cta_subtitle}</p>

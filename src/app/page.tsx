@@ -41,7 +41,7 @@ function GlowBand({
         left: '50%',
         top: `${top}px`,
         transform: 'translateX(-50%)',
-        width: '100vw',
+        width: '100%',
         maxWidth: '1600px',
         height: `${height}px`,
         background: `radial-gradient(ellipse 80% 50% at center,

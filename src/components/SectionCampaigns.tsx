@@ -1,6 +1,6 @@
 'use client';
-import React, { useState, useMemo, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
+import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from 'framer-motion';
 import { Campaign } from '@/lib/supabase/client';
 import AnalyticsGraph from './AnalyticsGraph';
 import { getCampaigns } from '@/lib/actions';
@@ -22,6 +22,30 @@ function parseGraphData(data: string | number[] | undefined): number[] {
 
 function ClientCard({ client: rawClient, onClick }: { client: any; onClick: () => void }) {
   const [isLoaded, setIsLoaded] = React.useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [15, -15]), { stiffness: 300, damping: 30 });
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-15, 15]), { stiffness: 300, damping: 30 });
+
+  function handleMouseMove(event: React.MouseEvent) {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+    const xPct = mouseX / width - 0.5;
+    const yPct = mouseY / height - 0.5;
+    x.set(xPct);
+    y.set(yPct);
+  }
+
+  function handleMouseLeave() {
+    x.set(0);
+    y.set(0);
+  }
 
   const client = useMemo(() => {
     return {
@@ -34,104 +58,124 @@ function ClientCard({ client: rawClient, onClick }: { client: any; onClick: () =
 
   return (
     <motion.div
-      whileHover={{ scale: 1.2, zIndex: 50 }}
-      transition={{ type: 'spring', damping: 20, stiffness: 300, mass: 0.8 }}
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        rotateX,
+        rotateY,
+        transformStyle: 'preserve-3d',
+        perspective: '1000px',
+        position: 'relative',
+        cursor: 'pointer',
+        flex: '0 0 280px'
+      }}
       className="card-track-item"
-      style={{ position: 'relative', cursor: 'pointer', flex: '0 0 280px' }}
     >
-      {/* Card Ambient Glow */}
-      <div style={{
-        position: 'absolute',
-        bottom: '-25px',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        width: '75%',
-        height: '100px',
-        background: 'radial-gradient(ellipse at center, rgba(90, 104, 130, 0.50) 0%, rgba(70, 80, 150, 0.25) 40%, transparent 70%)',
-        filter: 'blur(25px)',
-        pointerEvents: 'none',
-        zIndex: -1,
-        opacity: 0.8,
-        transition: 'opacity 0.4s ease',
-      }} />
-      <SpotlightCard
-        size="big"
-        className="reveal-card"
-        style={{
-          height: '420px',
-          width: '100%',
-          overflow: 'hidden',
-          borderRadius: '32px',
-          position: 'relative'
-        }}
+      <motion.div
+        whileHover={{ scale: 1.05, zIndex: 50 }}
+        transition={{ type: 'spring', damping: 20, stiffness: 300, mass: 0.8 }}
+        style={{ transformStyle: 'preserve-3d' }}
       >
-        <div onClick={onClick} style={{ height: '100%', position: 'relative' }}>
-          {/* SKELETON LOADER */}
-          {!isLoaded && (
-            <div className="skeleton-pulse" style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent)',
-              backgroundSize: '200% 100%',
-              zIndex: 5
-            }} />
-          )}
+        {/* Card Ambient Glow */}
+        <div style={{
+          position: 'absolute',
+          bottom: '-25px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '75%',
+          height: '100px',
+          background: 'radial-gradient(ellipse at center, rgba(90, 104, 130, 0.50) 0%, rgba(70, 80, 150, 0.25) 40%, transparent 70%)',
+          filter: 'blur(25px)',
+          pointerEvents: 'none',
+          zIndex: -1,
+          opacity: 0.8,
+          transition: 'opacity 0.4s ease',
+        }} />
+        <SpotlightCard
+          size="big"
+          className="reveal-card shimmer-card"
+          style={{
+            height: '420px',
+            width: '100%',
+            overflow: 'hidden',
+            borderRadius: '32px',
+            position: 'relative'
+          }}
+        >
+          <div onClick={onClick} style={{ height: '100%', position: 'relative' }}>
+            {/* SHIMMER EFFECT OVERLAY */}
+            <div className="card-shimmer-sweep" />
 
-          {/* BACKGROUND IMAGE - Cinematic Focus */}
-          {client.img_url && (
-            <img
-              src={client.img_url}
-              loading="lazy"
-              alt={client.name}
-              onLoad={() => setIsLoaded(true)}
-              onError={() => setIsLoaded(true)}
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                opacity: isLoaded ? 0.85 : 0,
-                filter: 'brightness(0.85)',
+            {/* SKELETON LOADER */}
+            {!isLoaded && (
+              <div className="skeleton-pulse" style={{
                 position: 'absolute',
                 inset: 0,
-                transition: 'opacity 1s ease'
-              }}
-            />
-          )}
+                background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent)',
+                backgroundSize: '200% 100%',
+                zIndex: 5
+              }} />
+            )}
 
-          {/* CONTENT (Always visible overlay) */}
-          <div style={{
-            position: 'absolute',
-            inset: 0,
-            padding: '24px 20px',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-end',
-            gap: '12px',
-            background: 'linear-gradient(to bottom, transparent 10%, rgba(5,3,4,0.3) 40%, rgba(5,3,4,0.85) 100%)',
-            zIndex: 40,
-            pointerEvents: 'none'
-          }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', pointerEvents: 'auto' }}>
-              <h3 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#fff', margin: 0, letterSpacing: '-0.5px', textTransform: 'uppercase' }}>
-                {cleanStr(client.name)}
-              </h3>
-              <div style={{ display: 'flex', gap: '8px' }}>
-                <div style={{ padding: '4px 10px', background: 'rgba(0, 230, 118, 0.1)', border: '1px solid rgba(0, 230, 118, 0.2)', borderRadius: '10px', color: '#00e676', fontWeight: 800, fontSize: '0.8rem' }}>{cleanStr(client.result)}</div>
-                <div style={{ padding: '4px 10px', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '10px', color: '#fff', fontWeight: 600, fontSize: '0.8rem' }}>{cleanStr(client.price)}</div>
-              </div>
+            {/* BACKGROUND IMAGE - Cinematic Focus */}
+            {client.img_url && (
+              <img
+                src={client.img_url}
+                loading="lazy"
+                alt={client.name}
+                onLoad={() => setIsLoaded(true)}
+                onError={() => setIsLoaded(true)}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  opacity: isLoaded ? 0.85 : 0,
+                  filter: 'brightness(0.85)',
+                  position: 'absolute',
+                  inset: 0,
+                  transition: 'opacity 1s ease',
+                  transform: 'translateZ(-10px)' // Depth effect
+                }}
+              />
+            )}
 
-              {/* DESCRIPTION TEXT - SLIDES DOWN ON HOVER */}
-              <div className="hover-desc-wrapper">
-                <div className="hover-desc-inner">
-                  <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.9rem', fontWeight: 500, lineHeight: '1.6', margin: 0, paddingTop: '10px' }}>
-                    {cleanStr(client.description)}
-                  </p>
+            {/* CONTENT (Always visible overlay) */}
+            <div style={{
+              position: 'absolute',
+              inset: 0,
+              padding: '24px 20px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'flex-end',
+              gap: '12px',
+              background: 'linear-gradient(to bottom, transparent 10%, rgba(5,3,4,0.3) 40%, rgba(5,3,4,0.85) 100%)',
+              zIndex: 40,
+              pointerEvents: 'none',
+              transform: 'translateZ(20px)' // Lift effect
+            }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', pointerEvents: 'auto' }}>
+                <h3 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#fff', margin: 0, letterSpacing: '-0.5px', textTransform: 'uppercase' }}>
+                  {cleanStr(client.name)}
+                </h3>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <div style={{ padding: '4px 10px', background: 'rgba(0, 230, 118, 0.1)', border: '1px solid rgba(0, 230, 118, 0.2)', borderRadius: '10px', color: '#00e676', fontWeight: 800, fontSize: '0.8rem' }}>{cleanStr(client.result)}</div>
+                  <div style={{ padding: '4px 10px', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '10px', color: '#fff', fontWeight: 600, fontSize: '0.8rem' }}>{cleanStr(client.price)}</div>
+                </div>
+
+                {/* DESCRIPTION TEXT - SLIDES DOWN ON HOVER */}
+                <div className="hover-desc-wrapper">
+                  <div className="hover-desc-inner">
+                    <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.9rem', fontWeight: 500, lineHeight: '1.6', margin: 0, paddingTop: '10px' }}>
+                      {cleanStr(client.description)}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </SpotlightCard>
+        </SpotlightCard>
+      </motion.div>
     </motion.div>
   );
 }
@@ -147,12 +191,21 @@ export default function SectionCampaigns() {
   }, []);
 
   useEffect(() => {
+    const lenis = (window as any).lenis;
     if (selectedIndex !== null) {
       document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+      lenis?.stop();
     } else {
       document.body.style.overflow = 'unset';
+      document.documentElement.style.overflow = 'unset';
+      lenis?.start();
     }
-    return () => { document.body.style.overflow = 'unset'; };
+    return () => {
+      document.body.style.overflow = 'unset';
+      document.documentElement.style.overflow = 'unset';
+      lenis?.start();
+    };
   }, [selectedIndex]);
 
   const selectedClientRaw = selectedIndex !== null ? (clients[selectedIndex] as any) : null;
@@ -183,33 +236,44 @@ export default function SectionCampaigns() {
   };
 
   return (
-    <section id="campaigns" style={{ position: 'relative' }}>
-      <div style={{ width: '100%', maxWidth: '100%', padding: '0 40px', margin: '0 auto' }}>
-        <PremiumWrapper className="campaigns-premium-container" style={{ paddingTop: '80px', paddingBottom: '80px', paddingLeft: '20px', paddingRight: '20px', borderRadius: '48px' }}>
-          <div style={{ textAlign: 'center', marginBottom: '80px' }}>
-            <h2 className="section-title reveal-up" style={{ textAlign: 'center', margin: '0 auto' }}>Clients</h2>
-            <p className="reveal-up stagger-1" style={{ opacity: 0.5, marginTop: '16px', textAlign: 'center' }}>Proven distribution results across major niches.</p>
-          </div>
+    <section id="campaigns" style={{ position: 'relative', overflow: 'hidden' }}>
+      <div className="standard-container" style={{ marginBottom: '60px' }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          style={{ textAlign: 'center' }}
+        >
+          <h2 className="section-title" style={{ textAlign: 'center', margin: '0 auto', fontSize: 'clamp(3rem, 6vw, 5rem)', fontWeight: 900, letterSpacing: '-2px' }}>Clients</h2>
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 0.5, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            style={{ marginTop: '16px', textAlign: 'center', fontSize: '1.25rem' }}
+          >Proven distribution results across major niches.</motion.p>
+        </motion.div>
+      </div>
 
-          {/* NAVIGATION WRAPPER */}
+      <div className="standard-container" style={{ maxWidth: '1520px' }}>
+        <PremiumWrapper className="campaigns-premium-container" style={{ paddingTop: '80px', paddingBottom: '80px', borderRadius: '48px', overflow: 'hidden' }}>
           <div style={{ position: 'relative' }}>
-            {/* FLOATING NAVIGATION BUTTONS - FIXED POSITIONING */}
-            <div style={{ position: 'absolute', top: '50%', left: '-30px', zIndex: 100, transform: 'translateY(-50%)' }}>
+            {/* FLOATING SIDE NAVIGATION - VERTICAL MIDDLE (Desktop Only) */}
+            <div style={{ position: 'absolute', top: '50%', left: '32px', zIndex: 100, transform: 'translateY(-50%)' }} className="hidden lg:block">
               <button
                 onClick={() => scroll('left')}
                 className="nav-slide-btn"
-                style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', color: '#fff', fontSize: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'all 0.3s ease', boxShadow: '0 10px 30px rgba(0,0,0,0.3)' }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.boxShadow = '0 0 20px var(--c1)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)'; }}
+                style={{ background: 'rgba(15, 23, 42, 0.4)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '50%', width: '56px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', color: '#fff', cursor: 'pointer', transition: 'all 0.3s ease' }}
+                aria-label="Previous slide"
               >‹</button>
             </div>
-            <div style={{ position: 'absolute', top: '50%', right: '-30px', zIndex: 100, transform: 'translateY(-50%)' }}>
+            <div style={{ position: 'absolute', top: '50%', right: '32px', zIndex: 100, transform: 'translateY(-50%)' }} className="hidden lg:block">
               <button
                 onClick={() => scroll('right')}
                 className="nav-slide-btn"
-                style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', color: '#fff', fontSize: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'all 0.3s ease', boxShadow: '0 10px 30px rgba(0,0,0,0.3)' }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.boxShadow = '0 0 20px var(--c1)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)'; }}
+                style={{ background: 'rgba(15, 23, 42, 0.4)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '50%', width: '56px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', color: '#fff', cursor: 'pointer', transition: 'all 0.3s ease' }}
+                aria-label="Next slide"
               >›</button>
             </div>
 
@@ -245,6 +309,21 @@ export default function SectionCampaigns() {
                 ))}
               </div>
             </div>
+
+          </div>
+
+          {/* MOBILE ONLY NAVIGATION CONTROLS (Hidden on Desktop to avoid overlap) */}
+          <div className="navigation-control-group flex justify-center gap-4 mt-8 lg:hidden">
+            <button
+              onClick={() => scroll('left')}
+              className="nav-slide-btn"
+              aria-label="Previous slide"
+            >‹</button>
+            <button
+              onClick={() => scroll('right')}
+              className="nav-slide-btn"
+              aria-label="Next slide"
+            >›</button>
           </div>
         </PremiumWrapper>
       </div>

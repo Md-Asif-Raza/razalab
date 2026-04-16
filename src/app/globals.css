@@ -1,6 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+@import "tailwindcss";
 @import '../styles/razalabs-animations.css';
 @import '../styles/glowEffects.css';
+
 :root {
   --c1: #5a6882;
   /* Restored original text accent color */
@@ -44,12 +45,17 @@ html.lenis body {
   overscroll-behavior: contain;
 }
 
+html,
+body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
 body {
   font-family: var(--font-body);
   background: radial-gradient(circle at 50% -20%, #1d2938 0%, #050304 60%);
   background-attachment: fixed;
   color: var(--text);
-  overflow-x: hidden;
   width: 100%;
   max-width: 100vw;
   cursor: auto;
@@ -372,9 +378,11 @@ section {
 }
 
 .standard-container {
-  max-width: 1400px;
+  max-width: 80rem;
+  /* 1280px / 7xl */
   margin: 0 auto;
-  padding: 0 40px;
+  padding: 0 1rem;
+  width: 100%;
 }
 
 /* ADMIN PANEL */
@@ -669,20 +677,59 @@ section {
 }
 
 
-/* Mobile Slide Button Adjustments */
+/* NAVIGATION CONTROLS UNIFICATION */
+.nav-slide-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #fff;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.nav-slide-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: var(--c1);
+  box-shadow: 0 0 25px var(--glow);
+  transform: translateY(-2px) scale(1.05);
+}
+
+.nav-slide-btn:active {
+  transform: translateY(0) scale(0.95);
+}
+
+.marquee-container {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+.marquee-container::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari and Opera */
+}
+
 @media (max-width: 1024px) {
+  .side-nav-desktop {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
   .nav-slide-btn {
-    width: 44px !important;
-    height: 44px !important;
-    font-size: 1.2rem !important;
-  }
-
-  div[style*='left: -30px'] {
-    left: 5px !important;
-  }
-
-  div[style*='right: -30px'] {
-    right: 5px !important;
+    width: 48px;
+    height: 48px;
+    font-size: 1.25rem;
   }
 }
 
@@ -909,7 +956,7 @@ section {
   }
 }
 
-/* ===== LARGE SCREENS (≥1440px) ===== */
+/* ===== LARGE SCREENS (1440px) ===== */
 @media (min-width: 1440px) {
   .standard-container {
     max-width: 1600px;
@@ -924,9 +971,10 @@ section {
 /* ── CARD HOVER LIFT + GLOW ── */
 .spotlight-card {
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.4s ease;
+    box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.4s ease;
 }
+
 .spotlight-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 40px rgba(90, 104, 130, 0.06);
@@ -938,6 +986,7 @@ section {
   position: relative;
   overflow: hidden;
 }
+
 .btn-primary::after {
   content: '';
   position: absolute;
@@ -949,35 +998,60 @@ section {
   transition: none;
   pointer-events: none;
 }
+
 .btn-primary:hover::after {
   animation: btn-shimmer 0.6s ease forwards;
 }
+
 @keyframes btn-shimmer {
-  0% { left: -100%; }
-  100% { left: 150%; }
+  0% {
+    left: -100%;
+  }
+
+  100% {
+    left: 150%;
+  }
 }
 
 /* ── GLOWING LINE PULSE ── */
 .glow-line {
   animation: line-pulse 4s ease-in-out infinite;
 }
+
 @keyframes line-pulse {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 /* ── FLOATING BREATH for ambient glow divs ── */
 @keyframes ambient-breathe {
-  0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.7; }
-  50% { transform: translateX(-50%) scale(1.05); opacity: 1; }
+
+  0%,
+  100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.7;
+  }
+
+  50% {
+    transform: translateX(-50%) scale(1.05);
+    opacity: 1;
+  }
 }
 
 /* ── FAQ ACCORDION HOVER ── */
 .accordion-item {
-  transition: border-color 0.3s ease, 
-              box-shadow 0.3s ease,
-              transform 0.3s ease !important;
+  transition: border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s ease !important;
 }
+
 .accordion-item:hover {
   border-color: rgba(255, 255, 255, 0.10) !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
@@ -985,18 +1059,24 @@ section {
 }
 
 /* ── SOCIAL ICON HOVER BOUNCE ── */
-.social-icon, .social-btn {
+.social-icon,
+.social-btn {
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
-.social-icon:hover, .social-btn:hover {
+
+.social-icon:hover,
+.social-btn:hover {
   transform: translateY(-3px) scale(1.1) !important;
 }
 
 /* ── NAV LINK HOVER UNDERLINE SLIDE ── */
-.nav-links a, .desktop-only a {
+.nav-links a,
+.desktop-only a {
   position: relative;
 }
-.nav-links a::after, .desktop-only a::after {
+
+.nav-links a::after,
+.desktop-only a::after {
   content: '';
   position: absolute;
   bottom: -4px;
@@ -1006,7 +1086,9 @@ section {
   background: var(--c1);
   transition: width 0.3s ease, left 0.3s ease;
 }
-.nav-links a:hover::after, .desktop-only a:hover::after {
+
+.nav-links a:hover::after,
+.desktop-only a:hover::after {
   width: 100%;
   left: 0;
 }
@@ -1021,6 +1103,7 @@ section {
 .section-title {
   transition: text-shadow 0.8s ease;
 }
+
 .reveal-up.visible .section-title,
 .section-title.visible {
   text-shadow: 0 0 60px rgba(90, 104, 130, 0.15);
@@ -1030,6 +1113,7 @@ section {
 .cta-btn {
   position: relative;
 }
+
 .cta-btn::before {
   content: '';
   position: absolute;
@@ -1040,21 +1124,40 @@ section {
   animation: cta-ring-pulse 2.5s ease-in-out infinite;
   pointer-events: none;
 }
+
 @keyframes cta-ring-pulse {
-  0%, 100% { border-color: rgba(0, 102, 255, 0); transform: scale(1); }
-  50% { border-color: rgba(0, 102, 255, 0.25); transform: scale(1.04); }
+
+  0%,
+  100% {
+    border-color: rgba(0, 102, 255, 0);
+    transform: scale(1);
+  }
+
+  50% {
+    border-color: rgba(0, 102, 255, 0.25);
+    transform: scale(1.04);
+  }
 }
 
 /* ── TESTIMONIAL CARD STAGGER ENTRANCE ── */
-.pro-testimonial-row > div:nth-child(1) { transition-delay: 0ms; }
-.pro-testimonial-row > div:nth-child(2) { transition-delay: 100ms; }
-.pro-testimonial-row > div:nth-child(3) { transition-delay: 200ms; }
+.pro-testimonial-row>div:nth-child(1) {
+  transition-delay: 0ms;
+}
+
+.pro-testimonial-row>div:nth-child(2) {
+  transition-delay: 100ms;
+}
+
+.pro-testimonial-row>div:nth-child(3) {
+  transition-delay: 200ms;
+}
 
 /* ── SLIDER THUMB GLOW ── */
 input[type="range"]::-webkit-slider-thumb {
   box-shadow: 0 0 12px rgba(90, 104, 130, 0.4);
   transition: box-shadow 0.3s ease;
 }
+
 input[type="range"]:hover::-webkit-slider-thumb {
   box-shadow: 0 0 20px rgba(90, 104, 130, 0.6);
 }
@@ -1063,7 +1166,70 @@ input[type="range"]:hover::-webkit-slider-thumb {
 .footer-links a {
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
+
 .footer-links a:hover {
   opacity: 1 !important;
   transform: translateX(3px);
+}
+
+/* ===== CAMPAIGN CARD SHIMMER ===== */
+.card-shimmer-sweep {
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to right,
+      transparent,
+      rgba(255, 255, 255, 0.05),
+      transparent);
+  transform: skewX(-25deg);
+  z-index: 45;
+  pointer-events: none;
+  animation: shimmer-sweep 8s infinite cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes shimmer-sweep {
+  0% {
+    left: -150%;
+  }
+
+  25% {
+    left: 200%;
+  }
+
+  100% {
+    left: 200%;
+  }
+}
+
+.shimmer-card:hover .card-shimmer-sweep {
+  animation-duration: 2s;
+  animation-iteration-count: 1;
+}
+
+/* ===== NAVIGATION SLIDE BUTTONS (Premium) ===== */
+.nav-slide-btn {
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  transform: scale(1);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.nav-slide-btn:hover {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.4);
+  transform: scale(1.15) translateY(-2px);
+  box-shadow: 0 15px 40px rgba(59, 130, 246, 0.3);
+}
+
+.nav-slide-btn:active {
+  transform: scale(0.95);
+}
+
+.marquee-container {
+  mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
 }

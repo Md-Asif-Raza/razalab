@@ -215,6 +215,7 @@ export default function AdminPage() {
   };
 
   const handleSave = async () => {
+    if (loading) return; // FIX: Prevent double-firing
     const validationError = validateItem();
     if (validationError) {
       showToast(validationError, 'error');
@@ -316,8 +317,8 @@ export default function AdminPage() {
             </div>
           ))}
           <Link href="/" className="admin-nav-item" style={{ marginTop: '32px', opacity: 0.5 }}>← Back to Site</Link>
-          <div 
-            className="admin-nav-item" 
+          <div
+            className="admin-nav-item"
             style={{ opacity: 0.5, cursor: 'pointer', color: '#e05252', marginTop: '8px' }}
             onClick={async () => {
               await fetch('/api/auth/logout', { method: 'POST' });

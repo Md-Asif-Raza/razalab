@@ -26,35 +26,40 @@ export default function SectionWhyChoose() {
   const prev = () => setIndex((index - 1 + (maxIdx + 1)) % (maxIdx + 1));
 
   return (
-    <section id="testimonials">
-      <div className="standard-container">
-        <PremiumWrapper className="why-premium-container" style={{ padding: '60px' }}>
+    <section id="testimonials" style={{ overflow: 'hidden' }}>
+      <div className="standard-container" style={{ maxWidth: '1180px' }}>
+        <PremiumWrapper className="why-premium-container" style={{ padding: 'min(5vw, 60px)' }}> {/* // FIX: Responsive padding to prevent mobile overflow */}
           <div style={{ textAlign: 'center', marginBottom: '60px' }}>
             <h2 className="section-title" style={{ textAlign: 'center', margin: '0 auto' }}>Testimonials</h2>
           </div>
 
-          <div className="pro-testimonial-row reveal-up" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
-            <AnimatePresence mode="wait">
-              {items.slice(index, index + 3).map((t) => (
-                <motion.div key={t.id}
-                  initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.5 }}
-                >
-                  <SpotlightCard size="small" className="pro-testimonial-card" style={{ padding: '32px', height: '100%' }}>
-                    <div className="pro-avatar" style={{ width: '60px', height: '60px', borderRadius: '50%', overflow: 'hidden', marginBottom: '20px' }}>
-                      {t.avatar_url && <img src={t.avatar_url} loading="lazy" alt={t.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
-                    </div>
-                    <h3 className="pro-name" style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '4px' }}>{t.name}</h3>
-                    <div className="pro-role" style={{ fontSize: '0.85rem', color: 'var(--c1)', marginBottom: '16px', fontWeight: 600 }}>{t.role}</div>
-                    <p className="pro-quote" style={{ fontSize: '0.95rem', opacity: 0.7, lineHeight: 1.6 }}>{t.quote}</p>
-                  </SpotlightCard>
-                </motion.div>
-              ))}
-            </AnimatePresence>
+          <div style={{ position: 'relative' }}>
+            {/* SIDE NAVIGATION - VERTICAL MIDDLE */}
+
+
+            <div className="pro-testimonial-row reveal-up" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
+              <AnimatePresence mode="wait">
+                {items.slice(index, index + 3).map((t) => (
+                  <motion.div key={t.id}
+                    initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.5 }}
+                  >
+                    <SpotlightCard size="small" className="pro-testimonial-card" style={{ padding: '32px', height: '100%' }}>
+                      <div className="pro-avatar" style={{ width: '60px', height: '60px', borderRadius: '50%', overflow: 'hidden', marginBottom: '20px' }}>
+                        {t.avatar_url && <img src={t.avatar_url} loading="lazy" alt={t.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
+                      </div>
+                      <h3 className="pro-name" style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '4px' }}>{t.name}</h3>
+                      <div className="pro-role" style={{ fontSize: '0.85rem', color: 'var(--c1)', marginBottom: '16px', fontWeight: 600 }}>{t.role}</div>
+                      <p className="pro-quote" style={{ fontSize: '0.95rem', opacity: 0.7, lineHeight: 1.6 }}>{t.quote}</p>
+                    </SpotlightCard>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', marginTop: '48px' }}>
-            <button onClick={prev} className="btn-ghost" style={{ padding: '12px 24px', borderRadius: '12px' }}>&larr;</button>
-            <button onClick={next} className="btn-ghost" style={{ padding: '12px 24px', borderRadius: '12px' }}>&rarr;</button>
+          <div className="navigation-control-group flex justify-center gap-4 mt-[50px]"> {/* // FIX: Navigation now always centered at bottom, 2px lower */}
+            <button onClick={prev} className="nav-slide-btn" aria-label="Previous slide">‹</button>
+            <button onClick={next} className="nav-slide-btn" aria-label="Next slide">›</button>
           </div>
         </PremiumWrapper>
       </div>

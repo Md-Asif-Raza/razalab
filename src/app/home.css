@@ -1547,14 +1547,11 @@ body::after {
 #brands {
   padding: 0;
   overflow: hidden;
-  position: relative;
+  background: transparent !important;
 }
-
 .brands-heading {
   text-align: center;
   margin-bottom: 48px;
-  position: relative;
-  z-index: 1;
 }
 .brands-heading h2 {
   font-family: var(--font-head);
@@ -1568,13 +1565,9 @@ body::after {
   font-style: italic;
 }
 .brands-marquee {
-  overflow: hidden; /* FIX: clip overflow */
+  overflow: hidden;
   position: relative;
   mask-image: linear-gradient(90deg, transparent 0%, black 10%, black 90%, transparent 100%);
-  width: 100%; /* FIX: full width */
-  max-width: 100%; /* FIX: prevent overflow */
-  padding: 40px 0;
-  z-index: 1;
 }
 .brands-track {
   display: flex;

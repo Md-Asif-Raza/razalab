@@ -94,7 +94,7 @@ export function useAnimations() {
             const progress = Math.min(elapsed / duration, 1);
             const ease = 1 - Math.pow(1 - progress, 3);
             const current = Math.round(ease * target);
-            el.textContent = current.toLocaleString() + (suffix ? suffix : '');
+            el.textContent = current.toLocaleString('en-US') + (suffix ? suffix : ''); // FIX: use en-US locale
             if (progress < 1) requestAnimationFrame(animate);
           };
           requestAnimationFrame(animate);

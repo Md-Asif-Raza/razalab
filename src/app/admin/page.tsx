@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import './admin.css';
 import {
@@ -214,16 +214,16 @@ export default function AdminPage() {
     return null;
   };
 
-  const isSavingRef = useRef(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const handleSave = async () => {
-    if (isSavingRef.current || loading) return;
+    if (isSaving || loading) return;
     const validationError = validateItem();
     if (validationError) {
       showToast(validationError, 'error');
       return;
     }
-    isSavingRef.current = true;
+    setIsSaving(true);
     setLoading(true);
     try {
       if (editType === 'campaign') await syncCampaign(editItem);
@@ -239,9 +239,10 @@ export default function AdminPage() {
       await loadData();
     } catch (err: any) {
       showToast(err.message, 'error');
+    } finally {
+      setIsSaving(false);
+      setLoading(false);
     }
-    isSavingRef.current = false;
-    setLoading(false);
   };
 
   const handleDelete = async () => {
@@ -425,7 +426,7 @@ export default function AdminPage() {
                   <ImageField value={editItem.img_url || ''} onChange={v => setEditItem({ ...editItem, img_url: v })} label="Cover Image" />
                   <div className="cms-modal-footer">
                     <button className="cms-btn cms-btn-ghost" onClick={() => { setEditItem(null); setEditType(''); }}>Cancel</button>
-                    <button className="cms-btn cms-btn-primary" onClick={handleSave} disabled={loading}>Save</button>
+                    <button className="cms-btn cms-btn-primary" onClick={handleSave} disabled={loading || isSaving}>Save</button>
                   </div>
                 </div>
               </div>
@@ -461,7 +462,7 @@ export default function AdminPage() {
                   <div className="form-group"><label className="form-label">Sort Order</label><input className="form-input" type="number" value={editItem.sort_order} onChange={e => setEditItem({ ...editItem, sort_order: parseInt(e.target.value) })} /></div>
                   <div className="cms-modal-footer">
                     <button className="cms-btn cms-btn-ghost" onClick={() => { setEditItem(null); setEditType(''); }}>Cancel</button>
-                    <button className="cms-btn cms-btn-primary" onClick={handleSave} disabled={loading}>Save</button>
+                    <button className="cms-btn cms-btn-primary" onClick={handleSave} disabled={loading || isSaving}>Save</button>
                   </div>
                 </div>
               </div>
@@ -496,7 +497,7 @@ export default function AdminPage() {
                   <div className="form-group"><label className="form-label">Sort Order</label><input className="form-input" type="number" value={editItem.sort_order} onChange={e => setEditItem({ ...editItem, sort_order: parseInt(e.target.value) })} /></div>
                   <div className="cms-modal-footer">
                     <button className="cms-btn cms-btn-ghost" onClick={() => { setEditItem(null); setEditType(''); }}>Cancel</button>
-                    <button className="cms-btn cms-btn-primary" onClick={handleSave} disabled={loading}>Save</button>
+                    <button className="cms-btn cms-btn-primary" onClick={handleSave} disabled={loading || isSaving}>Save</button>
                   </div>
                 </div>
               </div>
@@ -539,7 +540,7 @@ export default function AdminPage() {
                   <ImageField value={editItem.avatar_url} onChange={v => setEditItem({ ...editItem, avatar_url: v })} label="Avatar" />
                   <div className="cms-modal-footer">
                     <button className="cms-btn cms-btn-ghost" onClick={() => { setEditItem(null); setEditType(''); }}>Cancel</button>
-                    <button className="cms-btn cms-btn-primary" onClick={handleSave} disabled={loading}>Save</button>
+                    <button className="cms-btn cms-btn-primary" onClick={handleSave} disabled={loading || isSaving}>Save</button>
                   </div>
                 </div>
               </div>
@@ -576,7 +577,7 @@ export default function AdminPage() {
                   <div className="form-group mb-16"><label className="form-label">Description</label><input className="form-input" value={editItem.description} onChange={e => setEditItem({ ...editItem, description: e.target.value })} /></div>
                   <div className="cms-modal-footer">
                     <button className="cms-btn cms-btn-ghost" onClick={() => { setEditItem(null); setEditType(''); }}>Cancel</button>
-                    <button className="cms-btn cms-btn-primary" onClick={handleSave} disabled={loading}>Save</button>
+                    <button className="cms-btn cms-btn-primary" onClick={handleSave} disabled={loading || isSaving}>Save</button>
                   </div>
                 </div>
               </div>

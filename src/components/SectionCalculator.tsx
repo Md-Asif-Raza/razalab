@@ -54,14 +54,16 @@ export default function SectionCalculator() {
           <p className="reveal-up stagger-1" style={{ opacity: 0.4, marginTop: '24px', textAlign: 'center', fontSize: '1.25rem', maxWidth: '700px', margin: '24px auto 0' }}>Project your growth through the Raza Labs distribution engine.</p>
         </div>
 
-        <div className="calc-main-container" style={{ 
+        <div className="calc-main-container" style={{ // FIX: CRITICAL responsive calc container
           background: '#0c1015', 
           border: '1px solid rgba(255,255,255,0.03)', 
           borderRadius: '32px', 
-          padding: '24px',
+          padding: 'clamp(16px, 4vw, 24px)', // FIX: responsive padding
           boxShadow: '0 32px 128px rgba(0,0,0,0.8)',
-          width: '100%',
-          overflow: 'hidden'
+          width: '100%', // FIX: full width
+          maxWidth: '100%', // FIX: prevent overflow
+          overflow: 'hidden', // FIX: clip any overflow
+          boxSizing: 'border-box' // FIX: padding included in width
         }}> 
           <div className="dual-pane-calc"> 
 
@@ -84,7 +86,7 @@ export default function SectionCalculator() {
                   max="100" 
                   value={clippers} 
                   onChange={(e) => setClippers(parseInt(e.target.value))} 
-                  style={{ width: '100%', cursor: 'pointer', accentColor: '#3b82f6', height: '4px' }} 
+                  style={{ width: '100%', maxWidth: '100%', cursor: 'pointer', accentColor: '#3b82f6', height: '4px', boxSizing: 'border-box' }} // FIX: full width + box-sizing
                 />
               </div>
 
@@ -99,7 +101,7 @@ export default function SectionCalculator() {
                   max="10" 
                   value={posts} 
                   onChange={(e) => setPosts(parseInt(e.target.value))} 
-                  style={{ width: '100%', cursor: 'pointer', accentColor: '#3b82f6', height: '4px' }} 
+                  style={{ width: '100%', maxWidth: '100%', cursor: 'pointer', accentColor: '#3b82f6', height: '4px', boxSizing: 'border-box' }} // FIX: full width + box-sizing
                 />
               </div>
 
@@ -114,7 +116,7 @@ export default function SectionCalculator() {
                   max="5" 
                   value={platforms} 
                   onChange={(e) => setPlatforms(parseInt(e.target.value))} 
-                  style={{ width: '100%', cursor: 'pointer', accentColor: '#3b82f6', height: '4px' }} 
+                  style={{ width: '100%', maxWidth: '100%', cursor: 'pointer', accentColor: '#3b82f6', height: '4px', boxSizing: 'border-box' }} // FIX: full width + box-sizing
                 />
               </div>
 
@@ -130,25 +132,27 @@ export default function SectionCalculator() {
                   step="1000"
                   value={viewsPerPost} 
                   onChange={(e) => setViewsPerPost(parseInt(e.target.value))} 
-                  style={{ width: '100%', cursor: 'pointer', accentColor: '#3b82f6', height: '4px' }} 
+                  style={{ width: '100%', maxWidth: '100%', cursor: 'pointer', accentColor: '#3b82f6', height: '4px', boxSizing: 'border-box' }} // FIX: full width + box-sizing
                 />
               </div>
             </div>
 
             {/* RIGHT COLUMN: PROJECTION RESULTS */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-              <div style={{ 
+              <div className="calc-result-card" style={{ // FIX: added className for mobile override
                 background: '#161b22', 
-                borderRadius: '32px', 
-                padding: '40px 32px', 
+                borderRadius: '24px', // FIX: smaller radius for mobile fit
+                padding: 'clamp(24px, 4vw, 40px) clamp(16px, 3vw, 32px)', // FIX: responsive padding
                 display: 'flex', 
                 flexDirection: 'column', 
                 alignItems: 'center',
                 border: '1px solid rgba(255,255,255,0.05)',
-                boxShadow: 'inset 0 0 30px rgba(0,0,0,0.5)'
+                boxShadow: 'inset 0 0 30px rgba(0,0,0,0.5)',
+                overflow: 'hidden', // FIX: prevent any child from overflowing
+                width: '100%' // FIX: ensure it fills container
               }}>
                 <span style={{ fontSize: '9px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.4em', color: 'rgba(255,255,255,0.3)', marginBottom: '20px' }}>Est. Annual Value</span>
-                <div style={{ fontSize: 'clamp(3rem, 6vw, 4.5rem)', fontWeight: 900, color: '#3b82f6', lineHeight: 1, letterSpacing: '-0.05em', marginBottom: '12px' }}>
+                <div style={{ fontSize: 'clamp(1.5rem, 5vw, 4.5rem)', fontWeight: 900, color: '#3b82f6', lineHeight: 1, letterSpacing: '-0.05em', marginBottom: '12px', wordBreak: 'break-word', textAlign: 'center', maxWidth: '100%', overflow: 'hidden' }}> {/* FIX: clamp font + responsive sizing */}
                   ${isMounted ? savings.toLocaleString('en-US') : savings}
                 </div>
                 <div style={{ fontSize: '11px', fontWeight: 800, opacity: 0.3, textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '32px' }}>SAVED ANNUALLY</div>

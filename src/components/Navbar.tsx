@@ -61,20 +61,21 @@ export default function Navbar() {
   return (
     <>
       <nav className={`nav-full ${!visible ? 'nav-hidden' : ''} ${scrolled || isMobileMenuOpen ? 'nav-scrolled' : ''}`}>
-        <Link href="/" className="nav-logo" onClick={() => setIsMobileMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '12px', transition: 'transform 0.3s ease', textDecoration: 'none', zIndex: 1001 }}>
+        <Link href="/" className="nav-logo" onClick={() => setIsMobileMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '12px', transition: 'transform 0.3s ease', textDecoration: 'none', zIndex: 1001, minWidth: 0 }}> {/* FIX: min-width 0 for flex shrink */}
           <div className="logo-circle" style={{ 
             width: 44, height: 44, borderRadius: '50%', background: '#000', 
             display: 'flex', alignItems: 'center', justifyContent: 'center', 
             overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)',
             transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            flexShrink: 0 // FIX: prevent shrinking on mobile
           }}
           onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
           onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
           >
             <img src="/logo.png" alt="Logo" style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
           </div>
-          <span style={{ fontWeight: 800, fontSize: '1rem', letterSpacing: '-0.5px', color: '#fff' }}>Raza<span style={{ color: 'var(--c1)' }}>Labs</span></span>
+          <span style={{ fontWeight: 800, fontSize: 'clamp(0.75rem, 2vw, 1rem)', letterSpacing: '-0.5px', color: '#fff', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}> {/* FIX: responsive font size + overflow hidden */}Raza<span style={{ color: 'var(--c1)' }}>Labs</span></span>
         </Link>
         <ul className="nav-links desktop-only">
           <li><a href="#hero" onClick={(e) => handleNavClick(e, '#hero')}>Home</a></li>

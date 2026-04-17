@@ -1,19 +1,23 @@
 /* CAMPAIGNS GRID */
 #campaigns {
-  padding: 100px 72px;
+  padding: 100px 72px; /* FIX: will be overridden on mobile by media query */
 }
 .campaigns-header {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
   margin-bottom: 48px;
+  flex-wrap: wrap; /* FIX: allow wrapping on mobile */
+  gap: 24px; /* FIX: add gap for wrapped items */
 }
 
 /* CAMPAIGN GRID CARDS */
 .camp-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* FIX: responsive auto-fill */
   gap: 16px;
+  width: 100%; /* FIX: full width */
+  box-sizing: border-box; /* FIX: prevent overflow */
 }
 .camp-card {
   background: var(--c4);

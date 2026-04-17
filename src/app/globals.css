@@ -2,6 +2,24 @@
 @import '../styles/razalabs-animations.css';
 @import '../styles/glowEffects.css';
 
+/* FIX: CRITICAL - Hide all scrollbars globally across entire page */
+* {
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* IE/Edge */
+}
+
+*::-webkit-scrollbar {
+  display: none !important; /* Chrome/Safari */
+}
+
+*::-webkit-scrollbar-thumb {
+  display: none !important; /* Chrome/Safari */
+}
+
+*::-webkit-scrollbar-track {
+  display: none !important; /* Chrome/Safari */
+}
+
 :root {
   --c1: #5a6882;
   /* Restored original text accent color */
@@ -28,17 +46,43 @@
 }
 
 html {
-  scroll-behavior: initial;
-  /* Lenis handles this */
+  scroll-behavior: initial; /* Lenis handles this */
+  overflow-x: hidden !important; /* FIX: prevent horizontal scroll - CRITICAL */
+  max-width: 100vw !important; /* FIX: ensure html never exceeds viewport */
+  width: 100% !important; /* FIX: full width */
+  scrollbar-width: none !important; /* FIX: hide vertical scrollbar - Firefox */
+  -ms-overflow-style: none !important; /* FIX: hide vertical scrollbar - IE/Edge */
+}
+
+/* FIX: hide vertical scrollbar for Chrome/Safari */
+html::-webkit-scrollbar {
+  display: none !important;
 }
 
 html.lenis,
 html.lenis body {
   height: auto;
+  overflow-x: hidden !important; /* FIX: lock lenis scroll */
+  scrollbar-width: none !important; /* FIX: hide scrollbar */
+  -ms-overflow-style: none !important; /* FIX: hide scrollbar */
+}
+
+/* FIX: hide scrollbar for lenis - Chrome/Safari */
+html.lenis::-webkit-scrollbar,
+html.lenis body::-webkit-scrollbar {
+  display: none !important;
 }
 
 .lenis.lenis-smooth {
   scroll-behavior: auto !important;
+  overflow-x: hidden !important; /* FIX: prevent horizontal scroll */
+  scrollbar-width: none !important; /* FIX: hide scrollbar */
+  -ms-overflow-style: none !important; /* FIX: hide scrollbar */
+}
+
+/* FIX: hide scrollbar for lenis-smooth - Chrome/Safari */
+.lenis.lenis-smooth::-webkit-scrollbar {
+  display: none !important;
 }
 
 .lenis.lenis-smooth [data-lenis-prevent] {
@@ -47,8 +91,18 @@ html.lenis body {
 
 html,
 body {
-  overflow-x: hidden;
-  width: 100%;
+  overflow-x: hidden !important; /* FIX: ultimate lock on overflow */
+  width: 100% !important; /* FIX: ensure 100% width */
+  max-width: 100vw !important; /* FIX: cap at viewport width */
+  margin: 0 !important; /* FIX: no margins */
+  padding: 0 !important; /* FIX: no padding */
+  scrollbar-width: none !important; /* FIX: hide vertical scrollbar - Firefox */
+  -ms-overflow-style: none !important; /* FIX: hide vertical scrollbar - IE/Edge */
+}
+
+/* FIX: hide vertical scrollbar for body - Chrome/Safari */
+body::-webkit-scrollbar {
+  display: none !important;
 }
 
 body {
@@ -56,15 +110,20 @@ body {
   background: radial-gradient(circle at 50% -20%, #1d2938 0%, #050304 60%);
   background-attachment: fixed;
   color: var(--text);
-  width: 100%;
-  max-width: 100vw;
+  width: 100% !important; /* FIX: explicit 100% width */
+  max-width: 100vw !important; /* FIX: prevent any overflow */
   cursor: auto;
+  overflow-x: hidden !important; /* FIX: triple-lock horizontal scroll */
+  scrollbar-width: none !important; /* FIX: hide scrollbar - Firefox */
 }
 
 input,
 textarea,
 select {
   cursor: text !important;
+  box-sizing: border-box; /* FIX: ensure inputs don't overflow with padding */
+  max-width: 100%; /* FIX: prevent input overflow */
+  width: 100%; /* FIX: make inputs responsive */
 }
 
 /* ANIMATED ORB BACKGROUND (Fix 1) */
@@ -375,14 +434,33 @@ section {
   position: relative;
   padding: 80px 0;
   /* z-index removed to allow GlowBand elements to show between sections */
+  width: 100% !important; /* FIX: full width sections */
+  overflow-x: hidden !important; /* FIX: prevent horizontal scroll in sections */
+  max-width: 100vw !important; /* FIX: sections never exceed viewport */
+  scrollbar-width: none !important; /* FIX: hide vertical scrollbar - Firefox */
+  -ms-overflow-style: none !important; /* FIX: hide vertical scrollbar - IE/Edge */
+}
+
+/* FIX: hide scrollbar in sections - Chrome/Safari */
+section::-webkit-scrollbar {
+  display: none !important;
 }
 
 .standard-container {
   max-width: 80rem;
   /* 1280px / 7xl */
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 1rem; /* FIX: base padding for all viewports */
   width: 100%;
+  box-sizing: border-box; /* FIX: prevent padding from exceeding viewport */
+  overflow-x: hidden !important; /* FIX: prevent container overflow */
+  scrollbar-width: none !important; /* FIX: hide scrollbar - Firefox */
+  -ms-overflow-style: none !important; /* FIX: hide scrollbar - IE/Edge */
+}
+
+/* FIX: hide scrollbar in standard container - Chrome/Safari */
+.standard-container::-webkit-scrollbar {
+  display: none !important;
 }
 
 /* ADMIN PANEL */
@@ -679,21 +757,20 @@ section {
 
 /* NAVIGATION CONTROLS UNIFICATION */
 .nav-slide-btn {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  color: #fff;
-  font-size: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 1.5rem;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .nav-slide-btn:hover {
@@ -712,6 +789,9 @@ section {
   /* IE and Edge */
   scrollbar-width: none;
   /* Firefox */
+  overflow-x: hidden !important; /* FIX: prevent horizontal scroll */
+  max-width: 100% !important; /* FIX: don't exceed viewport */
+  width: 100% !important; /* FIX: full width */
 }
 
 .marquee-container::-webkit-scrollbar {
@@ -727,9 +807,23 @@ section {
 
 @media (max-width: 768px) {
   .nav-slide-btn {
-    width: 48px;
-    height: 48px;
+    width: 48px; /* FIX: reduce size on tablet */
+    height: 48px; /* FIX: reduce size on tablet */
     font-size: 1.25rem;
+  }
+}
+
+/* FIX: Additional mobile button size reduction */
+@media (max-width: 480px) {
+  .nav-slide-btn {
+    width: 40px; /* FIX: even smaller on mobile phones */
+    height: 40px; /* FIX: even smaller on mobile phones */
+    font-size: 1rem; /* FIX: reduce font size */
+  }
+  
+  .navigation-control-group {
+    gap: 8px !important; /* FIX: reduce gap on mobile */
+    margin-top: 24px !important; /* FIX: reduce margin on mobile */
   }
 }
 
@@ -806,32 +900,26 @@ section {
     right: 20px !important;
   }
 
-  /* CALCULATOR: Force single column on mobile */
+  /* FIX: CALCULATOR — Force single column on mobile */
   .dual-pane-calc {
     grid-template-columns: 1fr !important;
+    gap: 24px !important;
   }
 
   .dual-pane-calc>div {
-    padding: 32px 20px !important;
+    padding: 24px 16px !important; /* FIX: tighter mobile padding */
     border-right: none !important;
   }
 
-  /* HERO: Reduce massive top padding */
+  /* FIX: Calculator result card — prevent number cutoff */
+  .calc-main-container {
+    padding: 16px !important;
+    border-radius: 20px !important;
+  }
+
+  /* FIX: HERO — Reduce massive top padding */
   #hero {
     padding: 100px 0 40px 0 !important;
-  }
-
-  .dual-pane-calc {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 40px;
-    align-items: start;
-  }
-
-  @media (min-width: 1024px) {
-    .dual-pane-calc {
-      grid-template-columns: 1fr 1fr;
-    }
   }
 
   #hero h1 {

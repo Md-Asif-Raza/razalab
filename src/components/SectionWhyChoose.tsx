@@ -37,7 +37,7 @@ export default function SectionWhyChoose() {
             {/* SIDE NAVIGATION - VERTICAL MIDDLE */}
 
 
-            <div className="pro-testimonial-row reveal-up" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
+            <div className="pro-testimonial-row reveal-up" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', gap: '24px' }}> {/* FIX: min(240px, 100%) prevents overflow on small phones */}
               <AnimatePresence mode="wait">
                 {items.slice(index, index + 3).map((t) => (
                   <motion.div key={t.id}
@@ -57,7 +57,7 @@ export default function SectionWhyChoose() {
             </div>
           </div>
 
-          <div className="navigation-control-group flex justify-center gap-4 mt-[50px]"> {/* // FIX: Navigation now always centered at bottom, 2px lower */}
+          <div className="navigation-control-group" style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginTop: 'clamp(30px, 5vw, 50px)' }}>
             <button onClick={prev} className="nav-slide-btn" aria-label="Previous slide">‹</button>
             <button onClick={next} className="nav-slide-btn" aria-label="Next slide">›</button>
           </div>

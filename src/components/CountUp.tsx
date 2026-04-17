@@ -34,7 +34,7 @@ export default function CountUp({
           const currentVal = endNum * easeProgress;
           if (progress < 1) {
             const isFloat = endNum % 1 !== 0;
-            const formatted = isFloat ? currentVal.toFixed(1) : Math.floor(currentVal).toLocaleString();
+            const formatted = isFloat ? currentVal.toFixed(1) : Math.floor(currentVal).toLocaleString('en-US'); // FIX: use en-US locale
             setCount(formatted + suffix);
             requestAnimationFrame(step);
           } else {

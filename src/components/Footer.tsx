@@ -24,15 +24,15 @@ export default function Footer() {
 
   return (
     <>
-      <footer>
+      <footer style={{ display: 'flex', flexDirection: 'column', gap: '24px', padding: 'clamp(24px, 4vw, 40px)', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}> {/* FIX: responsive footer layout */}
         <div className="footer-logo">Raza<span>Labs</span></div>
-        <ul className="footer-links">
+        <ul className="footer-links" style={{ display: 'flex', gap: 'clamp(12px, 2vw, 28px)', listStyle: 'none', flexWrap: 'wrap', justifyContent: 'center' }}> {/* FIX: responsive gap + wrap */}
           <li><Link href="#hero">Home</Link></li>
           <li><Link href="#campaigns">Clients</Link></li>
           <li><Link href="#video-showcase">Explainer</Link></li>
           <li><Link href="#faq">FAQ</Link></li>
         </ul>
-        <div className="footer-socials">
+        <div className="footer-socials" style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
           <a href={socials.instagram_url} target="_blank" rel="noopener noreferrer" className="social-btn" aria-label="Instagram">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
           </a>
@@ -44,7 +44,7 @@ export default function Footer() {
           </a>
         </div>
       </footer>
-      <div className="footer-copy">
+      <div className="footer-copy" style={{ fontSize: 'clamp(7px, 1vw, 12px)', textAlign: 'center', padding: '20px', opacity: 0.5 }}> {/* FIX: responsive footer text */}
         <Link href="/login" style={{ fontSize: '7px', opacity: 0.05, textDecoration: 'none', color: 'inherit', marginRight: '4px' }}>A</Link>
         © 2026 Raza Labs — All Rights Reserved.
       </div>

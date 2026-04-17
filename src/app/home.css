@@ -96,9 +96,25 @@ body::after {
 
 /* DUAL-PANEL CALCULATOR (PINTEREST STYLE) */
 .dual-pane-calc {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 0; background: #1a1d2e; border-radius: 24px; overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  display: grid; grid-template-columns: 1fr; /* FIX: mobile-first single column */
+  gap: 24px; align-items: start;
+  width: 100%; /* FIX: ensure full width */
+  box-sizing: border-box; /* FIX: padding included in width */
+}
+@media (min-width: 1024px) { /* FIX: 2-col only on desktop */
+  .dual-pane-calc {
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+}
+/* FIX: Add mobile-specific responsive styles */
+@media (max-width: 768px) {
+  .dual-pane-calc > div {
+    padding: 0 !important; /* FIX: remove padding on mobile */
+  }
+  .calc-result-card {
+    padding: clamp(16px, 3vw, 24px) !important; /* FIX: responsive result card padding */
+  }
 }
 .calc-pane-left { padding: 60px; background: #1a1d2e; }
 .calc-pane-right { padding: 60px; background: rgba(0,0,0,0.2); border-left: 1px solid rgba(255, 255, 255, 0.05); }
@@ -801,28 +817,20 @@ body::after {
 }
 /* CINEMATIC MODAL NAVIGATION */
 .carousel-btn {
-  position: fixed;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 64px; height: 64px;
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.1);
-  color: #fff;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.5rem;
-  cursor: pointer;
-  z-index: 10000;
-  transition: all 0.3s ease;
+  display: none !important; /* FIX: CRITICAL - hide carousel buttons */
+  visibility: hidden !important; /* FIX: ensure hidden */
+  width: 0 !important; /* FIX: remove width */
+  height: 0 !important; /* FIX: remove height */
+  opacity: 0 !important; /* FIX: hide opacity */
+  pointer-events: none !important; /* FIX: disable interaction */
 }
 .carousel-btn:hover {
   background: rgba(255,255,255,0.1);
   border-color: var(--c1);
   transform: translateY(-50%) scale(1.1);
 }
-.carousel-btn.prev { left: 48px; }
-.carousel-btn.next { right: 48px; }
+.carousel-btn.prev { left: 48px; } /* FIX: position left button */
+.carousel-btn.next { right: 48px; } /* FIX: position right button */
 
 .modal-header-label {
   font-size: 0.65rem;
@@ -834,7 +842,16 @@ body::after {
 }
 
 @media (max-width: 1024px) {
-  .carousel-btn { display: none; }
+  .carousel-btn { display: none; } /* FIX: hide on lg and below */
+}
+
+/* FIX: Additional mobile-specific carousel button fixes */
+@media (max-width: 768px) {
+  .carousel-btn { display: none !important; } /* FIX: ensure hidden on tablet + mobile */
+}
+
+@media (max-width: 480px) {
+  .carousel-btn { display: none !important; } /* FIX: ensure hidden on small mobile */
 }
 
 /* NAVBAR — CIRCLE LOGO STATE */
@@ -1530,10 +1547,14 @@ body::after {
 #brands {
   padding: 0;
   overflow: hidden;
+  position: relative;
 }
+
 .brands-heading {
   text-align: center;
   margin-bottom: 48px;
+  position: relative;
+  z-index: 1;
 }
 .brands-heading h2 {
   font-family: var(--font-head);
@@ -1547,9 +1568,13 @@ body::after {
   font-style: italic;
 }
 .brands-marquee {
-  overflow: hidden;
+  overflow: hidden; /* FIX: clip overflow */
   position: relative;
   mask-image: linear-gradient(90deg, transparent 0%, black 10%, black 90%, transparent 100%);
+  width: 100%; /* FIX: full width */
+  max-width: 100%; /* FIX: prevent overflow */
+  padding: 40px 0;
+  z-index: 1;
 }
 .brands-track {
   display: flex;
@@ -1600,7 +1625,8 @@ body::after {
 
 @media (max-width: 768px) {
   .desktop-only { display: none !important; }
-  .mobile-menu-btn { display: flex !important; align-items: center; justify-content: center; z-index: 1001; }
+  .mobile-menu-btn { display: flex !important; align-items: center; justify-content: center; z-index: 1002; padding: 8px; transition: all 0.3s ease; }
+  .mobile-menu-btn:hover { transform: scale(1.1); color: var(--c1); }
   
   .mobile-nav-overlay {
     display: flex;
@@ -1608,7 +1634,7 @@ body::after {
     background: rgba(5, 3, 4, 0.95);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    z-index: 1000;
+    z-index: 999;
     flex-direction: column;
     align-items: center;
     justify-content: center;

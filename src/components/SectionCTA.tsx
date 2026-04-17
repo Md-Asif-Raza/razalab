@@ -45,7 +45,8 @@ export default function SectionCTA() {
         top: '40%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: '700px',
+        width: '80%', // FIX: percentage instead of fixed 700px to prevent mobile overflow
+        maxWidth: '700px', // FIX: cap at 700px on desktop
         height: '250px',
         background: 'radial-gradient(ellipse at center, rgba(90, 104, 130, 0.30) 0%, rgba(100, 80, 180, 0.15) 40%, transparent 70%)',
         filter: 'blur(120px)',
@@ -61,7 +62,7 @@ export default function SectionCTA() {
           }}></div>
         ))}
       </div>
-      <div className="standard-container reveal-up" style={{ textAlign: 'center', position: 'relative', zIndex: 1, maxWidth: '1180px' }}> {/* // FIX: Standardized to standard-container 1180px */}
+      <div className="standard-container reveal-up" style={{ textAlign: 'center', position: 'relative', zIndex: 1, maxWidth: '1180px', width: '100%', boxSizing: 'border-box', overflow: 'hidden' }}> {/* FIX: Standardized to standard-container 1180px with overflow-hidden */}
         <h2 className="section-title" style={{ opacity: 0.1, marginBottom: '32px' }}></h2>
         <h2 className="cta-title">{data.cta_title}<br /> <span style={{ color: 'var(--c1)' }}>{data.cta_title_accent}</span></h2>
         <p className="cta-sub">{data.cta_subtitle}</p>

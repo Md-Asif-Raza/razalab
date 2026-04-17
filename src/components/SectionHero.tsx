@@ -36,7 +36,8 @@ export default function SectionHero() {
         position: 'absolute',
         top: '20%',
         left: '30%',
-        width: '800px',
+        width: '80%', // FIX: percentage instead of fixed 800px to prevent mobile overflow
+        maxWidth: '800px', // FIX: cap at 800px on desktop
         height: '250px',
         background: 'radial-gradient(ellipse at center, rgba(90, 104, 130, 0.25) 0%, rgba(100, 80, 180, 0.12) 40%, transparent 70%)',
         filter: 'blur(120px)',
@@ -44,7 +45,7 @@ export default function SectionHero() {
         zIndex: 0,
       }} />
 
-      <div className="standard-container" style={{ position: 'relative', zIndex: 1, maxWidth: '1180px' }}>
+      <div className="standard-container" style={{ position: 'relative', zIndex: 1, maxWidth: '1180px', width: '100%', boxSizing: 'border-box', overflow: 'hidden' }}> {/* FIX: add overflow-hidden to prevent bleed */}
         <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
           <h1 className="reveal-up hero-anim-1" style={{
             fontSize: 'clamp(3rem, 8vw, 5.5rem)',
@@ -67,20 +68,22 @@ export default function SectionHero() {
           </h1>
 
           <p className="reveal-up stagger-1 hero-anim-2" style={{
-            fontSize: '1.25rem',
+            fontSize: 'clamp(0.875rem, 2vw, 1.25rem)', // FIX: responsive subtitle sizing
             lineHeight: 1.6,
             color: 'rgba(255, 255, 255, 0.6)',
             maxWidth: '800px',
             marginBottom: '48px',
             textAlign: 'left',
             padding: 0,
-            margin: '0 0 48px 0'
+            margin: '0 0 48px 0',
+            wordWrap: 'break-word', // FIX: enable word wrapping
+            overflowWrap: 'break-word' // FIX: break long words
           }}>
             {data.subtitle}
           </p>
 
-          <div className="reveal-up stagger-2 hero-anim-3" style={{ marginBottom: '64px', textAlign: 'left' }}>
-            <Link href={data.cta_link} className="btn-primary" style={{ padding: '18px 48px', fontSize: '1rem', borderRadius: '12px' }}>
+          <div className="reveal-up stagger-2 hero-anim-3" style={{ marginBottom: '64px', textAlign: 'left', width: '100%' }}> {/* FIX: add width 100% for mobile */}
+            <Link href={data.cta_link} className="btn-primary" style={{ padding: 'clamp(12px, 2vw, 18px) clamp(24px, 4vw, 48px)', fontSize: 'clamp(0.875rem, 2vw, 1rem)', borderRadius: '12px', display: 'inline-block', width: 'auto', minWidth: '150px' }}> {/* FIX: responsive sizing */}
               {data.cta_text}
             </Link>
           </div>

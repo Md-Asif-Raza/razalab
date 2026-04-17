@@ -68,7 +68,7 @@ function ClientCard({ client: rawClient, onClick }: { client: any; onClick: () =
         perspective: '1000px',
         position: 'relative',
         cursor: 'pointer',
-        flex: '0 0 280px'
+        flex: '0 0 min(280px, 75vw)' // FIX: responsive card width — shrinks on small phones
       }}
       className="card-track-item"
     >
@@ -219,9 +219,15 @@ export default function SectionCampaigns() {
     };
   }, [selectedClientRaw]);
   const marqueeItems = useMemo(() => {
-    // For a seamless -50% translation loop, we always need exactly two sets of items
+    // For a seamless -50% translation loop, we need two identical sets.
+    // When few items exist, repeat them enough to fill the viewport first.
     if (clients.length === 0) return [];
-    return [...clients, ...clients];
+    const minItems = Math.max(6, Math.ceil(8 / clients.length)) * clients.length;
+    const singleSet: Campaign[] = [];
+    while (singleSet.length < minItems) {
+      singleSet.push(...clients);
+    }
+    return [...singleSet, ...singleSet]; // duplicate for seamless -50% loop
   }, [clients]);
 
   const scroll = (direction: 'left' | 'right') => {
@@ -257,35 +263,31 @@ export default function SectionCampaigns() {
       </div>
 
       <div className="standard-container" style={{ maxWidth: '1520px' }}>
-        <PremiumWrapper className="campaigns-premium-container" style={{ paddingTop: '80px', paddingBottom: '80px', borderRadius: '48px', overflow: 'hidden' }}>
+        <PremiumWrapper className="campaigns-premium-container" style={{ paddingTop: 'clamp(40px, 8vw, 80px)', paddingBottom: 'clamp(40px, 8vw, 80px)', borderRadius: '48px', overflow: 'hidden' }}> {/* FIX: responsive padding on mobile */}
           <div style={{ position: 'relative' }}>
-            {/* FLOATING SIDE NAVIGATION - VERTICAL MIDDLE (Desktop Only) */}
-            <div style={{ position: 'absolute', top: '50%', left: '32px', zIndex: 100, transform: 'translateY(-50%)' }} className="hidden lg:block">
-              <button
-                onClick={() => scroll('left')}
-                className="nav-slide-btn"
-                style={{ background: 'rgba(15, 23, 42, 0.4)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '50%', width: '56px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', color: '#fff', cursor: 'pointer', transition: 'all 0.3s ease' }}
-                aria-label="Previous slide"
-              >‹</button>
-            </div>
-            <div style={{ position: 'absolute', top: '50%', right: '32px', zIndex: 100, transform: 'translateY(-50%)' }} className="hidden lg:block">
-              <button
-                onClick={() => scroll('right')}
-                className="nav-slide-btn"
-                style={{ background: 'rgba(15, 23, 42, 0.4)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '50%', width: '56px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', color: '#fff', cursor: 'pointer', transition: 'all 0.3s ease' }}
-                aria-label="Next slide"
-              >›</button>
-            </div>
-
+            {/* FLOATING SIDE NAVIGATION */}
+            <button
+              onClick={() => scroll('left')}
+              className="nav-slide-btn portfolio-side-btn left"
+              aria-label="Previous slide"
+              style={{ position: 'absolute', top: '50%', left: '16px', transform: 'translateY(-50%)', zIndex: 100 }}
+            >‹</button>
+            <button
+              onClick={() => scroll('right')}
+              className="nav-slide-btn portfolio-side-btn right"
+              aria-label="Next slide"
+              style={{ position: 'absolute', top: '50%', right: '16px', transform: 'translateY(-50%)', zIndex: 100 }}
+            >›</button>
             <div
               className="marquee-container"
               ref={scrollRef}
               style={{
                 overflowX: 'auto',
                 scrollbarWidth: 'none',
-                padding: '80px 0', // Reduced from 120px to tighten hover zone
+                padding: 'clamp(40px, 8vw, 80px) 0', // FIX: responsive padding on mobile
                 position: 'relative',
-                cursor: 'grab'
+                cursor: 'grab',
+                width: '100%' // FIX: ensure full width
               }}
             >
               <div
@@ -345,7 +347,7 @@ export default function SectionCampaigns() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: '40px',
+              padding: 'clamp(16px, 3vw, 40px)', // FIX: responsive modal padding for mobile
               overflowY: 'auto'
             }}
             onClick={() => setSelectedIndex(null)}
@@ -353,7 +355,7 @@ export default function SectionCampaigns() {
             {/* GLOBAL CLOSE BUTTON (TOP RIGHT) */}
             <button
               onClick={() => setSelectedIndex(null)}
-              style={{ position: 'fixed', top: '40px', right: '40px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', width: '50px', height: '50px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 10001, transition: 'all 0.3s ease' }}
+              style={{ position: 'fixed', top: 'clamp(16px, 3vw, 40px)', right: 'clamp(16px, 3vw, 40px)', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', width: '44px', height: '44px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 10001, transition: 'all 0.3s ease', fontSize: '1rem' }} // FIX: responsive close btn position + smaller size for mobile
               onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
               onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
             >✕</button>

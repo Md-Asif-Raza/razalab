@@ -54,7 +54,7 @@ export default function SectionCalculator() {
           <p className="reveal-up stagger-1" style={{ opacity: 0.4, marginTop: '24px', textAlign: 'center', fontSize: '1.25rem', maxWidth: '700px', margin: '24px auto 0' }}>Project your growth through the Raza Labs distribution engine.</p>
         </div>
 
-        <div style={{ 
+        <div className="calc-main-container" style={{ 
           background: '#0c1015', 
           border: '1px solid rgba(255,255,255,0.03)', 
           borderRadius: '32px', 
@@ -63,12 +63,8 @@ export default function SectionCalculator() {
           width: '100%',
           overflow: 'hidden'
         }}> 
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
-            gap: '40px',
-            alignItems: 'start'
-          }}>
+          <div className="dual-pane-calc"> 
+
             
             {/* LEFT COLUMN: STRATEGIC VARIABLES */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>

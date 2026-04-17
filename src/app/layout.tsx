@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Outfit, Syne, DM_Sans } from "next/font/google";
 import "./globals.css";
 import "./home.css";
@@ -15,6 +15,13 @@ const dmSans = DM_Sans({ subsets: ["latin"], weight: ["300", "400", "500"], vari
 
 import ClientLayout from "@/components/ClientLayout";
 import Script from "next/script";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://razalabs.com'),

@@ -821,6 +821,19 @@ section {
     padding: 100px 0 40px 0 !important;
   }
 
+  .dual-pane-calc {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+
+  @media (min-width: 1024px) {
+    .dual-pane-calc {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
   #hero h1 {
     font-size: clamp(2rem, 7vw, 3rem) !important;
     margin-bottom: 24px !important;

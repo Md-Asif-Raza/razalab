@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import './admin.css';
 import {
@@ -214,13 +214,16 @@ export default function AdminPage() {
     return null;
   };
 
+  const isSavingRef = useRef(false);
+
   const handleSave = async () => {
-    if (loading) return; // FIX: Prevent double-firing
+    if (isSavingRef.current || loading) return;
     const validationError = validateItem();
     if (validationError) {
       showToast(validationError, 'error');
       return;
     }
+    isSavingRef.current = true;
     setLoading(true);
     try {
       if (editType === 'campaign') await syncCampaign(editItem);
@@ -237,6 +240,7 @@ export default function AdminPage() {
     } catch (err: any) {
       showToast(err.message, 'error');
     }
+    isSavingRef.current = false;
     setLoading(false);
   };
 
@@ -584,6 +588,21 @@ export default function AdminPage() {
         {tab === 'hero' && (
           <>
             <h1 className="cms-page-title">Hero & CTA Content</h1>
+            <div className="cms-settings-card" style={{ marginBottom: '24px', background: 'rgba(0, 102, 255, 0.05)', border: '1px solid rgba(0, 102, 255, 0.2)' }}>
+              <h3 className="cms-settings-heading">🔗 Master Link Overrider</h3>
+              <p style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.6)', marginBottom: '16px' }}>Quickly change the destination URL for EVERY button on the website simultaneously.</p>
+              <div className="form-row" style={{ alignItems: 'flex-end' }}>
+                <div className="form-group" style={{ flex: 1, marginBottom: 0 }}>
+                  <label className="form-label">Global Target URL (e.g. calendly link)</label>
+                  <input className="form-input" placeholder="https://calendly.com/" onChange={e => {
+                    const val = e.target.value;
+                    setHeroData({ ...heroData, cta_link: val });
+                    setSettingsData({ ...settingsData, cta_button_link: val, video_cta_link: val, navbar_cta_link: val });
+                  }} />
+                </div>
+              </div>
+              <p style={{ fontSize: '0.8rem', color: '#00e676', marginTop: '12px', marginBottom: 0 }}>✓ Typing here instantly updates the links below. Don't forget to click "Save Hero & CTA" at the bottom!</p>
+            </div>
             <div className="cms-settings-card">
               <h3 className="cms-settings-heading">🏠 Hero Section</h3>
               <div className="form-row"><div className="form-group"><label className="form-label">Main Title</label><input className="form-input" value={heroData.title} onChange={e => setHeroData({ ...heroData, title: e.target.value })} /></div><div className="form-group"><label className="form-label">Accent Title</label><input className="form-input" value={heroData.title_accent} onChange={e => setHeroData({ ...heroData, title_accent: e.target.value })} /></div></div>

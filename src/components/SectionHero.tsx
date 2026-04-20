@@ -30,29 +30,33 @@ export default function SectionHero() {
   }, []);
 
   return (
-    <section id="hero" className="section-glow-bottom glow-transition" style={{ position: 'relative' }}>
+    <section id="hero" className="glow-transition" style={{ 
+      position: 'relative', 
+      background: 'transparent',
+      paddingBottom: '40px' 
+    }}>
       {/* ═══ AMBIENT GLOW — large elliptical behind headline ═══ */}
       <div aria-hidden="true" style={{
         position: 'absolute',
         top: '20%',
-        left: '30%',
-        width: '80%', // FIX: percentage instead of fixed 800px to prevent mobile overflow
-        maxWidth: '800px', // FIX: cap at 800px on desktop
-        height: '250px',
-        background: 'radial-gradient(ellipse at center, rgba(90, 104, 130, 0.25) 0%, rgba(100, 80, 180, 0.12) 40%, transparent 70%)',
-        filter: 'blur(120px)',
+        left: '10%',
+        width: '100%', 
+        maxWidth: '1200px',
+        height: '450px',
+        background: 'radial-gradient(ellipse at center, rgba(var(--c1-rgb), 0.15) 0%, rgba(var(--c2-rgb), 0.05) 50%, transparent 80%)',
+        filter: 'blur(150px)',
         pointerEvents: 'none',
         zIndex: 0,
       }} />
 
-      <div className="standard-container" style={{ position: 'relative', zIndex: 1, maxWidth: '1180px', width: '100%', boxSizing: 'border-box', overflow: 'hidden' }}> {/* FIX: add overflow-hidden to prevent bleed */}
+      <div className="standard-container" style={{ position: 'relative', zIndex: 1, maxWidth: '1180px', width: '100%', boxSizing: 'border-box' }}>
         <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
           <h1 className="reveal-up hero-anim-1" style={{
-            fontSize: 'clamp(3rem, 8vw, 5.5rem)',
-            fontWeight: 800,
-            lineHeight: 1.1,
-            letterSpacing: '-0.02em',
-            marginBottom: '40px',
+            fontSize: 'clamp(3.5rem, 9vw, 6.5rem)', /* Slightly larger */
+            fontWeight: 900, /* Ultra bold */
+            lineHeight: 1.05,
+            letterSpacing: '-0.04em',
+            marginBottom: '44px',
             color: '#fff',
             maxWidth: '1200px',
             textAlign: 'left',
@@ -61,42 +65,45 @@ export default function SectionHero() {
             alignItems: 'flex-start',
             gap: '0',
             padding: 0,
-            margin: 0
+            margin: 0,
+            textShadow: '0 10px 30px rgba(0,0,0,0.5)'
           }}>
             <span style={{ display: 'block' }}>{data.title}</span>
-            <span style={{ color: 'rgba(90, 104, 130, 0.6)', display: 'block' }}>{data.title_accent}</span>
+            <span style={{ color: 'rgba(255, 255, 255, 0.45)', display: 'block' }}>{data.title_accent}</span>
           </h1>
 
           <p className="reveal-up stagger-1 hero-anim-2" style={{
-            fontSize: 'clamp(0.875rem, 2vw, 1.25rem)', // FIX: responsive subtitle sizing
+            fontSize: 'clamp(1rem, 2.2vw, 1.35rem)',
             lineHeight: 1.6,
-            color: 'rgba(255, 255, 255, 0.6)',
-            maxWidth: '800px',
-            marginBottom: '48px',
+            color: 'rgba(255, 255, 255, 0.7)',
+            maxWidth: '850px',
+            marginBottom: '56px',
             textAlign: 'left',
             padding: 0,
-            margin: '0 0 48px 0',
-            wordWrap: 'break-word', // FIX: enable word wrapping
-            overflowWrap: 'break-word' // FIX: break long words
+            margin: '0 0 56px 0',
+            wordWrap: 'break-word',
+            overflowWrap: 'break-word',
+            fontWeight: 400,
+            letterSpacing: '0.01em'
           }}>
             {data.subtitle}
           </p>
 
-          <div className="reveal-up stagger-2 hero-anim-3" style={{ marginBottom: '64px', textAlign: 'left', width: '100%' }}> {/* FIX: add width 100% for mobile */}
-            <Link href={data.cta_link} className="btn-primary" style={{ padding: 'clamp(12px, 2vw, 18px) clamp(24px, 4vw, 48px)', fontSize: 'clamp(0.875rem, 2vw, 1rem)', borderRadius: '12px', display: 'inline-block', width: 'auto', minWidth: '150px' }}> {/* FIX: responsive sizing */}
+          <div className="reveal-up stagger-2 hero-anim-3" style={{ marginBottom: '72px', textAlign: 'left', width: '100%' }}>
+            <Link href={data.cta_link} className="btn-primary" style={{ padding: 'clamp(16px, 2.5vw, 22px) clamp(32px, 5vw, 64px)', fontSize: 'clamp(0.9rem, 2vw, 1.1rem)', borderRadius: '14px', display: 'inline-block', width: 'auto', minWidth: '180px', fontWeight: 600 }}>
               {data.cta_text}
             </Link>
           </div>
 
           <div className="reveal-up stagger-3 hero-anim-4" style={{
-            fontSize: '0.9rem',
-            color: 'rgba(255, 255, 255, 0.4)',
-            letterSpacing: '0.02em',
+            fontSize: '1rem',
+            color: 'rgba(255, 255, 255, 0.5)',
+            letterSpacing: '0.03em',
             display: 'flex',
             alignItems: 'baseline',
-            gap: '8px'
+            gap: '10px'
           }}>
-            <span style={{ fontWeight: 700, color: '#fff' }}>
+            <span style={{ fontWeight: 800, color: '#fff', fontSize: '1.2rem' }}>
               <CountUp endString={data.stats_text} />
             </span>
             views tracked for your favorite

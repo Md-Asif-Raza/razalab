@@ -107,20 +107,12 @@ export default function LoginPage() {
           display: flex;
           align-items: center;
           justify-content: center;
-          background: #050304;
+          background: transparent;
           position: relative;
           overflow: hidden;
         }
         .login-glow {
-          position: absolute;
-          width: 500px;
-          height: 500px;
-          background: radial-gradient(circle, rgba(90,104,130,0.1) 0%, transparent 70%);
-          filter: blur(80px);
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          pointer-events: none;
+          display: none;
         }
         .login-card {
           width: 100%;
@@ -337,7 +329,7 @@ export default function LoginPage() {
                   <label>Admin Email</label>
                   <input 
                     type="email" 
-                    placeholder="arifm9991@gmail.com" 
+                    placeholder="Enter admin email" 
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required

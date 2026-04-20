@@ -34,7 +34,7 @@ export default function SectionCalculator() {
           cta_link: res.cta_button_link || '#cta-end'
         });
       }
-    }).catch(() => {});
+    }).catch(() => { });
   }, []);
 
   const totalMonthlyPosts = clippers * posts * 4.33;
@@ -55,37 +55,37 @@ export default function SectionCalculator() {
         </div>
 
         <div className="calc-main-container" style={{ // FIX: CRITICAL responsive calc container
-          background: '#0c1015', 
-          border: '1px solid rgba(255,255,255,0.03)', 
-          borderRadius: '32px', 
+          background: 'var(--c5)',
+          border: '1px solid rgba(255,255,255,0.03)',
+          borderRadius: '32px',
           padding: 'clamp(16px, 4vw, 24px)', // FIX: responsive padding
           boxShadow: '0 32px 128px rgba(0,0,0,0.8)',
           width: '100%', // FIX: full width
           maxWidth: '100%', // FIX: prevent overflow
           overflow: 'hidden', // FIX: clip any overflow
           boxSizing: 'border-box' // FIX: padding included in width
-        }}> 
-          <div className="dual-pane-calc"> 
+        }}>
+          <div className="dual-pane-calc">
 
-            
+
             {/* LEFT COLUMN: STRATEGIC VARIABLES */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <div style={{ width: '3px', height: '24px', backgroundColor: '#3b82f6', borderRadius: '99px' }} />
                 <h3 style={{ fontSize: '1.25rem', fontWeight: 900, color: 'rgba(255,255,255,0.9)' }}>Strategic Variables</h3>
               </div>
-              
+
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                   <span style={{ fontSize: '10px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.2em', opacity: 0.3 }}>Clippers</span>
-                  <span style={{ fontSize: '1.5rem', fontWeight: 900, color: '#3b82f6' }}>{clippers.toLocaleString('en-US')}</span>
+                  <span style={{ fontSize: '1.5rem', fontWeight: 900, color: 'rgba(255,255,255,0.9)' }}>{clippers.toLocaleString('en-US')}</span>
                 </div>
-                <input 
-                  type="range" 
-                  min="1" 
-                  max="100" 
-                  value={clippers} 
-                  onChange={(e) => setClippers(parseInt(e.target.value))} 
+                <input
+                  type="range"
+                  min="1"
+                  max="100"
+                  value={clippers}
+                  onChange={(e) => setClippers(parseInt(e.target.value))}
                   style={{ width: '100%', maxWidth: '100%', cursor: 'pointer', accentColor: '#3b82f6', height: '4px', boxSizing: 'border-box' }} // FIX: full width + box-sizing
                 />
               </div>
@@ -93,14 +93,14 @@ export default function SectionCalculator() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                   <span style={{ fontSize: '10px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.2em', opacity: 0.3 }}>Weekly Posts</span>
-                  <span style={{ fontSize: '1.5rem', fontWeight: 900, color: '#3b82f6' }}>{posts.toLocaleString('en-US')}</span>
+                  <span style={{ fontSize: '1.5rem', fontWeight: 900, color: 'rgba(255,255,255,0.9)' }}>{posts.toLocaleString('en-US')}</span>
                 </div>
-                <input 
-                  type="range" 
-                  min="1" 
-                  max="10" 
-                  value={posts} 
-                  onChange={(e) => setPosts(parseInt(e.target.value))} 
+                <input
+                  type="range"
+                  min="1"
+                  max="10"
+                  value={posts}
+                  onChange={(e) => setPosts(parseInt(e.target.value))}
                   style={{ width: '100%', maxWidth: '100%', cursor: 'pointer', accentColor: '#3b82f6', height: '4px', boxSizing: 'border-box' }} // FIX: full width + box-sizing
                 />
               </div>
@@ -108,14 +108,14 @@ export default function SectionCalculator() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                   <span style={{ fontSize: '10px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.2em', opacity: 0.3 }}>Scale</span>
-                  <span style={{ fontSize: '1.5rem', fontWeight: 900, color: '#3b82f6' }}>{platforms.toLocaleString('en-US')}</span>
+                  <span style={{ fontSize: '1.5rem', fontWeight: 900, color: 'rgba(255,255,255,0.9)' }}>{platforms.toLocaleString('en-US')}</span>
                 </div>
-                <input 
-                  type="range" 
-                  min="1" 
-                  max="5" 
-                  value={platforms} 
-                  onChange={(e) => setPlatforms(parseInt(e.target.value))} 
+                <input
+                  type="range"
+                  min="1"
+                  max="5"
+                  value={platforms}
+                  onChange={(e) => setPlatforms(parseInt(e.target.value))}
                   style={{ width: '100%', maxWidth: '100%', cursor: 'pointer', accentColor: '#3b82f6', height: '4px', boxSizing: 'border-box' }} // FIX: full width + box-sizing
                 />
               </div>
@@ -123,15 +123,15 @@ export default function SectionCalculator() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                   <span style={{ fontSize: '10px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.2em', opacity: 0.3 }}>Video Views</span>
-                  <span style={{ fontSize: '1.5rem', fontWeight: 900, color: '#3b82f6' }}>{isMounted ? viewsPerPost.toLocaleString('en-US') : viewsPerPost}</span>
+                  <span style={{ fontSize: '1.5rem', fontWeight: 900, color: 'rgba(255,255,255,0.9)' }}>{isMounted ? viewsPerPost.toLocaleString('en-US') : viewsPerPost}</span>
                 </div>
-                <input 
-                  type="range" 
-                  min="1000" 
-                  max="100000" 
+                <input
+                  type="range"
+                  min="1000"
+                  max="100000"
                   step="1000"
-                  value={viewsPerPost} 
-                  onChange={(e) => setViewsPerPost(parseInt(e.target.value))} 
+                  value={viewsPerPost}
+                  onChange={(e) => setViewsPerPost(parseInt(e.target.value))}
                   style={{ width: '100%', maxWidth: '100%', cursor: 'pointer', accentColor: '#3b82f6', height: '4px', boxSizing: 'border-box' }} // FIX: full width + box-sizing
                 />
               </div>
@@ -140,11 +140,11 @@ export default function SectionCalculator() {
             {/* RIGHT COLUMN: PROJECTION RESULTS */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
               <div className="calc-result-card" style={{ // FIX: added className for mobile override
-                background: '#161b22', 
+                background: 'var(--c4)',
                 borderRadius: '24px', // FIX: smaller radius for mobile fit
                 padding: 'clamp(24px, 4vw, 40px) clamp(16px, 3vw, 32px)', // FIX: responsive padding
-                display: 'flex', 
-                flexDirection: 'column', 
+                display: 'flex',
+                flexDirection: 'column',
                 alignItems: 'center',
                 border: '1px solid rgba(255,255,255,0.05)',
                 boxShadow: 'inset 0 0 30px rgba(0,0,0,0.5)',

@@ -22,30 +22,6 @@ function parseGraphData(data: string | number[] | undefined): number[] {
 
 function ClientCard({ client: rawClient, onClick }: { client: any; onClick: () => void }) {
   const [isLoaded, setIsLoaded] = React.useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-
-  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [15, -15]), { stiffness: 300, damping: 30 });
-  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-15, 15]), { stiffness: 300, damping: 30 });
-
-  function handleMouseMove(event: React.MouseEvent) {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = event.clientX - rect.left;
-    const mouseY = event.clientY - rect.top;
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
-    x.set(xPct);
-    y.set(yPct);
-  }
-
-  function handleMouseLeave() {
-    x.set(0);
-    y.set(0);
-  }
 
   const client = useMemo(() => {
     return {
@@ -57,25 +33,18 @@ function ClientCard({ client: rawClient, onClick }: { client: any; onClick: () =
   }, [rawClient]);
 
   return (
-    <motion.div
-      ref={cardRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
+    <div
+      onClick={onClick}
       style={{
-        rotateX,
-        rotateY,
-        transformStyle: 'preserve-3d',
-        perspective: '1000px',
         position: 'relative',
         cursor: 'pointer',
-        flex: '0 0 min(280px, 75vw)' // FIX: responsive card width — shrinks on small phones
+        flex: '0 0 min(280px, 75vw)' // FIX: responsive card width
       }}
-      className="card-track-item"
+      className="card-track-item reveal-card"
     >
       <motion.div
-        whileHover={{ scale: 1.05, zIndex: 50 }}
-        transition={{ type: 'spring', damping: 20, stiffness: 300, mass: 0.8 }}
-        style={{ transformStyle: 'preserve-3d' }}
+        whileHover={{ translateY: -10, scale: 1.02 }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
       >
         {/* Card Ambient Glow */}
         <div style={{
@@ -135,7 +104,6 @@ function ClientCard({ client: rawClient, onClick }: { client: any; onClick: () =
                   position: 'absolute',
                   inset: 0,
                   transition: 'opacity 1s ease',
-                  transform: 'translateZ(-10px)' // Depth effect
                 }}
               />
             )}
@@ -152,7 +120,6 @@ function ClientCard({ client: rawClient, onClick }: { client: any; onClick: () =
               background: 'linear-gradient(to bottom, transparent 10%, rgba(5,3,4,0.3) 40%, rgba(5,3,4,0.85) 100%)',
               zIndex: 40,
               pointerEvents: 'none',
-              transform: 'translateZ(20px)' // Lift effect
             }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', pointerEvents: 'auto' }}>
                 <h3 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#fff', margin: 0, letterSpacing: '-0.5px', textTransform: 'uppercase' }}>
@@ -176,7 +143,7 @@ function ClientCard({ client: rawClient, onClick }: { client: any; onClick: () =
           </div>
         </SpotlightCard>
       </motion.div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -378,28 +345,58 @@ export default function SectionCampaigns() {
               }}
               onClick={(e) => e.stopPropagation()}
             >
-              {/* CAMPAIGN HERO IMAGE */}
-              <div className="modal-hero-img-box" style={{ width: '100%', height: '350px', position: 'relative', borderBottom: '1px solid rgba(255,255,255,0.08)', background: '#050304' }}>
+              {/* CAMPAIGN HERO IMAGE — Increased height for full photo visibility */}
+              <div className="modal-hero-img-box" style={{
+                width: '100%',
+                height: 'clamp(400px, 60vh, 600px)',
+                position: 'relative',
+                borderBottom: '1px solid rgba(255,255,255,0.08)',
+                background: '#050304',
+                overflow: 'hidden'
+              }}>
                 {selectedClient.img_url && (
                   <img
                     src={selectedClient.img_url}
                     alt={selectedClient.name}
                     onLoad={(e) => (e.currentTarget.style.opacity = '1')}
                     onError={(e) => (e.currentTarget.style.opacity = '1')}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0, transition: 'opacity 0.6s ease' }}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      objectPosition: 'top center', // FIX: ensure heads are not cut off
+                      opacity: 0,
+                      transition: 'opacity 0.8s ease'
+                    }}
                   />
                 )}
-                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 40%, #0c1015 100%)' }} />
+                {/* Refined gradient: deeper at bottom, clearer at top */}
+                <div style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: 'linear-gradient(to bottom, transparent 30%, rgba(12, 16, 21, 0.4) 60%, #0c1015 100%)'
+                }} />
 
                 {/* FLOATING HEADER ON IMAGE */}
-                <div className="modal-floating-header" style={{ position: 'absolute', bottom: '32px', left: '48px', right: '48px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                <div className="modal-floating-header" style={{
+                  position: 'absolute',
+                  bottom: '32px',
+                  left: 'clamp(20px, 5vw, 48px)',
+                  right: 'clamp(20px, 5vw, 48px)',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'flex-end',
+                  flexWrap: 'wrap',
+                  gap: '20px',
+                  zIndex: 10
+                }}>
                   <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
                       <div className="modal-index-badge" style={{ padding: '6px 16px', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '10px', fontSize: '1rem', opacity: 0.8, fontWeight: 800, background: 'rgba(0,0,0,0.3)', backdropFilter: 'blur(10px)' }}>
                         {selectedClient.index_label || '01'}
                       </div>
                       <div>
-                        <h2 className="modal-hero-title" style={{ fontSize: '3.5rem', fontWeight: 900, color: '#fff', margin: 0, letterSpacing: '-2.5px', lineHeight: 1 }}>{cleanStr(selectedClient.name)}</h2>
+                        <h2 className="modal-hero-title" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 900, color: '#fff', margin: 0, letterSpacing: '-2.5px', lineHeight: 1 }}>{cleanStr(selectedClient.name)}</h2>
                         <div style={{ marginTop: '12px', padding: '4px 14px', background: 'var(--c1)', borderRadius: '20px', fontSize: '0.75rem', color: '#000', fontWeight: 800, display: 'inline-block' }}>
                           {cleanStr(selectedClient.tag || selectedClient.category)}
                         </div>
@@ -408,11 +405,11 @@ export default function SectionCampaigns() {
                   </motion.div>
                   <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }} style={{ display: 'flex', gap: '40px' }}>
                     <div style={{ textAlign: 'right' }}>
-                      <div style={{ fontSize: '1.8rem', fontWeight: 900, color: '#fff' }}>{selectedClient.views_total || '0'}</div>
+                      <div style={{ fontSize: 'clamp(1.2rem, 3vw, 1.8rem)', fontWeight: 900, color: '#fff' }}>{selectedClient.views_total || '0'}</div>
                       <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', opacity: 0.5, letterSpacing: '2px', fontWeight: 700 }}>Total Views</div>
                     </div>
                     <div style={{ textAlign: 'right' }}>
-                      <div style={{ fontSize: '1.8rem', fontWeight: 900, color: 'var(--c1)' }}>{selectedClient.roi || '0x'}</div>
+                      <div style={{ fontSize: 'clamp(1.2rem, 3vw, 1.8rem)', fontWeight: 900, color: 'var(--c1)' }}>{selectedClient.roi || '0x'}</div>
                       <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', opacity: 0.5, letterSpacing: '2px', fontWeight: 700 }}>Projected ROI</div>
                     </div>
                   </motion.div>

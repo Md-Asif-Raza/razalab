@@ -22,8 +22,12 @@ export const SpotlightCard = ({ children, className = "", style = {}, size = "bi
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     
-    divRef.current.style.setProperty('--mouse-x', `${x}px`);
-    divRef.current.style.setProperty('--mouse-y', `${y}px`);
+    requestAnimationFrame(() => {
+      if (divRef.current) {
+        divRef.current.style.setProperty('--mouse-x', `${x}px`);
+        divRef.current.style.setProperty('--mouse-y', `${y}px`);
+      }
+    });
   };
 
   return (

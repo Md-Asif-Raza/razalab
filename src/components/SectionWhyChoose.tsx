@@ -30,6 +30,16 @@ export default function SectionWhyChoose() {
       <div className="standard-container" style={{ maxWidth: '1180px' }}>
         <PremiumWrapper className="why-premium-container" style={{ padding: 'min(5vw, 60px)' }}> {/* // FIX: Responsive padding to prevent mobile overflow */}
           <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
+              <div style={{ 
+                width: '64px', height: '64px', borderRadius: '50%', background: '#000', 
+                display: 'flex', alignItems: 'center', justifyContent: 'center', 
+                border: '1px solid rgba(255,255,255,0.1)', overflow: 'hidden',
+                boxShadow: '0 0 30px rgba(0,0,0,0.6)'
+              }}>
+                <img src="/logo.png" alt="Raza Labs Logo" style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+              </div>
+            </div>
             <h2 className="section-title" style={{ textAlign: 'center', margin: '0 auto' }}>Testimonials</h2>
           </div>
 

@@ -274,7 +274,7 @@ export default function ResetPasswordPage() {
                 <label>Admin Email</label>
                 <input 
                   type="email" 
-                  placeholder="arifm9991@gmail.com" 
+                  placeholder="Enter admin email" 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required

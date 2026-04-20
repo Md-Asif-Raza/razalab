@@ -81,9 +81,14 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <SectionHero />
-      <GlowBand intensity={0.40} height={320} blur={90} top={-160} />
-      <SectionBrands />
+      {/* ── SEAMLESS HERO-BRANDS MERGER ── */}
+      <div style={{
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        <SectionHero />
+        <SectionBrands />
+      </div>
       <SectionTransition />
       <SectionVideo />
       <GlowBand intensity={0.35} color2="70, 90, 180" />

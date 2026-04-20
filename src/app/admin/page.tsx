@@ -186,6 +186,8 @@ export default function AdminPage() {
 
   useEffect(() => { if (mounted) loadData(); }, [mounted, loadData]);
 
+  const [isSaving, setIsSaving] = useState(false);
+
   if (!mounted || !authed) return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#050304', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
       Authenticating...
@@ -213,8 +215,6 @@ export default function AdminPage() {
     }
     return null;
   };
-
-  const [isSaving, setIsSaving] = useState(false);
 
   const handleSave = async () => {
     if (isSaving || loading) return;
@@ -305,7 +305,7 @@ export default function AdminPage() {
   ];
 
   return (
-    <div id="admin" className="active" style={{ display: 'flex', minHeight: '100vh', background: '#050304' }}>
+    <div id="admin" className="active" style={{ display: 'flex', minHeight: '100vh', background: 'transparent' }}>
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
       {deleteTarget && <ConfirmModal message={`Delete "${deleteTarget.name}"? This cannot be undone.`} onConfirm={handleDelete} onCancel={() => setDeleteTarget(null)} />}
 

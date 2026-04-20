@@ -49,8 +49,8 @@ export default function SectionVideo() {
 
   return (
     <section id="video-showcase" ref={sectionRef} className="section-glow-bottom section-glow-top glow-transition">
-      <div className="glow-top-inner"></div>
-      <div className="glow-top-outer"></div>
+      <div className="glow-top-inner" style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(0, 102, 255, 0.15) 0%, transparent 70%)' }}></div>
+      <div className="glow-top-outer" style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(90, 104, 130, 0.08) 0%, transparent 70%)' }}></div>
       <div className="standard-container" style={{ maxWidth: '1180px' }}>
         <PremiumWrapper className="video-premium-container" style={{ padding: 'min(5vw, 60px)' }}> {/* // FIX: Responsive padding to prevent mobile overflow */}
           <div style={{ textAlign: 'center', marginBottom: '60px' }}>

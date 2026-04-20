@@ -232,18 +232,60 @@ export default function SectionCampaigns() {
       <div className="standard-container" style={{ maxWidth: '1520px' }}>
         <PremiumWrapper className="campaigns-premium-container" style={{ paddingTop: 'clamp(40px, 8vw, 80px)', paddingBottom: 'clamp(40px, 8vw, 80px)', borderRadius: '48px', overflow: 'hidden' }}> {/* FIX: responsive padding on mobile */}
           <div style={{ position: 'relative' }}>
-            {/* FLOATING SIDE NAVIGATION */}
+            {/* FLOATING SIDE NAVIGATION (DESKTOP) */}
             <button
               onClick={() => scroll('left')}
               className="nav-slide-btn portfolio-side-btn left"
               aria-label="Previous slide"
-              style={{ position: 'absolute', top: '50%', left: '16px', transform: 'translateY(-50%)', zIndex: 100 }}
+              style={{
+                position: 'absolute',
+                top: '50%',
+                left: '24px',
+                transform: 'translateY(-50%)',
+                zIndex: 100,
+                width: '56px',
+                height: '56px',
+                borderRadius: '50%',
+                background: 'rgba(0, 102, 255, 0.9)',
+                color: '#fff',
+                border: '1px solid rgba(255,255,255,0.2)',
+                fontSize: '1.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 0 20px rgba(0, 102, 255, 0.4)'
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)'; e.currentTarget.style.background = '#0066FF'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(-50%) scale(1)'; e.currentTarget.style.background = 'rgba(0, 102, 255, 0.9)'; }}
             >‹</button>
             <button
               onClick={() => scroll('right')}
               className="nav-slide-btn portfolio-side-btn right"
               aria-label="Next slide"
-              style={{ position: 'absolute', top: '50%', right: '16px', transform: 'translateY(-50%)', zIndex: 100 }}
+              style={{
+                position: 'absolute',
+                top: '50%',
+                right: '24px',
+                transform: 'translateY(-50%)',
+                zIndex: 100,
+                width: '56px',
+                height: '56px',
+                borderRadius: '50%',
+                background: 'rgba(0, 102, 255, 0.9)',
+                color: '#fff',
+                border: '1px solid rgba(255,255,255,0.2)',
+                fontSize: '1.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 0 20px rgba(0, 102, 255, 0.4)'
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)'; e.currentTarget.style.background = '#0066FF'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(-50%) scale(1)'; e.currentTarget.style.background = 'rgba(0, 102, 255, 0.9)'; }}
             >›</button>
             <div
               className="marquee-container"
@@ -281,16 +323,36 @@ export default function SectionCampaigns() {
 
           </div>
 
-          {/* MOBILE ONLY NAVIGATION CONTROLS (Hidden on Desktop to avoid overlap) */}
-          <div className="navigation-control-group flex justify-center gap-4 mt-8 lg:hidden">
+          {/* MOBILE ONLY NAVIGATION CONTROLS */}
+          <div className="navigation-control-group flex justify-center gap-6 mt-8 lg:hidden">
             <button
               onClick={() => scroll('left')}
               className="nav-slide-btn"
+              style={{
+                width: '64px',
+                height: '64px',
+                borderRadius: '50%',
+                background: '#0066FF',
+                color: '#fff',
+                fontSize: '1.8rem',
+                border: 'none',
+                boxShadow: '0 8px 24px rgba(0, 102, 255, 0.4)'
+              }}
               aria-label="Previous slide"
             >‹</button>
             <button
               onClick={() => scroll('right')}
               className="nav-slide-btn"
+              style={{
+                width: '64px',
+                height: '64px',
+                borderRadius: '50%',
+                background: '#0066FF',
+                color: '#fff',
+                fontSize: '1.8rem',
+                border: 'none',
+                boxShadow: '0 8px 24px rgba(0, 102, 255, 0.4)'
+              }}
               aria-label="Next slide"
             >›</button>
           </div>
@@ -308,14 +370,15 @@ export default function SectionCampaigns() {
             style={{
               position: 'fixed',
               inset: 0,
-              background: 'rgba(0,0,0,0.9)',
-              backdropFilter: 'blur(30px)',
+              background: 'rgba(5, 3, 4, 0.95)',
+              backdropFilter: 'blur(40px)',
               zIndex: 10000,
               display: 'flex',
-              alignItems: 'center',
+              alignItems: 'flex-start', // FULL-PAGE: Start from top
               justifyContent: 'center',
-              padding: 'clamp(16px, 3vw, 40px)', // FIX: responsive modal padding for mobile
-              overflowY: 'auto'
+              padding: 'clamp(0px, 0vw, 40px)', // No padding on outer for seamless feel
+              overflowY: 'auto',
+              scrollBehavior: 'smooth'
             }}
             onClick={() => setSelectedIndex(null)}
           >
@@ -333,22 +396,23 @@ export default function SectionCampaigns() {
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 30 }}
               style={{
-                maxWidth: '1000px',
+                maxWidth: '1280px', // INCREASED: wider modal content
                 width: '100%',
                 background: '#0c1015',
-                borderRadius: '40px',
+                borderRadius: '0 0 40px 40px', // No top radius for seamless full-page feel
                 border: '1px solid rgba(255,255,255,0.08)',
+                borderTop: 'none',
                 overflow: 'hidden',
                 boxShadow: '0 50px 150px rgba(0,0,0,1)',
                 position: 'relative',
-                margin: 'auto',
+                margin: '0 auto 100px auto', // Bottom margin for scrolling space
               }}
               onClick={(e) => e.stopPropagation()}
             >
               {/* CAMPAIGN HERO IMAGE — Increased height for full photo visibility */}
               <div className="modal-hero-img-box" style={{
                 width: '100%',
-                height: 'clamp(400px, 60vh, 600px)',
+                height: 'clamp(500px, 85vh, 900px)', // INCREASED: immersive full hero
                 position: 'relative',
                 borderBottom: '1px solid rgba(255,255,255,0.08)',
                 background: '#050304',

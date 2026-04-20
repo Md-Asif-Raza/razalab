@@ -26,11 +26,6 @@ export default function SectionCTA() {
   }, []);
 
   const handleCtaClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    const target = e.currentTarget;
-    target.classList.add('animate-ripple');
-    setTimeout(() => {
-      target.classList.remove('animate-ripple');
-    }, 800);
     if (data.cta_button_link.startsWith('#')) {
       e.preventDefault();
       document.querySelector(data.cta_button_link)?.scrollIntoView({ behavior: 'smooth' });

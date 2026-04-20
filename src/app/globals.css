@@ -281,43 +281,69 @@ select {
   z-index: 5;
 }
 
-/* CTA BUTTON RIPPLE (Fix 4) */
-.cta-btn {
-  background: #0066FF;
-  border: 1px solid #0099FF;
-  box-shadow: 0 0 20px rgba(0, 102, 255, 0.4);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
+/* PREMIUM BLUE BUTTON (Core System) */
+.btn-primary, .cta-btn {
+  background: linear-gradient(135deg, #0066FF 0%, #0052CC 100%);
+  color: #fff !important;
+  padding: 16px 40px;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 18px 48px;
-  font-weight: 800;
-  font-size: 1.1rem;
-  color: white;
-  text-decoration: none;
-  border-radius: 40px;
-  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0, 102, 255, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
 }
 
-.cta-btn:hover {
-  box-shadow: 0 0 40px rgba(0, 153, 255, 0.7);
-  transform: translateY(-2px);
+.btn-primary:hover, .cta-btn:hover {
+  background: linear-gradient(135deg, #0077FF 0%, #0066FF 100%);
+  box-shadow: 0 15px 45px rgba(0, 120, 255, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  transform: translateY(-4px) scale(1.02);
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
-.cta-btn::after {
+.btn-primary:active, .cta-btn:active {
+  transform: translateY(-1px) scale(0.98);
+}
+
+/* SHIMMER SWEEP ANIMATION */
+.btn-primary::before, .cta-btn::before {
   content: '';
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 5px;
-  height: 5px;
-  background: rgba(255, 255, 255, 0.5);
-  opacity: 0;
-  border-radius: 100%;
-  transform: scale(1) translate(-50%, -50%);
-  transform-origin: 50% 50%;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transform: skewX(-25deg);
+  transition: none;
+}
+
+.btn-primary:hover::before, .cta-btn:hover::before {
+  animation: shimmerSweep 0.8s ease-in-out forwards;
+}
+
+@keyframes shimmerSweep {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
+
+/* DEPRECATED RIPPLE (kept for compatibility but hidden) */
+.cta-btn::after {
+  content: '';
+  display: none;
 }
 
 @keyframes ripple {
@@ -447,28 +473,7 @@ body::before {
   pointer-events: none;
 }
 
-/* BUTTONS */
-.btn-primary {
-  background: #0066FF;
-  color: #fff;
-  padding: 14px 32px;
-  border-radius: 8px;
-  font-size: 0.88rem;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  border: 1px solid rgba(0, 102, 255, 0.4);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  display: inline-block;
-  box-shadow: 0 4px 14px rgba(0, 102, 255, 0.3);
-}
-
-.btn-primary:hover {
-  background: #0052cc;
-  box-shadow: 0 0 20px rgba(0, 153, 255, 0.5);
-  transform: translateY(-2px);
-}
+/* btn-primary now handled by the unified section above */
 
 .btn-ghost {
   background: transparent;

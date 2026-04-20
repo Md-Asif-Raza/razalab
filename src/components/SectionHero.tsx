@@ -14,6 +14,13 @@ export default function SectionHero() {
     stats_text: '527,00,000+',
   });
 
+  const handleCtaClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (data.cta_link.startsWith('#')) {
+      e.preventDefault();
+      document.querySelector(data.cta_link)?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   useEffect(() => {
     getHeroContent().then(res => {
       if (res) {
@@ -90,7 +97,11 @@ export default function SectionHero() {
           </p>
 
           <div className="reveal-up stagger-2 hero-anim-3" style={{ marginBottom: '72px', textAlign: 'left', width: '100%' }}>
-            <Link href={data.cta_link} className="btn-primary" style={{ padding: 'clamp(16px, 2.5vw, 22px) clamp(32px, 5vw, 64px)', fontSize: 'clamp(0.9rem, 2vw, 1.1rem)', borderRadius: '14px', display: 'inline-block', width: 'auto', minWidth: '180px', fontWeight: 600 }}>
+            <Link href={data.cta_link} className="btn-primary" onClick={handleCtaClick} style={{ 
+              padding: 'clamp(18px, 2.5vw, 24px) clamp(40px, 6vw, 80px)', 
+              fontSize: 'clamp(1rem, 2vw, 1.2rem)',
+              borderRadius: '16px'
+            }}>
               {data.cta_text}
             </Link>
           </div>

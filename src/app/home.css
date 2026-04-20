@@ -591,7 +591,15 @@ h4,
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.pro-testimonial-card .spotlight-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
 .pro-avatar {
@@ -599,9 +607,13 @@ h4,
   height: 90px;
   border-radius: 50%;
   border: 3px solid #fff;
-  margin-bottom: 24px;
+  margin: 0 auto 24px auto; /* Centered with bottom margin */
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
 }
 
 .pro-avatar img {

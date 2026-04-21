@@ -332,6 +332,40 @@ export default function SectionCampaigns() {
               </div>
             </div>
 
+            {/* MOBILE ONLY NAVIGATION CONTROLS */}
+            <div className="navigation-control-group flex justify-center gap-6 mt-8 lg-hidden">
+              <button
+                onClick={() => scroll('left')}
+                className="nav-slide-btn"
+                style={{
+                  width: '64px',
+                  height: '64px',
+                  borderRadius: '50%',
+                  background: '#0066FF',
+                  color: '#fff',
+                  fontSize: '1.8rem',
+                  border: 'none',
+                  boxShadow: '0 8px 24px rgba(0, 102, 255, 0.4)'
+                }}
+                aria-label="Previous slide"
+              >‹</button>
+              <button
+                onClick={() => scroll('right')}
+                className="nav-slide-btn"
+                style={{
+                  width: '64px',
+                  height: '64px',
+                  borderRadius: '50%',
+                  background: '#0066FF',
+                  color: '#fff',
+                  fontSize: '1.8rem',
+                  border: 'none',
+                  boxShadow: '0 8px 24px rgba(0, 102, 255, 0.4)'
+                }}
+                aria-label="Next slide"
+              >›</button>
+            </div>
+
           </div>
         </PremiumWrapper>
       </div>
@@ -362,9 +396,38 @@ export default function SectionCampaigns() {
             {/* GLOBAL CLOSE BUTTON (TOP RIGHT) */}
             <button
               onClick={() => setSelectedIndex(null)}
-              style={{ position: 'fixed', top: 'clamp(16px, 3vw, 40px)', right: 'clamp(16px, 3vw, 40px)', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', width: '44px', height: '44px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 10001, transition: 'all 0.3s ease', fontSize: '1rem' }} // FIX: responsive close btn position + smaller size for mobile
-              onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
-              onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
+              style={{ 
+                position: 'fixed', 
+                top: 'clamp(20px, 4vw, 40px)', 
+                right: 'clamp(20px, 4vw, 40px)', 
+                background: 'rgba(5, 3, 4, 0.6)', 
+                backdropFilter: 'blur(20px)',
+                border: '1px solid rgba(255,255,255,0.2)', 
+                color: '#fff', 
+                width: 'clamp(48px, 10vw, 64px)', 
+                height: 'clamp(48px, 10vw, 64px)', 
+                borderRadius: '50%', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                cursor: 'pointer', 
+                zIndex: 10001, 
+                transition: 'all 0.3s ease', 
+                fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
+                boxShadow: '0 0 30px rgba(0,0,0,0.5), 0 0 15px rgba(255,255,255,0.1)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'var(--c1)';
+                e.currentTarget.style.color = '#000';
+                e.currentTarget.style.borderColor = 'var(--c1)';
+                e.currentTarget.style.boxShadow = '0 0 30px var(--c1)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'rgba(5, 3, 4, 0.6)';
+                e.currentTarget.style.color = '#fff';
+                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)';
+                e.currentTarget.style.boxShadow = '0 0 30px rgba(0,0,0,0.5), 0 0 15px rgba(255,255,255,0.1)';
+              }}
             >✕</button>
 
             <motion.div

@@ -607,7 +607,8 @@ h4,
   height: 90px;
   border-radius: 50%;
   border: 3px solid #fff;
-  margin: 0 auto 24px auto; /* Centered with bottom margin */
+  margin: 0 auto 24px auto;
+  /* Centered with bottom margin */
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   display: flex;
@@ -1659,12 +1660,12 @@ h4,
 
 /* ── MARQUEE ANIMATIONS ── */
 .brands-track-forward {
-  animation: brands-scroll-forward 32s linear infinite;
+  animation: brands-scroll-forward 120s linear infinite;
   will-change: transform;
 }
 
 .brands-track-reverse {
-  animation: brands-scroll-reverse 32s linear infinite;
+  animation: brands-scroll-reverse 120s linear infinite;
   will-change: transform;
 }
 
@@ -1690,14 +1691,15 @@ h4,
 
 /* ── MOBILE RESPONSIVE ── */
 @media (max-width: 768px) {
-  .brands-track-forward {
-    animation-duration: 45s;
-    gap: 48px !important;
-  }
-
+  .brands-track-forward,
   .brands-track-reverse {
-    animation-duration: 45s;
-    gap: 48px !important;
+    animation-duration: 400s !important;
+    animation-timing-function: linear !important;
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    gap: 80px !important;
   }
 }
 

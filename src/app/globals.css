@@ -282,7 +282,8 @@ select {
 }
 
 /* PREMIUM BLUE BUTTON (Core System) */
-.btn-primary, .cta-btn {
+.btn-primary,
+.cta-btn {
   background: linear-gradient(135deg, #0066FF 0%, #0052CC 100%);
   color: #fff !important;
   padding: 16px 40px;
@@ -307,7 +308,8 @@ select {
   isolation: isolate;
 }
 
-.btn-primary:hover, .cta-btn:hover {
+.btn-primary:hover,
+.cta-btn:hover {
   background: linear-gradient(135deg, #0077FF 0%, #0066FF 100%);
   /* INTENSE LIGHTING ON HOVER */
   box-shadow: 0 0 25px rgba(0, 120, 255, 0.4), 0 15px 45px rgba(0, 120, 255, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.3);
@@ -315,35 +317,41 @@ select {
   border-color: rgba(255, 255, 255, 0.4);
 }
 
-.btn-primary:active, .cta-btn:active {
+.btn-primary:active,
+.cta-btn:active {
   transform: translateY(-1px) scale(0.98);
 }
 
 /* SHIMMER SWEEP ANIMATION */
-.btn-primary::before, .cta-btn::before {
+.btn-primary::before,
+.cta-btn::before {
   content: '';
   position: absolute;
   top: 0;
   left: -100%;
   width: 50%;
   height: 100%;
-  background: linear-gradient(
-    to right,
-    transparent,
-    rgba(255, 255, 255, 0.3),
-    transparent
-  );
+  background: linear-gradient(to right,
+      transparent,
+      rgba(255, 255, 255, 0.3),
+      transparent);
   transform: skewX(-25deg);
   transition: none;
 }
 
-.btn-primary:hover::before, .cta-btn:hover::before {
+.btn-primary:hover::before,
+.cta-btn:hover::before {
   animation: shimmerSweep 0.8s ease-in-out forwards;
 }
 
 @keyframes shimmerSweep {
-  0% { left: -100%; }
-  100% { left: 200%; }
+  0% {
+    left: -100%;
+  }
+
+  100% {
+    left: 200%;
+  }
 }
 
 /* DEPRECATED RIPPLE (kept for compatibility but hidden) */
@@ -1410,16 +1418,38 @@ input[type="range"]:hover::-webkit-slider-thumb {
 }
 
 /* ── RESPONSIVE UTILITIES ── */
-.hidden { display: none !important; }
-.flex { display: flex !important; }
-.mobile-only-flex { display: flex !important; }
-.lg-hidden { display: flex !important; }
-.lg-flex { display: none !important; }
+.hidden {
+  display: none !important;
+}
+
+.flex {
+  display: flex !important;
+}
+
+.mobile-only-flex {
+  display: flex !important;
+}
+
+.lg-hidden {
+  display: flex !important;
+}
+
+.lg-flex {
+  display: none !important;
+}
 
 @media (min-width: 1024px) {
-  .lg-hidden { display: none !important; }
-  .lg-flex { display: flex !important; }
-  .mobile-only-flex { display: none !important; }
+  .lg-hidden {
+    display: none !important;
+  }
+
+  .lg-flex {
+    display: flex !important;
+  }
+
+  .mobile-only-flex {
+    display: none !important;
+  }
 }
 
 /* ===== NAVIGATION SLIDE BUTTONS (Premium) ===== */
@@ -1436,11 +1466,15 @@ input[type="range"]:hover::-webkit-slider-thumb {
 /* ── MARQUEE RESPONSIVE SPEED ── */
 .marquee-track-animation {
   animation: marquee 120s linear infinite;
+  will-change: transform;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
   .marquee-track-animation {
-    animation-duration: 800s;
+    animation-duration: 600s !important;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
 }
 

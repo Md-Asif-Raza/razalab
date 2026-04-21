@@ -22,7 +22,15 @@ export default function CursorWrapper() {
     }
 
     const handleMouseMove = (e: MouseEvent) => {
-      if (!isVisible) setIsVisible(true);
+      const target = e.target as HTMLElement;
+      const isHidden = target?.closest('[data-cursor="none"]');
+      
+      if (isHidden) {
+        if (isVisible) setIsVisible(false);
+      } else {
+        if (!isVisible) setIsVisible(true);
+      }
+      
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
     };

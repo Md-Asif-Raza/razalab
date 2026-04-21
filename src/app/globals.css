@@ -297,14 +297,20 @@ select {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10px 30px rgba(0, 102, 255, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  /* UPDATED LIGHTING: Consistent vibrant glow */
+  box-shadow: 0 0 15px rgba(0, 102, 255, 0.15), 0 10px 30px rgba(0, 102, 255, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.2);
   position: relative;
+  /* FIX: prevent shimmer and spotlight leakage outside rounded corners */
   overflow: hidden;
+  mask-image: -webkit-radial-gradient(white, black);
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  isolation: isolate;
 }
 
 .btn-primary:hover, .cta-btn:hover {
   background: linear-gradient(135deg, #0077FF 0%, #0066FF 100%);
-  box-shadow: 0 15px 45px rgba(0, 120, 255, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  /* INTENSE LIGHTING ON HOVER */
+  box-shadow: 0 0 25px rgba(0, 120, 255, 0.4), 0 15px 45px rgba(0, 120, 255, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.3);
   transform: translateY(-4px) scale(1.02);
   border-color: rgba(255, 255, 255, 0.4);
 }
@@ -669,6 +675,10 @@ section::-webkit-scrollbar {
 .spotlight-card {
   position: relative;
   overflow: hidden;
+  /* FIX: force clipping on rounded corners to prevent spotlight leakage */
+  mask-image: -webkit-radial-gradient(white, black);
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  isolation: isolate;
   border-radius: 28px;
   background: rgba(12, 16, 21, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.04);
@@ -1401,19 +1411,21 @@ input[type="range"]:hover::-webkit-slider-thumb {
 
 /* ===== NAVIGATION SLIDE BUTTONS (Premium) ===== */
 .nav-slide-btn {
-  background: rgba(15, 23, 42, 0.4);
+  background: rgba(0, 102, 255, 0.1);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 102, 255, 0.2);
+  /* UNIFIED LIGHTING: Consistent glow for nav buttons */
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4), 0 0 10px rgba(0, 102, 255, 0.2);
   transform: scale(1);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
 }
 
 .nav-slide-btn:hover {
-  background: rgba(59, 130, 246, 0.2);
-  border-color: rgba(59, 130, 246, 0.4);
+  background: rgba(0, 102, 255, 0.4);
+  border-color: rgba(0, 102, 255, 0.8);
   transform: scale(1.15) translateY(-2px);
-  box-shadow: 0 15px 40px rgba(59, 130, 246, 0.3);
+  /* INTENSE NAV LIGHTING */
+  box-shadow: 0 15px 40px rgba(0, 102, 255, 0.5), 0 0 20px rgba(0, 102, 255, 0.4);
 }
 
 .nav-slide-btn:active {

@@ -22,7 +22,7 @@ function parseGraphData(data: string | number[] | undefined): number[] {
 
 function ClientCard({ client: rawClient, onClick }: { client: any; onClick: () => void }) {
   const [isLoaded, setIsLoaded] = React.useState(false);
-  
+
   // 3D Tilt Logic
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -31,22 +31,8 @@ function ClientCard({ client: rawClient, onClick }: { client: any; onClick: () =
   const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["17.5deg", "-17.5deg"]);
   const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-17.5deg", "17.5deg"]);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
-    x.set(xPct);
-    y.set(yPct);
-  };
-
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
+  const handleMouseMove = () => {};
+  const handleMouseLeave = () => {};
 
   const client = useMemo(() => {
     return {
@@ -58,125 +44,120 @@ function ClientCard({ client: rawClient, onClick }: { client: any; onClick: () =
   }, [rawClient]);
 
   return (
-    <div
+    <motion.div
       onClick={onClick}
       style={{
         position: 'relative',
         cursor: 'pointer',
         flex: '0 0 min(280px, 75vw)', // FIX: responsive card width
-        perspective: '1000px'
+        perspective: '1000px',
+        zIndex: 1
       }}
       className="card-track-item reveal-card"
+      whileHover={{ scale: 1.2, zIndex: 100 }}
+      transition={{ 
+        type: 'spring', 
+        stiffness: 260, 
+        damping: 20 
+      }}
     >
-      <motion.div
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
+      {/* Card Ambient Glow */}
+      <div style={{
+        position: 'absolute',
+        bottom: '-25px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        width: '75%',
+        height: '100px',
+        background: 'radial-gradient(ellipse at center, rgba(90, 104, 130, 0.50) 0%, rgba(70, 80, 150, 0.25) 40%, transparent 70%)',
+        filter: 'blur(25px)',
+        pointerEvents: 'none',
+        zIndex: -1,
+        opacity: 0.8,
+        transition: 'opacity 0.4s ease',
+      }} />
+      <SpotlightCard
+        size="big"
+        className="reveal-card shimmer-card"
         style={{
-          rotateX,
-          rotateY,
-          transformStyle: "preserve-3d",
+          height: '420px',
+          width: '100%',
+          overflow: 'hidden',
+          borderRadius: '32px',
+          position: 'relative'
         }}
-        whileHover={{ scale: 1.02 }}
-        transition={{ duration: 0.3, ease: 'easeOut' }}
       >
-        {/* Card Ambient Glow */}
-        <div style={{
-          position: 'absolute',
-          bottom: '-25px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '75%',
-          height: '100px',
-          background: 'radial-gradient(ellipse at center, rgba(90, 104, 130, 0.50) 0%, rgba(70, 80, 150, 0.25) 40%, transparent 70%)',
-          filter: 'blur(25px)',
-          pointerEvents: 'none',
-          zIndex: -1,
-          opacity: 0.8,
-          transition: 'opacity 0.4s ease',
-        }} />
-        <SpotlightCard
-          size="big"
-          className="reveal-card shimmer-card"
-          style={{
-            height: '420px',
-            width: '100%',
-            overflow: 'hidden',
-            borderRadius: '32px',
-            position: 'relative'
-          }}
-        >
-          <div onClick={onClick} style={{ height: '100%', position: 'relative' }}>
-            {/* SHIMMER EFFECT OVERLAY */}
-            <div className="card-shimmer-sweep" />
+        <div onClick={onClick} style={{ height: '100%', position: 'relative' }}>
+          {/* SHIMMER EFFECT OVERLAY */}
+          <div className="card-shimmer-sweep" />
 
-            {/* SKELETON LOADER */}
-            {!isLoaded && (
-              <div className="skeleton-pulse" style={{
-                position: 'absolute',
-                inset: 0,
-                background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent)',
-                backgroundSize: '200% 100%',
-                zIndex: 5
-              }} />
-            )}
-
-            {/* BACKGROUND IMAGE - Cinematic Focus */}
-            {client.img_url && (
-              <img
-                src={client.img_url}
-                loading="lazy"
-                alt={client.name}
-                onLoad={() => setIsLoaded(true)}
-                onError={() => setIsLoaded(true)}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  opacity: isLoaded ? 0.85 : 0,
-                  filter: 'brightness(0.85)',
-                  position: 'absolute',
-                  inset: 0,
-                  transition: 'opacity 1s ease',
-                }}
-              />
-            )}
-
-            {/* CONTENT (Always visible overlay) */}
-            <div style={{
+          {/* SKELETON LOADER */}
+          {!isLoaded && (
+            <div className="skeleton-pulse" style={{
               position: 'absolute',
               inset: 0,
-              padding: '24px 20px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'flex-end',
-              gap: '12px',
-              background: 'linear-gradient(to bottom, transparent 10%, rgba(5,3,4,0.3) 40%, rgba(5,3,4,0.85) 100%)',
-              zIndex: 40,
-              pointerEvents: 'none',
-            }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', pointerEvents: 'auto' }}>
-                <h3 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#fff', margin: 0, letterSpacing: '-0.5px', textTransform: 'uppercase' }}>
-                  {cleanStr(client.name)}
-                </h3>
-                <div style={{ display: 'flex', gap: '8px' }}>
-                  <div style={{ padding: '4px 10px', background: 'rgba(0, 230, 118, 0.1)', border: '1px solid rgba(0, 230, 118, 0.2)', borderRadius: '10px', color: '#00e676', fontWeight: 800, fontSize: '0.8rem' }}>{cleanStr(client.result)}</div>
-                  <div style={{ padding: '4px 10px', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '10px', color: '#fff', fontWeight: 600, fontSize: '0.8rem' }}>{cleanStr(client.price)}</div>
-                </div>
+              background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent)',
+              backgroundSize: '200% 100%',
+              zIndex: 5
+            }} />
+          )}
 
-                {/* DESCRIPTION TEXT - SLIDES DOWN ON HOVER */}
-                <div className="hover-desc-wrapper" style={{ transform: "translateZ(50px)" }}>
-                  <div className="hover-desc-inner">
-                    <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.9rem', fontWeight: 500, lineHeight: '1.6', margin: 0, paddingTop: '10px' }}>
-                      {cleanStr(client.description)}
-                    </p>
-                  </div>
+          {/* BACKGROUND IMAGE - Cinematic Focus */}
+          {client.img_url && (
+            <img
+              src={client.img_url}
+              loading="lazy"
+              alt={client.name}
+              onLoad={() => setIsLoaded(true)}
+              onError={() => setIsLoaded(true)}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                opacity: isLoaded ? 0.85 : 0,
+                filter: 'brightness(0.85)',
+                position: 'absolute',
+                inset: 0,
+                transition: 'opacity 1s ease',
+              }}
+            />
+          )}
+
+          {/* CONTENT (Always visible overlay) */}
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            padding: '24px 20px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-end',
+            gap: '12px',
+            background: 'linear-gradient(to bottom, transparent 10%, rgba(5,3,4,0.3) 40%, rgba(5,3,4,0.85) 100%)',
+            zIndex: 40,
+            pointerEvents: 'none',
+          }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', pointerEvents: 'auto' }}>
+              <h3 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#fff', margin: 0, letterSpacing: '-0.5px', textTransform: 'uppercase' }}>
+                {cleanStr(client.name)}
+              </h3>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <div style={{ padding: '4px 10px', background: 'rgba(0, 230, 118, 0.1)', border: '1px solid rgba(0, 230, 118, 0.2)', borderRadius: '10px', color: '#00e676', fontWeight: 800, fontSize: '0.8rem' }}>{cleanStr(client.result)}</div>
+                <div style={{ padding: '4px 10px', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '10px', color: '#fff', fontWeight: 600, fontSize: '0.8rem' }}>{cleanStr(client.price)}</div>
+              </div>
+
+              {/* DESCRIPTION TEXT - SLIDES DOWN ON HOVER */}
+              <div className="hover-desc-wrapper" style={{ transform: "translateZ(50px)" }}>
+                <div className="hover-desc-inner">
+                  <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.9rem', fontWeight: 500, lineHeight: '1.6', margin: 0, paddingTop: '10px' }}>
+                    {cleanStr(client.description)}
+                  </p>
                 </div>
               </div>
             </div>
           </div>
-        </SpotlightCard>
-      </motion.div>
-    </div>
+        </div>
+      </SpotlightCard>
+    </motion.div>
   );
 }
 
@@ -294,19 +275,11 @@ export default function SectionCampaigns() {
                 width: '56px',
                 height: '56px',
                 borderRadius: '50%',
-                background: 'rgba(0, 102, 255, 0.9)',
-                color: '#fff',
-                border: '1px solid rgba(255,255,255,0.2)',
-                fontSize: '1.5rem',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                boxShadow: '0 0 20px rgba(0, 102, 255, 0.4)'
+                cursor: 'pointer'
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)'; e.currentTarget.style.background = '#0066FF'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(-50%) scale(1)'; e.currentTarget.style.background = 'rgba(0, 102, 255, 0.9)'; }}
             >‹</button>
             <button
               onClick={() => scroll('right')}
@@ -321,19 +294,11 @@ export default function SectionCampaigns() {
                 width: '56px',
                 height: '56px',
                 borderRadius: '50%',
-                background: 'rgba(0, 102, 255, 0.9)',
-                color: '#fff',
-                border: '1px solid rgba(255,255,255,0.2)',
-                fontSize: '1.5rem',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                boxShadow: '0 0 20px rgba(0, 102, 255, 0.4)'
+                cursor: 'pointer'
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)'; e.currentTarget.style.background = '#0066FF'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(-50%) scale(1)'; e.currentTarget.style.background = 'rgba(0, 102, 255, 0.9)'; }}
             >›</button>
             <div
               className="marquee-container"
@@ -355,7 +320,7 @@ export default function SectionCampaigns() {
                   display: 'flex',
                   gap: '24px',
                   width: 'fit-content',
-                  animation: 'marquee 80s linear infinite',
+                  animation: 'marquee 150s linear infinite',
                   animationPlayState: isPaused ? 'paused' : 'running',
                 }}
               >
@@ -634,3 +599,4 @@ export default function SectionCampaigns() {
     </section>
   );
 }
+

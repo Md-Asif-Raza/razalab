@@ -26,7 +26,7 @@ export default function SectionWhyChoose() {
   const prev = () => setIndex((index - 1 + (maxIdx + 1)) % (maxIdx + 1));
 
   return (
-    <section id="testimonials" style={{ overflow: 'hidden' }}>
+    <section id="testimonials" data-cursor="none" style={{ overflow: 'hidden' }}>
       <div className="standard-container" style={{ maxWidth: '1180px' }}>
         <PremiumWrapper className="why-premium-container" style={{ padding: 'min(5vw, 60px)' }}> {/* // FIX: Responsive padding to prevent mobile overflow */}
           <div style={{ textAlign: 'center', marginBottom: '60px' }}>
@@ -67,9 +67,9 @@ export default function SectionWhyChoose() {
             </div>
           </div>
 
-          <div className="navigation-control-group" style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginTop: 'clamp(30px, 5vw, 50px)' }}>
-            <button onClick={prev} className="nav-slide-btn" aria-label="Previous slide">‹</button>
-            <button onClick={next} className="nav-slide-btn" aria-label="Next slide">›</button>
+          <div className="navigation-control-group" style={{ display: 'flex', justifyContent: 'center', gap: '16px', marginTop: 'clamp(30px, 5vw, 50px)' }}>
+            <button onClick={prev} className="nav-slide-btn" style={{ width: '56px', height: '56px', borderRadius: '50%', fontSize: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }} aria-label="Previous slide">‹</button>
+            <button onClick={next} className="nav-slide-btn" style={{ width: '56px', height: '56px', borderRadius: '50%', fontSize: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }} aria-label="Next slide">›</button>
           </div>
         </PremiumWrapper>
       </div>

@@ -99,7 +99,6 @@ export default function Home() {
       <SectionWhyChoose />
       <GlowBand intensity={0.25} />
       <SectionFAQ />
-      <SectionTransition />
       <SectionCTA />
       <Footer />
     </>

@@ -22,6 +22,31 @@ function parseGraphData(data: string | number[] | undefined): number[] {
 
 function ClientCard({ client: rawClient, onClick }: { client: any; onClick: () => void }) {
   const [isLoaded, setIsLoaded] = React.useState(false);
+  
+  // 3D Tilt Logic
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const mouseXSpring = useSpring(x);
+  const mouseYSpring = useSpring(y);
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["17.5deg", "-17.5deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-17.5deg", "17.5deg"]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const xPct = mouseX / width - 0.5;
+    const yPct = mouseY / height - 0.5;
+    x.set(xPct);
+    y.set(yPct);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
 
   const client = useMemo(() => {
     return {
@@ -38,12 +63,20 @@ function ClientCard({ client: rawClient, onClick }: { client: any; onClick: () =
       style={{
         position: 'relative',
         cursor: 'pointer',
-        flex: '0 0 min(280px, 75vw)' // FIX: responsive card width
+        flex: '0 0 min(280px, 75vw)', // FIX: responsive card width
+        perspective: '1000px'
       }}
       className="card-track-item reveal-card"
     >
       <motion.div
-        whileHover={{ translateY: -10, scale: 1.02 }}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        style={{
+          rotateX,
+          rotateY,
+          transformStyle: "preserve-3d",
+        }}
+        whileHover={{ scale: 1.02 }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
       >
         {/* Card Ambient Glow */}
@@ -131,7 +164,7 @@ function ClientCard({ client: rawClient, onClick }: { client: any; onClick: () =
                 </div>
 
                 {/* DESCRIPTION TEXT - SLIDES DOWN ON HOVER */}
-                <div className="hover-desc-wrapper">
+                <div className="hover-desc-wrapper" style={{ transform: "translateZ(50px)" }}>
                   <div className="hover-desc-inner">
                     <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.9rem', fontWeight: 500, lineHeight: '1.6', margin: 0, paddingTop: '10px' }}>
                       {cleanStr(client.description)}
@@ -208,6 +241,21 @@ export default function SectionCampaigns() {
     }
   };
 
+  // Mobile Auto-Scroll Logic
+  useEffect(() => {
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile) {
+      // Small delay to ensure layout is ready
+      const timer = setTimeout(() => {
+        const element = document.getElementById('campaigns');
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 800);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
   return (
     <section id="campaigns" style={{ position: 'relative', overflow: 'hidden' }}>
       <div className="standard-container" style={{ marginBottom: '60px' }}>
@@ -235,7 +283,7 @@ export default function SectionCampaigns() {
             {/* FLOATING SIDE NAVIGATION (DESKTOP) */}
             <button
               onClick={() => scroll('left')}
-              className="nav-slide-btn portfolio-side-btn left"
+              className="nav-slide-btn portfolio-side-btn left hidden lg:flex"
               aria-label="Previous slide"
               style={{
                 position: 'absolute',
@@ -262,7 +310,7 @@ export default function SectionCampaigns() {
             >‹</button>
             <button
               onClick={() => scroll('right')}
-              className="nav-slide-btn portfolio-side-btn right"
+              className="nav-slide-btn portfolio-side-btn right hidden lg:flex"
               aria-label="Next slide"
               style={{
                 position: 'absolute',

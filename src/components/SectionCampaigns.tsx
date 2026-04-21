@@ -264,7 +264,7 @@ export default function SectionCampaigns() {
             {/* FLOATING SIDE NAVIGATION (DESKTOP) */}
             <button
               onClick={() => scroll('left')}
-              className="nav-slide-btn portfolio-side-btn left hidden lg:flex"
+              className="nav-slide-btn portfolio-side-btn left hidden lg-flex"
               aria-label="Previous slide"
               style={{
                 position: 'absolute',
@@ -283,7 +283,7 @@ export default function SectionCampaigns() {
             >‹</button>
             <button
               onClick={() => scroll('right')}
-              className="nav-slide-btn portfolio-side-btn right hidden lg:flex"
+              className="nav-slide-btn portfolio-side-btn right hidden lg-flex"
               aria-label="Next slide"
               style={{
                 position: 'absolute',
@@ -313,15 +313,13 @@ export default function SectionCampaigns() {
               }}
             >
               <div
-                className="marquee-track"
+                className={`marquee-track marquee-track-animation ${isPaused ? 'is-paused' : ''}`}
                 onMouseEnter={() => setIsPaused(true)}
                 onMouseLeave={() => setIsPaused(false)}
                 style={{
                   display: 'flex',
                   gap: '24px',
-                  width: 'fit-content',
-                  animation: 'marquee 150s linear infinite',
-                  animationPlayState: isPaused ? 'paused' : 'running',
+                  width: 'fit-content'
                 }}
               >
                 {marqueeItems.map((client: Campaign, idx: number) => (
@@ -334,40 +332,6 @@ export default function SectionCampaigns() {
               </div>
             </div>
 
-          </div>
-
-          {/* MOBILE ONLY NAVIGATION CONTROLS */}
-          <div className="navigation-control-group flex justify-center gap-6 mt-8 lg:hidden">
-            <button
-              onClick={() => scroll('left')}
-              className="nav-slide-btn"
-              style={{
-                width: '64px',
-                height: '64px',
-                borderRadius: '50%',
-                background: '#0066FF',
-                color: '#fff',
-                fontSize: '1.8rem',
-                border: 'none',
-                boxShadow: '0 8px 24px rgba(0, 102, 255, 0.4)'
-              }}
-              aria-label="Previous slide"
-            >‹</button>
-            <button
-              onClick={() => scroll('right')}
-              className="nav-slide-btn"
-              style={{
-                width: '64px',
-                height: '64px',
-                borderRadius: '50%',
-                background: '#0066FF',
-                color: '#fff',
-                fontSize: '1.8rem',
-                border: 'none',
-                boxShadow: '0 8px 24px rgba(0, 102, 255, 0.4)'
-              }}
-              aria-label="Next slide"
-            >›</button>
           </div>
         </PremiumWrapper>
       </div>

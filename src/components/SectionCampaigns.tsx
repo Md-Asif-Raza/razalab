@@ -222,20 +222,7 @@ export default function SectionCampaigns() {
     }
   };
 
-  // Mobile Auto-Scroll Logic
-  useEffect(() => {
-    const isMobile = window.innerWidth <= 768;
-    if (isMobile) {
-      // Small delay to ensure layout is ready
-      const timer = setTimeout(() => {
-        const element = document.getElementById('campaigns');
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }, 800);
-      return () => clearTimeout(timer);
-    }
-  }, []);
+
 
   return (
     <section id="campaigns" style={{ position: 'relative', overflow: 'hidden' }}>

@@ -26,14 +26,14 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL('https://razalabs.com'),
   title: {
-    default: "Raza Labs — #1 Organic Marketing Network",
+    default: "Raza Labs — Content Distribution Network",
     template: "%s | Raza Labs",
   },
   description: "We orchestrate mass content distribution systems that scale brands natively with organic clippers. Explode your reach across all algorithmic platforms.",
-  keywords: ["organic marketing", "short form content", "TikTok agency", "content distribution", "creator growth", "views scaling"],
+  keywords: ["organic marketing", "short form content", "TikTok agency", "content distribution", "creator growth", "views scaling", "organic marketing agency", "content distribution agency", "video clipping service", "viral clipping agency", "short form content agency", "organic growth agency", "content repurposing agency", "video clip distribution", "clipping service for brands", "organic content marketing", "video clipping agency", "viral clips service", "short form video agency", "content clipping network", "mass content distribution", "clip distribution system", "long form to short form content", "repurpose long form video", "video content repurposing service", "TikTok clipping service", "YouTube Shorts clipping agency", "Instagram Reels clipping service", "multi-platform video distribution", "clipper network for brands", "viral short form content service", "organic marketing for AI startups", "content marketing for SaaS brands", "video marketing for AI tools", "grow AI brand organically", "SaaS brand awareness without paid ads", "organic growth for tech brands", "short form content for SaaS", "content distribution for AI companies", "viral marketing for SaaS", "social media growth for AI startups", "how to grow brand organically 2025", "how to get viral clips for my brand", "hire video clippers for brand", "best organic marketing agency for brands", "outsource video clipping", "done for you content distribution", "organic reach growth service", "alternative to paid ads for brand growth", "no ad spend brand growth strategy", "content marketing vs paid advertising", "UGC marketing agency", "clipping service for content creators", "grow YouTube channel with clips", "podcast clipping agency", "repurpose podcast into clips", "content agency for personal brands", "YouTube to TikTok repurposing service", "grow social media organically", "get 1 million views organically", "scale brand to millions of views", "organic impressions at scale", "brand awareness through organic content", "high ROI content marketing", "organic content that converts", "organic marketing agency for startups", "content distribution service USA", "video clipping agency for e-commerce", "viral marketing for mobile apps", "content agency for funded startups", "TikTok growth agency for brands", "best clipping agency for SaaS 2025", "organic social media agency for tech companies", "Raza Labs review", "Raza Labs organic marketing", "Raza Labs clipping agency", "number one organic marketing network", "527 million views marketing agency" ],
   authors: [{ name: "Raza Labs" }],
   openGraph: {
-    title: "Raza Labs — #1 Organic Marketing Network",
+    title: "Raza Labs — Content Distribution Network",
     description: "Build a mass content distribution system to scale your brand with an army of clippers.",
     url: "https://razalabs.com",
     siteName: "Raza Labs",
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Raza Labs — #1 Organic Marketing Network",
+    title: "Raza Labs — Content Distribution Network",
     description: "Scale your brand to new heights seamlessly.",
     images: ["/logo.png"],
   },

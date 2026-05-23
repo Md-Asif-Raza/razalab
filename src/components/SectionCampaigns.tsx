@@ -140,13 +140,25 @@ function ClientCard({ client: rawClient, index }: { client: Campaign; index: num
    SECTION CAMPAIGNS — Main export
    ═══════════════════════════════════════════════════════════════ */
 export default function SectionCampaigns() {
-  const [clients, setClients] = useState(FALLBACK_CLIENTS);
+  const [clients, setClients] = useState<Campaign[] | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getCampaigns()
-      .then(data => { if (data && data.length > 0) setClients(data); })
-      .catch(() => { /* fallback data already set */ });
+      .then(data => {
+        if (data && data.length > 0) {
+          setClients(data);
+        } else {
+          setClients(FALLBACK_CLIENTS);
+        }
+      })
+      .catch(() => {
+        setClients(FALLBACK_CLIENTS);
+      })
+      .finally(() => setLoading(false));
   }, []);
+
+  if (loading || !clients) return null;
 
   return (
     <section id="campaigns" className="clients-section">

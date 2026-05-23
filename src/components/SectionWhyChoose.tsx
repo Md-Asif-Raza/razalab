@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 import { getTestimonials } from '@/lib/actions';
 import { PremiumWrapper, SpotlightCard } from './ui/PremiumUI';
 
@@ -54,8 +55,16 @@ export default function SectionWhyChoose() {
                     initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.5 }}
                   >
                     <SpotlightCard size="small" className="pro-testimonial-card" style={{ padding: '32px', height: '100%' }}>
-                      <div className="pro-avatar" style={{ width: '60px', height: '60px', borderRadius: '50%', overflow: 'hidden', marginBottom: '20px' }}>
-                        {t.avatar_url && <img src={t.avatar_url} loading="lazy" alt={t.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
+                      <div className="pro-avatar" style={{ width: '60px', height: '60px', borderRadius: '50%', overflow: 'hidden', marginBottom: '20px', position: 'relative' }}>
+                        {t.avatar_url && (
+                          <Image
+                            src={t.avatar_url}
+                            alt={t.name}
+                            fill
+                            sizes="60px"
+                            className="object-cover"
+                          />
+                        )}
                       </div>
                       <h3 className="pro-name" style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '4px' }}>{t.name}</h3>
                       <div className="pro-role" style={{ fontSize: '0.85rem', color: 'var(--c1)', marginBottom: '16px', fontWeight: 600 }}>{t.role}</div>

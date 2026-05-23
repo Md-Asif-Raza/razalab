@@ -2,7 +2,6 @@ import Navbar from "@/components/Navbar";
 import SectionHero from "@/components/SectionHero";
 import SectionBrands from "@/components/SectionBrands";
 import SectionVideo from "@/components/SectionVideo";
-import SectionCampaigns from "@/components/SectionCampaigns";
 import SectionCalculator from "@/components/SectionCalculator";
 import SectionWhyChoose from "@/components/SectionWhyChoose";
 import SectionFAQ from "@/components/SectionFAQ";
@@ -91,8 +90,6 @@ export default function Home() {
       </div>
       <SectionTransition />
       <SectionVideo />
-      <GlowBand intensity={0.35} color2="70, 90, 180" />
-      <SectionCampaigns />
       <GlowBand intensity={0.45} height={350} blur={100} top={-175} />
       <SectionCalculator />
       <SectionTransition color="100, 80, 180" />

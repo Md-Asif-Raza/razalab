@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 import { getReviews } from '@/lib/actions';
 import { SpotlightCard } from './ui/PremiumUI';
 
@@ -38,8 +39,16 @@ export default function SectionTestimonials() {
             {visibleItems.map((r) => (
               <motion.div key={r.id} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ duration: 0.4 }}>
                 <SpotlightCard size="small" className="pro-testimonial-card shadow-lg" style={{ borderRadius: '24px' }}>
-                  <div className="pro-avatar">
-                    {r.avatar_url && <img src={r.avatar_url} loading="lazy" alt={r.name} />}
+                  <div className="pro-avatar" style={{ position: 'relative', overflow: 'hidden' }}>
+                    {r.avatar_url && (
+                      <Image
+                        src={r.avatar_url}
+                        alt={r.name}
+                        fill
+                        sizes="90px"
+                        className="object-cover"
+                      />
+                    )}
                   </div>
                   <h3 className="pro-name">{r.name}</h3>
                   <div className="pro-role">{r.handle}</div>

@@ -48,9 +48,17 @@ export default function Navbar() {
   }, [lastScrollY]);
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (href.startsWith('#')) {
-      e.preventDefault();
-      document.querySelector(href)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (href.startsWith('/#')) {
+      const id = href.substring(1); // e.g. "#hero" or "#faq"
+      if (pathname === '/') {
+        e.preventDefault();
+        const element = document.querySelector(id);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        setIsMobileMenuOpen(false);
+      }
+    } else {
       setIsMobileMenuOpen(false);
     }
   };
@@ -78,10 +86,10 @@ export default function Navbar() {
           <span style={{ fontWeight: 800, fontSize: 'clamp(0.75rem, 2vw, 1rem)', letterSpacing: '-0.5px', color: '#fff', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}> {/* FIX: responsive font size + overflow hidden */}Raza<span style={{ color: 'var(--c1)' }}>Labs</span></span>
         </Link>
         <ul className="nav-links desktop-only">
-          <li><a href="#hero" onClick={(e) => handleNavClick(e, '#hero')}>Home</a></li>
-          <li><a href="#campaigns" onClick={(e) => handleNavClick(e, '#campaigns')}>Clients</a></li>
-          <li><a href="#testimonials" onClick={(e) => handleNavClick(e, '#testimonials')}>Testimonials</a></li>
-          <li><a href="#faq" onClick={(e) => handleNavClick(e, '#faq')}>FAQ</a></li>
+          <li><Link href="/#hero" onClick={(e) => handleNavClick(e, '/#hero')}>Home</Link></li>
+          <li><Link href="/clients" onClick={(e) => handleNavClick(e, '/clients')}>Clients</Link></li>
+          <li><Link href="/#testimonials" onClick={(e) => handleNavClick(e, '/#testimonials')}>Testimonials</Link></li>
+          <li><Link href="/#faq" onClick={(e) => handleNavClick(e, '/#faq')}>FAQ</Link></li>
         </ul>
          <div className="nav-socials desktop-only">
           <a href={socials.instagram_url} target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="Instagram">
@@ -125,10 +133,10 @@ export default function Navbar() {
       {/* Full screen mobile menu overlay */}
       <div className={`mobile-nav-overlay ${isMobileMenuOpen ? 'open' : ''}`}>
         <ul className="mobile-nav-links">
-          <li><a href="#hero" onClick={(e) => handleNavClick(e, '#hero')}>Home</a></li>
-          <li><a href="#campaigns" onClick={(e) => handleNavClick(e, '#campaigns')}>Clients</a></li>
-          <li><a href="#testimonials" onClick={(e) => handleNavClick(e, '#testimonials')}>Testimonials</a></li>
-          <li><a href="#faq" onClick={(e) => handleNavClick(e, '#faq')}>FAQ</a></li>
+          <li><Link href="/#hero" onClick={(e) => handleNavClick(e, '/#hero')}>Home</Link></li>
+          <li><Link href="/clients" onClick={(e) => handleNavClick(e, '/clients')}>Clients</Link></li>
+          <li><Link href="/#testimonials" onClick={(e) => handleNavClick(e, '/#testimonials')}>Testimonials</Link></li>
+          <li><Link href="/#faq" onClick={(e) => handleNavClick(e, '/#faq')}>FAQ</Link></li>
         </ul>
         
         <div className="mobile-nav-socials">

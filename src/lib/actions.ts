@@ -47,6 +47,7 @@ export async function syncCampaign(data: any) {
   const { error } = await supabase.from('campaigns').upsert(payload);
   if (error) throw new Error(`Sync Failed: ${error.message}`);
   revalidatePath('/');
+  revalidatePath('/clients');
   return { success: true };
 }
 
@@ -55,6 +56,7 @@ export async function deleteCampaign(id: string) {
   const { error } = await supabase.from('campaigns').delete().eq('id', id);
   if (error) throw new Error(`Delete Failed: ${error.message}`);
   revalidatePath('/');
+  revalidatePath('/clients');
   return { success: true };
 }
 

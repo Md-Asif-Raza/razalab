@@ -39,50 +39,6 @@ const NetworkPattern = () => (
 );
 
 
-import { useScroll, useTransform } from 'framer-motion';
-
-const FloatingParticles = () => {
-  const [mounted, setMounted] = useState(false);
-  const { scrollY } = useScroll();
-
-  // Parallax layers
-  const y1 = useTransform(scrollY, [0, 1000], [0, -150]);
-  const y2 = useTransform(scrollY, [0, 1000], [0, -300]);
-  const y3 = useTransform(scrollY, [0, 1000], [0, -450]);
-
-  useEffect(() => setMounted(true), []);
-
-  if (!mounted) return null;
-
-  return (
-    <div className="absolute inset-0 z-0 pointer-events-none">
-      {[...Array(24)].map((_, i) => {
-        const speed = [y1, y2, y3][i % 3];
-        return (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-white/20 rounded-full"
-            style={{
-              left: `${(i * 17.5) % 100}%`,
-              top: `${(i * 13.3) % 100}%`,
-              y: speed
-            }}
-            animate={{
-              opacity: [0.1, 0.4, 0.1],
-              scale: [0.8, 1.2, 0.8],
-            }}
-            transition={{
-              duration: 3 + (i % 5),
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
-        );
-      })}
-    </div>
-  );
-};
-
 export default function SectionBrands() {
   const [brands, setBrands] = useState(FALLBACK_BRANDS);
   const [mounted, setMounted] = useState(false);
@@ -109,7 +65,6 @@ export default function SectionBrands() {
     >
       {/* RESTORED ANIMATIONS — only on client to avoid hydration mismatch */}
       <NetworkPattern />
-      {mounted && <FloatingParticles />}
 
       <div style={{ position: 'relative', zIndex: 10, maxWidth: '1400px', margin: '0 auto', padding: '0 24px' }}>
 

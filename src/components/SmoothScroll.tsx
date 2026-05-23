@@ -21,14 +21,19 @@ export default function SmoothScroll() {
 
     (window as any).lenis = lenis;
 
+    // Scroll to top on route change (prevents stale scroll position)
+    lenis.scrollTo(0, { immediate: true });
+
+    let rafId: number;
     function raf(time: number) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      rafId = requestAnimationFrame(raf);
     }
 
-    requestAnimationFrame(raf);
+    rafId = requestAnimationFrame(raf);
 
     return () => {
+      cancelAnimationFrame(rafId);
       (window as any).lenis = null;
       lenis.destroy();
     };

@@ -60,6 +60,13 @@ export default function Navbar() {
         setIsMobileMenuOpen(false);
       }
     } else {
+      // Direct page link (e.g. /clients) — stop smooth scroll & reset position
+      // This prevents the home page from flashing/scrolling before navigation
+      const lenis = (window as any).lenis;
+      if (lenis) {
+        lenis.stop();
+      }
+      window.scrollTo(0, 0);
       setIsMobileMenuOpen(false);
     }
   };

@@ -1,5 +1,5 @@
 'use server';
-import { revalidatePath, revalidateTag } from 'next/cache';
+import { revalidatePath, updateTag } from 'next/cache';
 import { unstable_cache } from 'next/cache';
 import { createServerClient } from './supabase/server';
 
@@ -54,7 +54,7 @@ export async function syncCampaign(data: any) {
 
   const { error } = await supabase.from('campaigns').upsert(payload);
   if (error) throw new Error(`Sync Failed: ${error.message}`);
-  revalidateTag('campaigns');
+  updateTag('campaigns');
   revalidatePath('/');
   revalidatePath('/clients');
   return { success: true };
@@ -64,7 +64,7 @@ export async function deleteCampaign(id: string) {
   const supabase = createServerClient();
   const { error } = await supabase.from('campaigns').delete().eq('id', id);
   if (error) throw new Error(`Delete Failed: ${error.message}`);
-  revalidateTag('campaigns');
+  updateTag('campaigns');
   revalidatePath('/');
   revalidatePath('/clients');
   return { success: true };

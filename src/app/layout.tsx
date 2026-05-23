@@ -7,6 +7,7 @@ import BgCanvas from "@/components/BgCanvas";
 import CursorWrapper from "@/components/CursorWrapper";
 import ScrollObserver from "@/components/ScrollObserver";
 import SmoothScroll from "@/components/SmoothScroll";
+import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const outfit = Outfit({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"], variable: "--font-outfit" });
@@ -54,7 +55,14 @@ export const metadata: Metadata = {
     images: ["/logo.png"],
   },
   icons: {
-    icon: '/logo.png',
+    icon: [
+      { url: '/logo.png', sizes: 'any' },
+      { url: '/logo.png', sizes: '32x32', type: 'image/png' },
+      { url: '/logo.png', sizes: '192x192', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/logo.png', sizes: '180x180', type: 'image/png' },
+    ],
   },
   robots: {
     index: true,
@@ -70,6 +78,31 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${outfit.variable} ${syne.variable} ${dmSans.variable}`} suppressHydrationWarning>
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Raza Labs",
+              "url": "https://razalabs.com",
+              "logo": "https://razalabs.com/logo.png",
+              "image": "https://razalabs.com/logo.png",
+              "description": "We orchestrate mass content distribution systems that scale brands natively with organic clippers."
+            })
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "name": "Raza Labs",
+              "url": "https://razalabs.com"
+            })
+          }}
+        />
       </head>
       <body className={`${outfit.className} bg-surface text-foreground antialiased`}>
         {/* Google Analytics Tag - Replace ID when shipping */}
@@ -85,6 +118,9 @@ export default function RootLayout({
             gtag('config', 'G-XXXXXXXXXX');
           `}
         </Script>
+
+        {/* Register image-cache service worker for instant repeat loads */}
+        <ServiceWorkerRegister />
         
         <ClientLayout>
           {children}

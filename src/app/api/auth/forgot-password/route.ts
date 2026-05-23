@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
-const ADMIN_EMAIL = 'arifm9991@gmail.com';
+const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || 'arifm9991@gmail.com').trim().toLowerCase();
 
 export async function POST(request: Request) {
   try {

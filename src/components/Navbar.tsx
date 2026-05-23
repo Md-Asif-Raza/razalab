@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { getSiteSettings } from '@/lib/actions';
 
@@ -81,7 +82,7 @@ export default function Navbar() {
           onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
           onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
           >
-            <img src="/logo.png" alt="Logo" style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+            <Image src="/logo.png" alt="Logo" width={34} height={34} style={{ objectFit: 'contain' }} />
           </div>
           <span style={{ fontWeight: 800, fontSize: 'clamp(0.75rem, 2vw, 1rem)', letterSpacing: '-0.5px', color: '#fff', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}> {/* FIX: responsive font size + overflow hidden */}Raza<span style={{ color: 'var(--c1)' }}>Labs</span></span>
         </Link>

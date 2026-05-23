@@ -2307,3 +2307,22 @@ input[type="range"]:hover::-webkit-slider-thumb {
     padding: 4px 10px;
   }
 }
+
+/* ── PREMIUM SKELETON SHIMMER ── */
+.cc__img-shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(10, 12, 16, 0.9) 25%, rgba(20, 24, 32, 0.9) 50%, rgba(10, 12, 16, 0.9) 75%);
+  background-size: 200% 100%;
+  animation: loading-shimmer 1.6s infinite linear;
+  z-index: 2;
+}
+
+@keyframes loading-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

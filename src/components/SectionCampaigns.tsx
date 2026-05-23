@@ -80,16 +80,21 @@ function ClientCard({ client: rawClient, index }: { client: Campaign; index: num
       {/* ── LEFT: Image ── */}
       <div className="cc__img-wrap">
         {client.img_url ? (
-          <Image
-            src={client.img_url}
-            alt={cleanStr(client.name)}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 900px) 38vw, 42vw"
-            className="cc__img"
-            onLoad={() => setImgLoaded(true)}
-            style={{ opacity: imgLoaded ? 1 : 0 }}
-            priority={index === 0}
-          />
+          <>
+            {!imgLoaded && <div className="cc__img-shimmer" />}
+            <Image
+              src={client.img_url}
+              alt={cleanStr(client.name)}
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 900px) 38vw, 42vw"
+              className="cc__img"
+              onLoad={() => setImgLoaded(true)}
+              style={{ opacity: imgLoaded ? 1 : 0 }}
+              priority={index < 2}
+              loading={index < 2 ? 'eager' : 'lazy'}
+              fetchPriority={index < 2 ? 'high' : 'low'}
+            />
+          </>
         ) : (
           <div className="cc__img-placeholder" />
         )}
@@ -154,16 +159,7 @@ export default function SectionCampaigns() {
           transition={{ duration: 0.6 }}
           style={{ textAlign: 'center' }}
         >
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
-            <div style={{
-              width: '64px', height: '64px', borderRadius: '50%', background: '#000',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              border: '1px solid rgba(255,255,255,0.1)', overflow: 'hidden',
-              boxShadow: '0 0 30px rgba(0,0,0,0.6)'
-            }}>
-              <img src="/logo.png" alt="Raza Labs Logo" style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
-            </div>
-          </div>
+          {/* Logo removed from client page as requested */}
           <h2 className="section-title clients-section__title">Clients</h2>
           <p className="clients-section__subtitle">
             Proven distribution results across major niches.

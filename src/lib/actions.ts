@@ -1,11 +1,12 @@
 'use server';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
+import { unstable_cache } from 'next/cache';
 import { createServerClient } from './supabase/server';
 
 // =============================================
 // CAMPAIGNS
 // =============================================
-export async function getCampaigns() {
+const _fetchCampaigns = async () => {
   const supabase = createServerClient();
   const { data, error } = await supabase
     .from('campaigns')
@@ -13,7 +14,14 @@ export async function getCampaigns() {
     .order('sort_order', { ascending: true });
   if (error) return [];
   return data || [];
-}
+};
+
+// Cache campaign data for 60s — revalidated on-demand via tag
+export const getCampaigns = unstable_cache(
+  _fetchCampaigns,
+  ['campaigns-list'],
+  { revalidate: 60, tags: ['campaigns'] }
+);
 
 export async function syncCampaign(data: any) {
   const supabase = createServerClient();
@@ -46,6 +54,7 @@ export async function syncCampaign(data: any) {
 
   const { error } = await supabase.from('campaigns').upsert(payload);
   if (error) throw new Error(`Sync Failed: ${error.message}`);
+  revalidateTag('campaigns');
   revalidatePath('/');
   revalidatePath('/clients');
   return { success: true };
@@ -55,6 +64,7 @@ export async function deleteCampaign(id: string) {
   const supabase = createServerClient();
   const { error } = await supabase.from('campaigns').delete().eq('id', id);
   if (error) throw new Error(`Delete Failed: ${error.message}`);
+  revalidateTag('campaigns');
   revalidatePath('/');
   revalidatePath('/clients');
   return { success: true };
@@ -349,7 +359,7 @@ export async function uploadImage(formData: FormData) {
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from('media')
       .upload(filename, file, {
-        cacheControl: '3600',
+        cacheControl: 'public, max-age=31536000, immutable',
         upsert: false,
         contentType: file.type || 'image/png'
       });

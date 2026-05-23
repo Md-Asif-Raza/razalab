@@ -38,7 +38,7 @@ export default function SectionWhyChoose() {
                 border: '1px solid rgba(255,255,255,0.1)', overflow: 'hidden',
                 boxShadow: '0 0 30px rgba(0,0,0,0.6)'
               }}>
-                <img src="/logo.png" alt="Raza Labs Logo" style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+                <Image src="/logo.png" alt="Raza Labs Logo" width={50} height={50} style={{ objectFit: 'contain' }} />
               </div>
             </div>
             <h2 className="section-title" style={{ textAlign: 'center', margin: '0 auto' }}>Testimonials</h2>

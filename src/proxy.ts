@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-const ADMIN_EMAIL = 'arifm9991@gmail.com';
+const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || 'arifm9991@gmail.com').trim().toLowerCase();
 const COOKIE_NAME = 'sb-session';
 
 export async function proxy(request: NextRequest) {

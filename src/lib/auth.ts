@@ -5,7 +5,7 @@ import { env } from './env';
 // =============================================
 // ADMIN EMAIL — Only this email can access admin
 // =============================================
-export const ADMIN_EMAIL = 'arifm9991@gmail.com';
+export const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || 'arifm9991@gmail.com').trim().toLowerCase();
 
 const COOKIE_NAME = 'sb-session';
 

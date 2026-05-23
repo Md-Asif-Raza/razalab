@@ -154,6 +154,16 @@ export default function SectionCampaigns() {
           transition={{ duration: 0.6 }}
           style={{ textAlign: 'center' }}
         >
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
+            <div style={{
+              width: '64px', height: '64px', borderRadius: '50%', background: '#000',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              border: '1px solid rgba(255,255,255,0.1)', overflow: 'hidden',
+              boxShadow: '0 0 30px rgba(0,0,0,0.6)'
+            }}>
+              <img src="/logo.png" alt="Raza Labs Logo" style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
+            </div>
+          </div>
           <h2 className="section-title clients-section__title">Clients</h2>
           <p className="clients-section__subtitle">
             Proven distribution results across major niches.

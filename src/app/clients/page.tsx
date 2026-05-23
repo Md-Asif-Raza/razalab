@@ -1,4 +1,7 @@
 'use client';
+
+export const dynamic = 'force-dynamic';
+
 import Navbar from "@/components/Navbar";
 import SectionCampaigns from "@/components/SectionCampaigns";
 import Footer from "@/components/Footer";

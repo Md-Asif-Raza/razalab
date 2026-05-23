@@ -24,13 +24,13 @@ export function CampaignCard({ campaign, index }: CampaignCardProps) {
       className="group relative h-80 rounded-2xl overflow-hidden cursor-pointer"
     >
       {/* Background image with overlay */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 overflow-hidden">
         {campaign.img_url ? (
           <Image
             src={campaign.img_url}
             alt={campaign.name}
             fill
-            className="object-cover group-hover:scale-110 transition-transform duration-500"
+            className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-slate-800 to-slate-900" />
